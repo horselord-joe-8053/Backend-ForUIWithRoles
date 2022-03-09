@@ -2,14 +2,20 @@ exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
 };
 
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
+exports.currUserBoard = (req, res) => {
+  res.status(200).send("Current User Content.");
+};
+
+exports.staffBoard = (req, res) => {
+  res.status(200).send("Staff Content.");
+};
+
+exports.ownerBoard = (req, res) => {
+  res.status(200).send("Owner Content.");
 };
 
 exports.adminBoard = (req, res) => {
   res.status(200).send("Admin Content.");
 };
 
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send("Moderator Content.");
-};
+

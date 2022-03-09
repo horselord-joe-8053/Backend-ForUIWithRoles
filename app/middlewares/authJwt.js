@@ -8,6 +8,8 @@ const { TokenExpiredError } = jwt;
 
 const catchError = (err, res) => {
   if (err instanceof TokenExpiredError) {
+    // jjw: if the tokent is expired, return error to client immediately
+    // jjw: hoping upon this, the client will send to /refreshToken/ end point
     return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
   }
 
@@ -27,6 +29,68 @@ const verifyToken = (req, res, next) => {
     }
     req.userId = decoded.id;
     next();
+  });
+};
+
+const isStaff = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles }
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "staff") {
+            next();
+            return;
+          }
+        }
+
+        res.status(403).send({ message: "Require Staff Role!" });
+        return;
+      }
+    );
+  });
+};
+
+const isOwner = (req, res, next) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles }
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "owner") {
+            next();
+            return;
+          }
+        }
+
+        res.status(403).send({ message: "Require Owner Role!" });
+        return;
+      }
+    );
   });
 };
 
@@ -61,40 +125,10 @@ const isAdmin = (req, res, next) => {
   });
 };
 
-const isModerator = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
-    Role.find(
-      {
-        _id: { $in: user.roles }
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "moderator") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Require Moderator Role!" });
-        return;
-      }
-    );
-  });
-};
-
 const authJwt = {
   verifyToken,
-  isAdmin,
-  isModerator
+  isStaff,
+  isOwner,
+  isAdmin
 };
 module.exports = authJwt;

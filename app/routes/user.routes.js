@@ -10,15 +10,25 @@ module.exports = function(app) {
     next();
   });
 
+  // jjw: corresponding to 
+  // jjw: /Users/jjw8053/GoogleDrive2022/Future/UI_Learn_2022/bezkoder-react-typescript-login-example/Frontend/jjw-FRONTEND-react-typescript-login-example/src/services/user.service.ts
   app.get("/api/test/all", controller.allAccess);
 
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+  // jjw: NOTE before these resource request, singin already happened
+  // jjw: authJwt check for expired token
+  app.get("/api/test/current-user", [authJwt.verifyToken], controller.currUserBoard);
 
   app.get(
-    "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
-    controller.moderatorBoard
+    "/api/test/staff",
+    [authJwt.verifyToken, authJwt.isStaff],
+    controller.staffBoard
   );
+
+  app.get(
+    "/api/test/owner",
+    [authJwt.verifyToken, authJwt.isOwner],
+    controller.ownerBoard
+  );  
 
   app.get(
     "/api/test/admin",

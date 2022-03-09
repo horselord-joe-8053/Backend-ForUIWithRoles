@@ -19,6 +19,7 @@ exports.signup = (req, res) => {
     }
 
     if (req.body.roles) {
+      // jjw: find all the roles in the list of 'req.body.roles'
       Role.find(
         {
           name: { $in: req.body.roles },
@@ -29,6 +30,7 @@ exports.signup = (req, res) => {
             return;
           }
 
+          // jjw: user.roles is a list {}, assigned value by the roles.map(...)
           user.roles = roles.map((role) => role._id);
           user.save((err) => {
             if (err) {
@@ -41,6 +43,7 @@ exports.signup = (req, res) => {
         }
       );
     } else {
+      // jjw: if 'req.body.roles' is not specified, 
       Role.findOne({ name: "user" }, (err, role) => {
         if (err) {
           res.status(500).send({ message: err });
@@ -88,10 +91,14 @@ exports.signin = (req, res) => {
         });
       }
 
+      // jjw: as long as we sign in with right username/password, we start
+      // jjw:   creating a pair of tokens and return them in response
       let token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: config.jwtExpiration,
       });
 
+      // jjw: note that 'refreshToken' returned here is NOT a JWT 'token' object 
+      // jjw:   as above, but just an UUID.
       let refreshToken = await RefreshToken.createToken(user);
 
       let authorities = [];
@@ -104,13 +111,15 @@ exports.signin = (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
-        accessToken: token,
-        refreshToken: refreshToken,
+        accessToken: token, // jjw: a signed JWT token object
+        refreshToken: refreshToken, // jjw: just a UUID
       });
     });
 };
 
+// jjw: this gets called for "/api/auth/refreshtoken" requests 
 exports.refreshToken = async (req, res) => {
+  // jjw; 'requestToken' from {refreshToken:<requestToken>} is just aUUID
   const { refreshToken: requestToken } = req.body;
 
   if (requestToken == null) {
@@ -118,6 +127,14 @@ exports.refreshToken = async (req, res) => {
   }
 
   try {
+    // jjw: find the 'refreshToken' document in DB by the UUID given in the request,
+    // jjw: NOTE: findOne(...): as we have the UUID of the last saved RefreshToken 
+    // jjw: Document, we should be fine by using findOne(...) 
+    // jjw: NOTE: storing refreshingTokens in DB is NOT usual practice, as usually
+    // jjw:   we actually transmit the signed refreshToken payload in a JWT to client 
+    // jjw:   and back to server and so on so forth. more secure as we know with the JWT
+    // jjw:   if the payload itself has been tempered with, while with the just a naked
+    // jjw:   UUID, we can't tell. 
     let refreshToken = await RefreshToken.findOne({ token: requestToken });
 
     if (!refreshToken) {
@@ -126,18 +143,27 @@ exports.refreshToken = async (req, res) => {
     }
 
     if (RefreshToken.verifyExpiration(refreshToken)) {
+      // jjw: if the refreshToken is also expired, we return error to the client
+      // jjw:   asking them to re-signin, upon wich, we will call
+      // jjw:   'let refreshToken = await RefreshToken.createToken(user);'
+      // jjw:   and create an unexpired refreshToken.
       RefreshToken.findByIdAndRemove(refreshToken._id, { useFindAndModify: false }).exec();
-      
       res.status(403).json({
         message: "Refresh token was expired. Please make a new signin request",
       });
       return;
     }
 
+    // jjw: if refreshToken is not expired, we just took the user._id in the 
+    // jjw: refreshToken document we found in the DB, and use it to generate a
+    // jjw: new signed JWT token as the new accessToken.
     let newAccessToken = jwt.sign({ id: refreshToken.user._id }, config.secret, {
       expiresIn: config.jwtExpiration,
     });
 
+    // jjw: return 
+    // jjw: - the new signed JWT accessToken AND 
+    // jjw: - the UUID associated with the current refreshToken
     return res.status(200).json({
       accessToken: newAccessToken,
       refreshToken: refreshToken.token,
