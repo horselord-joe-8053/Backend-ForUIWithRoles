@@ -43,7 +43,7 @@ exports.signup = (req, res) => {
         }
       );
     } else {
-      // jjw: if 'req.body.roles' is not specified, 
+      // jjw: if 'req.body.roles' is not specified, we default it to 'user' role
       Role.findOne({ name: "user" }, (err, role) => {
         if (err) {
           res.status(500).send({ message: err });

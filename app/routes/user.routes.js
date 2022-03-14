@@ -1,6 +1,9 @@
 const { authJwt } = require("../middlewares");
 const controller = require("../controllers/user.controller");
 
+// jjw: we are passsing an express 'app' object to here
+// jjw:   which will call .use(...) .post(...) to add more 
+// jjw:   routes
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
@@ -28,7 +31,7 @@ module.exports = function(app) {
     "/api/test/owner",
     [authJwt.verifyToken, authJwt.isOwner],
     controller.ownerBoard
-  );  
+  );
 
   app.get(
     "/api/test/admin",

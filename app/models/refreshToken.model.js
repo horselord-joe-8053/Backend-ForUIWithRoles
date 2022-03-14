@@ -11,7 +11,10 @@ const RefreshTokenSchema = new mongoose.Schema({
   expiryDate: Date,
 });
 
-// jjw: RefreshToken.creatToken(...) gets called on signin request
+// jjw: we define a createToken(...) function as a static function of the
+// jjw:   RefreshTokenSchema. This way, we can call RefreshToken.createToken
+// jjw:   statically.
+// jjw: RefreshToken.creatToken(...) gets called on every signin request
 RefreshTokenSchema.statics.createToken = async function (user) {
   let expiredAt = new Date();
 

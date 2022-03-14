@@ -1,6 +1,9 @@
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 
+// jjw: we are passsing an express 'app' object to here
+// jjw:   which will call .use(...) .post(...) to add more 
+// jjw:   routes
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
@@ -19,6 +22,17 @@ module.exports = function(app) {
     controller.signup
   );
 
+  // jjw: signin will return 
+  /*
+  res.status(200).send({
+    id: user._id,
+    username: user.username,
+    email: user.email,
+    roles: authorities,
+    accessToken: token, // jjw: a signed JWT token object
+    refreshToken: refreshToken, // jjw: just a UUID
+  });
+  */
   app.post("/api/auth/signin", controller.signin);
 
   app.post("/api/auth/refreshtoken", controller.refreshToken);

@@ -1,3 +1,6 @@
+const db = require("../models");
+const { resident: Resident } = db;
+
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
 };
