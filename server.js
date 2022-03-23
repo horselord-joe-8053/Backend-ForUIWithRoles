@@ -52,6 +52,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
+// jjw: TODO: maybe all the roles should be from a config file? necessary?
 function initRoles() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
@@ -98,6 +99,7 @@ function initRoles() {
   });
 };
 
+// jjw: Add dummy Residents when all residents are deleted for initial testing. TODO: remove this later
 function initResidents() {
 
   Resident.estimatedDocumentCount((err, count) => {
@@ -107,7 +109,7 @@ function initResidents() {
         firstName: "resident1_fn",
         lastName: "resident1_ln",
         // jjw: use Date https://mongoosejs.com/docs/tutorials/dates.html
-        DOB: "1983-11-16",
+        dob: "1983-11-16",
         lastKnownPayDate: "2022-02-21",
         payFrequency: "fortnightly"
       }).save(err => {
@@ -121,7 +123,7 @@ function initResidents() {
         firstName: "resident2_fn",
         lastName: "resident2_ln",
         // jjw: use Date https://mongoosejs.com/docs/tutorials/dates.html
-        DOB: "1982-11-16",
+        dob: "1982-11-16",
         lastKnownPayDate: "2021-02-21",
         payFrequency: "monthly"
       }).save(err => {

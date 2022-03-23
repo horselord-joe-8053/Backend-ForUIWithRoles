@@ -1,0 +1,128 @@
+[
+  {
+    "_id" : "uuid_1234",
+    "key": "CRUD_STAFF",
+    "maxNumFieldsInSummary" : 5,
+    "fieldsMap" : 
+    {
+      "first_name" : 
+      {
+        "nameInDataSource" : "firstName",
+        "isInSummary" : true,
+        "displayName" : "First Name",
+        "htmlType" : "text",
+        "isInAddEdit" : true,
+        "IsMandatoryInAdd" : true
+      },
+      "last_name" : 
+      {
+        "nameInDataSource" : "lastName",
+        "isInSummary" : true,
+        "displayName" : "Last Name",
+        "htmlType" : "text",
+        "isInAddEdit" : true,
+        "IsMandatoryInAdd" : true
+      }
+    } 
+  },
+  {
+    "_id" : "uuid_1234",
+    "key": "CRUD_RESIDENT",
+    "maxNumFieldsInSummary" : 5,
+    "fieldsMap" : 
+    {
+      "first_name" : 
+      {
+        "nameInDataSource" : "firstName",
+        "isInSummary" : true,
+        "displayName" : "First Name",
+        "htmlType" : "text",
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "string",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["First Name is required"]
+          }
+        ]
+      },
+      "last_name" : 
+      {
+        "nameInDataSource" : "lastName",
+        "isInSummary" : true,
+        "displayName" : "Last Name",
+        "htmlType" : "text",
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "string",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Last Name is required"]
+          }
+        ]
+      },
+      "dob" : 
+      {
+        "nameInDataSource" : "dob",
+        "isInSummary" : true,
+        "displayName" : "Date of Birth",
+        "htmlType" : "date",
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "date",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Date of Birth is required"]
+          }
+        ]
+      },
+      "last_known_pay_date" : 
+      {
+        "nameInDataSource" : "lastKnownPayDate",
+        "isInSummary" : true,
+        "displayName" : "Last Known Pay Date",
+        "htmlType" : "date",
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "date",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Last Known Pay Date is required"]
+          }
+        ]
+      },
+      "pay_frequency" : 
+      {
+        "nameInDataSource" : "payFrequency",
+        "isInSummary" : true,
+        "displayName" : "Pay Frequency",
+        "htmlType" : "text",
+        "formikAs" : "select",
+        "formikInnerHtmlArr" : [
+          "<option value=\"\"></option>",
+          "<option value=\"fornightly\">fornightly</option>",
+          "<option value=\"monthly\">monthly</option>"
+        ],
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "string",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Pay Frequency is required"]
+          }
+        ]
+      }
+    },
+    "addEditLayout" :
+    [
+      ["first_name", "last_name"],
+      ["dob", "last_known_pay_date"],
+      ["pay_frequency"]
+    ]
+  }
+]

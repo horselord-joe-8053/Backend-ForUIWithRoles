@@ -1,5 +1,5 @@
 const { authJwt } = require("../middlewares");
-const controller = require("../controllers/resident.controller");
+const controller = require("../controllers/item.controller");
 
 // jjw: we are passsing an express 'app' object to here
 // jjw:   which will call .use(...) .post(...) to add more 
@@ -16,7 +16,8 @@ module.exports = function(app) {
   app.get(
     "/api/test/residents",
     [authJwt.verifyToken, authJwt.isOwner],
-    controller.residentsSection
+    controller.residentGet
+    // (req, res) => { itemGet(req, res, Resident, "CRUD_Resident");} // jjw: here??? TODO: like this we can remove resident.controller entirely
   );
 
   app.delete(

@@ -5,7 +5,7 @@ const Resident = mongoose.model(
   new mongoose.Schema({
     firstName: String,
     lastName: String,
-    DOB: Date,
+    dob: Date,
     lastKnownPayDate: Date,
     payFrequency: {
       type: String,
