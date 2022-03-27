@@ -1,5 +1,5 @@
 const { authJwt } = require("../middlewares");
-const controller = require("../controllers/item.controller");
+const controller = require("../controllers/resident.controller");
 
 // jjw: we are passsing an express 'app' object to here
 // jjw:   which will call .use(...) .post(...) to add more 
@@ -16,15 +16,32 @@ module.exports = function(app) {
   app.get(
     "/api/test/residents",
     [authJwt.verifyToken, authJwt.isOwner],
-    controller.residentGet
-    // (req, res) => { itemGet(req, res, Resident, "CRUD_Resident");} // jjw: here??? TODO: like this we can remove resident.controller entirely
+    controller.residentGetAll
   );
+
+  app.get(
+    "/api/test/residents/:id",
+    [authJwt.verifyToken, authJwt.isOwner],
+    controller.residentGet // jjw: here??? TODO: we can remove resident.controller entirely
+  ); 
+
+  app.post(
+    "/api/test/residents",
+    [authJwt.verifyToken, authJwt.isOwner],
+    controller.residentCreate // jjw: here??? TODO: we can remove resident.controller entirely
+  ); 
+
+  app.put(
+    "/api/test/residents/:id",
+    [authJwt.verifyToken, authJwt.isOwner],
+    controller.residentUpdate // jjw: here??? TODO: we can remove resident.controller entirely
+  ); 
 
   app.delete(
     "/api/test/residents/:id",
     // [authJwt.verifyToken, authJwt.isOwner],
     [authJwt.verifyToken],
-    controller.residentDeletion
+    controller.residentDelete
   );
 
 };

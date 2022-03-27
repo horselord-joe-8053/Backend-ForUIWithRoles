@@ -1,8 +1,10 @@
 [
   {
     "_id" : "uuid_1234",
-    "key": "CRUD_STAFF",
+    "key": "STAFF",
     "maxNumFieldsInSummary" : 5,
+    "itemMsgLabel" : "Staff",
+    "itemServiceType" : "staff",
     "fieldsMap" : 
     {
       "first_name" : 
@@ -27,8 +29,10 @@
   },
   {
     "_id" : "uuid_1234",
-    "key": "CRUD_RESIDENT",
+    "key": "RESIDENT",
     "maxNumFieldsInSummary" : 5,
+    "itemMsgLabel" : "Resident",
+    "itemServiceType" : "residents",
     "fieldsMap" : 
     {
       "first_name" : 
@@ -104,7 +108,7 @@
         "formikAs" : "select",
         "formikInnerHtmlArr" : [
           "<option value=\"\"></option>",
-          "<option value=\"fornightly\">fornightly</option>",
+          "<option value=\"fortnightly\">fortnightly</option>",
           "<option value=\"monthly\">monthly</option>"
         ],
         "isInAddEdit" : true,
@@ -116,13 +120,52 @@
             "params": ["Pay Frequency is required"]
           }
         ]
-      }
+      },
+      "payment_amount" : 
+      {
+        "nameInDataSource" : "paymentAmount",
+        "isInSummary" : true,
+        "displayName" : "Payment Amount",
+        "htmlType" : "number",
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "number",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Payment Amount is required"]
+          }
+        ]
+      },
+      "is_diabetic" : 
+      {
+        "nameInDataSource" : "isDiabetic",
+        "isInSummary" : true,
+        "displayName" : "Diabetic",
+        "htmlType" : "text",
+        "formikAs" : "select",
+        "formikInnerHtmlArr" : [
+          "<option value=\"\"></option>",
+          "<option value=\"Yes\">Yes</option>",
+          "<option value=\"No\">No</option>"
+        ],
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "string",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Specifying if diabetic is required"]
+          }
+        ]
+      }      
     },
     "addEditLayout" :
     [
       ["first_name", "last_name"],
       ["dob", "last_known_pay_date"],
-      ["pay_frequency"]
+      ["pay_frequency", "payment_amount"],
+      ["is_diabetic"]
     ]
   }
 ]

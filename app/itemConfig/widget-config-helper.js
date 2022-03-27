@@ -55,6 +55,15 @@ var getLoadedConfig = (configKey) => {
 	return config;
 }
 
+exports.getConfigMsgLabel = (configKey) => {
+	var config = getLoadedConfig(configKey);
+	let itemLabel = config["itemMsgLabel"] ? config["itemMsgLabel"] : "item";
+	logger.logAsStr("getConfigMsgLabel", "configKey", configKey);
+	logger.logAsStr("getConfigMsgLabel", "itemLabel", itemLabel);
+
+	return itemLabel;
+}
+
 // export function getConfigAddEditLayout(configKey) {
 exports.getConfigAddEditLayout = (configKey) => {
 	var config = getLoadedConfig(configKey);
