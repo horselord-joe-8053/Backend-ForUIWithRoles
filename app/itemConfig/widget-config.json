@@ -158,6 +158,22 @@
             "params": ["Specifying if diabetic is required"]
           }
         ]
+      },
+      "move_in_date" : 
+      {
+        "nameInDataSource" : "moveInDate",
+        "isInSummary" : true,
+        "displayName" : "Move-in Date",
+        "htmlType" : "date",
+        "isInAddEdit" : true,
+        "initialValue" : "",
+        "validationType" : "date",
+        "validations": [
+          {
+            "type": "required",
+            "params": ["Move-in Date is required"]
+          }
+        ]
       }      
     },
     "addEditLayout" :
@@ -165,7 +181,7 @@
       ["first_name", "last_name"],
       ["dob", "last_known_pay_date"],
       ["pay_frequency", "payment_amount"],
-      ["is_diabetic"]
+      ["is_diabetic", "move_in_date"]
     ]
   }
 ]
