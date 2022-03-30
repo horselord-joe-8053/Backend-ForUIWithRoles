@@ -1,8 +1,18 @@
+const logger = require("../utils/logger");
+
 const config = require("../config/auth.config");
 const db = require("../models");
 const { user: User, role: Role, refreshToken: RefreshToken } = db;
 
 const jwt = require("jsonwebtoken");
+
+// jjw: TODO: 
+// jjw: https://www.youtube.com/watch?v=uAKzFhE3rxU
+/* IMPORTANT: Please use argon for hashing and verifying refresh 
+tokens (https://www.npmjs.com/package/argon2). Bcrypt is only good 
+for short passwords (less than 74 bytes). Since our refresh token 
+is a JWT, it will be longer than 74 bytes, so our bcrypt compare 
+function might return true when it should not!*/
 const bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
@@ -106,6 +116,9 @@ exports.signin = (req, res) => {
       for (let i = 0; i < user.roles.length; i++) {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
+
+      // jjw: HERE TODO!!! instead of sending tokens here, set them on the cookies of the browser,
+      // jjw:   like here: https://github.com/flolu/auth/blob/master/api/index.ts
       res.status(200).send({
         id: user._id,
         username: user.username,
@@ -132,9 +145,9 @@ exports.refreshToken = async (req, res) => {
     // jjw: Document, we should be fine by using findOne(...) 
     // jjw: NOTE: storing refreshingTokens in DB is NOT usual practice, as usually
     // jjw:   we actually transmit the signed refreshToken payload in a JWT to client 
-    // jjw:   and back to server and so on so forth. more secure as we know with the JWT
-    // jjw:   if the payload itself has been tempered with, while with the just a naked
-    // jjw:   UUID, we can't tell. 
+    // jjw:   and back to server and so on so forth. more secure as with the JWT, 
+    // jjw:   if the payload itself has been tempered with, we will know; while with 
+    // jjw:   the just a naked UUID, we can't tell. 
     let refreshToken = await RefreshToken.findOne({ token: requestToken });
 
     if (!refreshToken) {
@@ -143,7 +156,7 @@ exports.refreshToken = async (req, res) => {
     }
 
     if (RefreshToken.verifyExpiration(refreshToken)) {
-      // jjw: if the refreshToken is also expired, we return error to the client
+      // jjw: if the refreshToken is also expired, we remove this refreshToken and return error to the client
       // jjw:   asking them to re-signin, upon wich, we will call
       // jjw:   'let refreshToken = await RefreshToken.createToken(user);'
       // jjw:   and create an unexpired refreshToken.
@@ -160,6 +173,9 @@ exports.refreshToken = async (req, res) => {
     let newAccessToken = jwt.sign({ id: refreshToken.user._id }, config.secret, {
       expiresIn: config.jwtExpiration,
     });
+
+    // jjw: HERE TODO!!! instead of sending tokens here, set them on the cookies of the browser,
+    // jjw:   like here: https://github.com/flolu/auth/blob/master/api/index.ts
 
     // jjw: return 
     // jjw: - the new signed JWT accessToken AND 
