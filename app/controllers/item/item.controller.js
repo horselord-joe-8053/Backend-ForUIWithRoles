@@ -12,7 +12,7 @@ const ObjectId = require('mongodb').ObjectID;
 // jjw: TODO: read JS function declaration and definition: 
 // jjw:   https://stackoverflow.com/questions/16439949/define-local-function-in-javascript-use-var-or-not
 exports.itemGetAll = (req, res, mongoosModel, configKey) => {  
-  logger.logAsStr("itemGetAll", "configKey", configKey);
+  logger.logAsStr("itemGetAll", "configKey", configKey, "debug");
 
   let itemMsgLabel = configHelper.getConfigMsgLabel(configKey);
 
@@ -36,10 +36,10 @@ exports.itemGetAll = (req, res, mongoosModel, configKey) => {
           // jjw: dynamically populate all the fields (except for id) based on 
           // jjw:   configuration and item from the data source
           let itemJson = populateFields(x, configKey);
-          logger.logAsJsonStr("itemGetAll", "itemJson after populateFields()", itemJson);
+          logger.logAsJsonStr("itemGetAll", "itemJson after populateFields()", itemJson, "debug");
           itemsJson.push(itemJson);
         })
-        logger.logAsJsonStr("itemGetAll", "item Json:", itemsJson);
+        logger.logAsJsonStr("itemGetAll", "item Json:", itemsJson, "debug");
         res.status(200).send(itemsJson);
       }
     );
@@ -51,27 +51,27 @@ var populateFields = (itemFromDataSource, configKey) => {
   let populatedFieldsMap = {id : itemFromDataSource._id}; // init the map with id field
 
   let configFieldsMap = configHelper.getLoadedConfigFieldsMap(configKey);
-  logger.logAsJsonStr("populateFields", "configFieldsMap", configFieldsMap);
+  logger.logAsJsonStr("populateFields", "configFieldsMap", configFieldsMap, "DEBUG");
 
   for ([key, val] of Object.entries(configFieldsMap)) {
-    logger.logAsStr("populateFields loop:", "key", key);
-    logger.logAsJsonStr("populateFields loop:", "val", val);
+    logger.logAsStr("populateFields loop:", "key", key, "DEBUG");
+    logger.logAsJsonStr("populateFields loop:", "val", val, "DEBUG");
 
     let fieldNameInDS = val["nameInDataSource"];
-    logger.logAsStr("populateFields loop:", "fieldNameInDS", fieldNameInDS);
+    logger.logAsStr("populateFields loop:", "fieldNameInDS", fieldNameInDS, "DEBUG");
 
     let fieldValueFromDS = itemFromDataSource[fieldNameInDS];
-    logger.logAsStr("populateFields loop:", "fieldValueFromDS", fieldValueFromDS);
+    logger.logAsStr("populateFields loop:", "fieldValueFromDS", fieldValueFromDS, "DEBUG");
 
     populatedFieldsMap[fieldNameInDS] = fieldValueFromDS;
 
-                // firstName: x.firstName,
-            // lastName: x.lastName,
-            // DOB: x.DOB, // jjw: ???TODO: DOB not showing
-            // lastKnownPayDate: x.lastKnownPayDate,
-            // payFrequency: x.payFrequency 
+    // firstName: x.firstName,
+    // lastName: x.lastName,
+    // DOB: x.DOB, // jjw: ???TODO: DOB not showing
+    // lastKnownPayDate: x.lastKnownPayDate,
+    // payFrequency: x.payFrequency 
   }
-  logger.logAsJsonStr("populateFields", "populatedFieldsMap", populatedFieldsMap);
+  logger.logAsJsonStr("populateFields", "populatedFieldsMap", populatedFieldsMap, "DEBUG");
 
   return populatedFieldsMap;
 }

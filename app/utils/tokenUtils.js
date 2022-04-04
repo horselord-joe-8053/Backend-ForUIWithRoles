@@ -1,0 +1,195 @@
+const logger = require("../utils/logger");
+
+const {CookieOptions, Response} = require("express");
+const jwt = require('jsonwebtoken');
+const { TokenExpiredError } = jwt;
+
+// const {
+//   AccessToken,
+//   AccessTokenPayload,
+//   Cookies,
+//   RefreshToken,
+//   RefreshTokenPayload,
+//   UserDocument,
+// } = require('./shared');
+
+const authConfig = require('../config/auth.config');
+const {Cookies, TokenExpiration} = require('../config/auth.config');
+
+// jjw: https://www.youtube.com/watch?v=xMsJPnjiRAc
+
+function signAccessToken(payload) {
+  return jwt.sign(payload, authConfig.accessTokenSecret, {expiresIn: TokenExpiration.Access})
+}
+
+function signRefreshToken(payload) {
+  return jwt.sign(payload, authConfig.refreshTokenSecret, {expiresIn: TokenExpiration.Refresh})
+}
+
+const defaultCookieOptions = {
+  // jjw: TODO! enable the rest later
+  httpOnly: true,
+  // secure: authConfig.isProduction,
+  // sameSite: authConfig.isProduction ? 'strict' : 'lax',
+  // domain: authConfig.baseDomain,
+  // path: '/',
+}
+
+const accessTokenCookieOptions = {
+  ...defaultCookieOptions,
+  maxAge: TokenExpiration.CookieAccess * 1000,
+}
+
+const refreshTokenCookieOptions = {
+  ...defaultCookieOptions,
+  maxAge: TokenExpiration.CookieRefresh * 1000,
+}
+
+exports.verifyRefreshToken = (httpResponse, encodedToken) => {
+  return verifyToken(httpResponse, "RefreshToken", encodedToken, authConfig.refreshTokenSecret);
+}
+
+exports.verifyAccessToken = (httpResponse, encodedToken) => {
+  return verifyToken(httpResponse, "AccessToken", encodedToken, authConfig.accessTokenSecret);
+}
+
+const verifyToken = (httpResponse, tokenType, encodedToken, secret) => {
+
+  // jjw: source code for jwt.verify(...)
+  // jjw:   https://github.com/auth0/node-jsonwebtoken/blob/eefb9d9c6eec54718fa6e41306bda84788df7bec/verify.js#L199-L211
+  // jjw: It's an asynchronous function with option to take a callback argument, two way to call
+  // jjw: 1. call normally and get the decoded token as return value, use try catch to get the err
+  // jjw: 2. passing in a callback with (err, decodedToken) as arguments
+  try {
+
+    let decodedToken = jwt.verify(encodedToken, secret);
+    logger.logAsJsonStr("-- tokenUtils.verifyToken", tokenType + " not expired, decoded to:", decodedToken);
+
+    return decodedToken;
+
+  } catch (err) {
+
+    // jjw: https://github.com/auth0/node-jsonwebtoken/issues/609
+    // jjw: https://github.com/auth0/node-jsonwebtoken/blob/eefb9d9c6eec54718fa6e41306bda84788df7bec/verify.js#L199-L211
+    // jjw: https://github.com/auth0/node-jsonwebtoken/blob/eefb9d9c6eec54718fa6e41306bda84788df7bec/lib/TokenExpiredError.js
+    if (err instanceof TokenExpiredError) {
+      logger.logAsJsonStr("-- tokenUtils.verifyToken", "caught TokenExpiredError:", err);
+      // jjw: if the tokent is expired, return error to client immediately
+      // jjw: hoping upon this, the client will send to /refreshToken/ end point
+      httpResponse.status(401).send({ message: "Unauthorized! " + tokenType + " expired" });
+    } else {
+      logger.logAsJsonStr("-- tokenUtils.verifyToken", "caught NON-TokenExpiredError error:", err);
+
+      httpResponse.status(401).send({ message: "Unauthorized! Failed to verify " + tokenType + " for reasons other than expired token" });
+    }
+    httpResponse.end();
+  }
+
+}
+
+// exports.verifyRefreshToken = (token, callback) => {
+//   return jwt.verify(token, authConfig.refreshTokenSecret, callback)
+// }
+
+// exports.verifyAccessToken = (token, callback) => {
+//   return jwt.verify(token, authConfig.accessTokenSecret, callback)
+// }
+
+exports.buildTokens = (user, loginSessionId) => {
+  const accessPayload = {
+      "userId": user._id, 
+      // "loginSessionId": loginSessionId, 
+      // "loginSessionVersion": user.loginSessions[loginSessionId]
+    }
+  
+  const refreshPayload = {
+    "userId": user._id, 
+    "loginSessionId": loginSessionId, 
+    "loginSessionVersion": user.loginSessions[loginSessionId]
+  };
+
+  const accessToken = signAccessToken(accessPayload);
+  const refreshToken = refreshPayload && signRefreshToken(refreshPayload);
+
+  return {accessToken, refreshToken};
+}
+
+exports.setTokens = (res, accessPayload, refreshPayload) => {
+  res.cookie(Cookies.AccessToken, accessPayload, accessTokenCookieOptions)
+  // jjw: only update the refreshToken in the cookie if it is defined
+  if (refreshPayload) res.cookie(Cookies.RefreshToken, refreshPayload, refreshTokenCookieOptions)
+}
+
+exports.generateRefreshedTokens = (currentRefreshToken, loginSessionId, storedTokenVersion) => {
+
+  logger.logAsJsonStr("token-utils.refreshTokens", "currentRefreshToken", currentRefreshToken);
+  logger.logAsStr("token-utils.refreshTokens", "loginSessionId", loginSessionId);
+  logger.logAsStr("token-utils.refreshTokens", "storedTokenVersion", storedTokenVersion);
+
+  // -- 1. Create refreshPayload + Sign it to restart its expiration cycle
+  // let refreshPayload;
+  // jjw: ??? current.exp ???
+  // jjw: the 'current' was generated by jwt.verify(token, config.refreshTokenSecret) as RefreshToken
+  // jjw:   , where the jwt.verify will return the object below which, besides the payload object
+  // jjw:   we defined (RefreshTokenPayload)
+  // jjw:   also a 'exp' indicating the time by which the JWT token will expire (which makes up the extra
+  // jjw:   field of RefreshToken comparing to RefreshTokenPayload)
+  /*
+  export interface JwtPayload {
+    [key: string]: any;
+    iss?: string | undefined;
+    sub?: string | undefined;
+    aud?: string | string[] | undefined;
+    exp?: number | undefined;
+    nbf?: number | undefined;
+    iat?: number | undefined;
+    jti?: string | undefined;
+  } 
+  */
+  // // jjw: because we do 
+  // const expiration = new Date(currentRefreshToken.exp * 1000)
+  // const now = new Date()
+  // const secondsUntilExpiration = (expiration.getTime() - now.getTime()) / 1000
+  // if (secondsUntilExpiration < TokenExpiration.RefreshIfLessThan) {
+  //   // jjw: only if the refreshToken is going to expire sooner than the threshold
+  //   // jjw:   (in this config, 4 days while refreshToken is set with life span of 7 days)
+  //   // jjw: , then we will form a new payload and hence a new refreshToken
+  //   // jjw:   (with Ttl changed to start from Full again)
+  //   refreshPayload = {
+  //     "userId": currentRefreshToken.userId, 
+  //     "loginSessionId": loginSessionId, 
+  //     "loginSessionVersion": storedTokenVersion
+  //   }
+  // }
+  // // jjw: otherwise, refreshPayload here will be undefined
+  // const refreshToken = refreshPayload && signRefreshToken(refreshPayload)
+
+  // -- 1. Create refreshPayload + Sign it to restart its expiration cycle
+  const newRefreshPayload = {
+    "userId": currentRefreshToken.userId, 
+    "loginSessionId": loginSessionId, 
+    "loginSessionVersion": storedTokenVersion
+  }
+  const newRefreshToken = signRefreshToken(newRefreshPayload)
+  // jjw: NOTE: refreshPayload could be undefined if the refreshToken is NOT
+  // jjw:   going to expire sooner than the threshold
+  // jjw:   --> leads to refreshToken undefined
+  logger.logAsJsonStr("generateRefreshedTokens", "newRefreshPayload", newRefreshPayload);
+  logger.logAsJsonStr("generateRefreshedTokens", "newRefreshToken", newRefreshToken);
+
+  // -- 2. Create accessPayload + Sign it to restart its expiration cycle
+  const newAccessPayload = {userId: currentRefreshToken.userId}
+  const newAccessToken = signAccessToken(newAccessPayload)
+
+  logger.logAsJsonStr("generateRefreshedTokens", "newAccessPayload", newAccessPayload);
+  logger.logAsJsonStr("generateRefreshedTokens", "newAccessToken", newAccessToken);
+
+  // jjw: caller of this function will have to deal with the situation where
+  // jjw:   refreshToken is undefined
+  return {newAccessToken, newRefreshToken};
+}
+
+exports.clearTokens = (res) => {
+  res.cookie(Cookies.AccessToken, '', {...defaultCookieOptions, maxAge: 0})
+  res.cookie(Cookies.RefreshToken, '', {...defaultCookieOptions, maxAge: 0})
+}

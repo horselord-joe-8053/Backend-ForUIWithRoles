@@ -6,10 +6,9 @@ const controller = require("../controllers/user.controller");
 // jjw:   routes
 module.exports = function(app) {
   app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
-    );
+    // res.header("Access-Control-Allow-Headers", "x-access-token, Origin, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept"); 
+    // jjw: no need for x-access-token, we store the token in the cookies
     next();
   });
 
@@ -19,23 +18,23 @@ module.exports = function(app) {
 
   // jjw: NOTE before these resource request, singin already happened
   // jjw: authJwt check for expired token
-  app.get("/api/test/current-user", [authJwt.verifyToken], controller.currUserBoard);
+  app.get("/api/test/current-user", [authJwt.verifyAccToken], controller.currUserBoard);
 
   app.get(
     "/api/test/staff",
-    [authJwt.verifyToken, authJwt.isStaff],
+    [authJwt.verifyAccToken, authJwt.isStaff],
     controller.staffBoard
   );
 
   app.get(
     "/api/test/owner",
-    [authJwt.verifyToken, authJwt.isOwner],
+    [authJwt.verifyAccToken, authJwt.isOwner],
     controller.ownerBoard
   );
 
   app.get(
     "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyAccToken, authJwt.isAdmin],
     controller.adminBoard
   );
 };

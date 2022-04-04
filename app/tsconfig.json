@@ -1,27 +1,27 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "baseUrl": ".",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "incremental": true,
+    // "paths": {
+    //   "@shared": ["."]
+    // },
+    
   },
-  "include": [
-    "src"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/tokenUtils.js", "utils/tokenUtils.js", "routes/auth.routes.js", "controllers/auth.controller.js", "utils/tokenUtils.tsx.old", "utils/logger.tsx.old", "utils/shared/index.ts.old"],
+  "exclude": ["node_modules"],
+  // "references": [{"path": "."}],
+  
 }

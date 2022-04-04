@@ -28,7 +28,7 @@ var loadedConfig = {};
 
 loadConfigs(); 
 
-console.log("after loadConfigs(), loadedConfig:\n", JSON.stringify(loadedConfig, null, '\t'));
+logger.logAsJsonStr("after loadConfigs(), ", "loadedConfig", loadedConfig, "debug");
 
 // function AddEdit ({match} : RouteComponentProps<IItemId>) {
 // export function loadConfigs() { // got error [SyntaxError: Unexpected token 'export'] jjw: TODO: why???
