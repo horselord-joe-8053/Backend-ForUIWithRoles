@@ -28,7 +28,13 @@ function signRefreshToken(payload) {
 
 const defaultCookieOptions = {
   // jjw: TODO! enable the rest later
-  httpOnly: true,
+
+  // jjw: https://stackoverflow.com/a/21467613
+  // jjw: when we logout, only happen on the client side, we want the client js be able to expire the
+  // jjw: cookies as https://stackoverflow.com/a/23995984
+  // jjw: hence set this to false
+  httpOnly: false,
+  // httpOnly: true,
   // secure: authConfig.isProduction,
   // sameSite: authConfig.isProduction ? 'strict' : 'lax',
   // domain: authConfig.baseDomain,
@@ -198,6 +204,9 @@ exports.generateRefreshedTokens = (currUserId, loginSessionId, storedTokenVersio
 }
 
 exports.clearTokens = (res) => {
-  res.cookie(Cookies.AccessToken, '', {...defaultCookieOptions, maxAge: 0})
-  res.cookie(Cookies.RefreshToken, '', {...defaultCookieOptions, maxAge: 0})
+  res.clearCookie(Cookies.AccessToken);
+  res.clearCookie(Cookies.RefreshToken);
+
+  // res.cookie(Cookies.AccessToken, '', {...defaultCookieOptions, maxAge: 0});
+  // res.cookie(Cookies.RefreshToken, '', {...defaultCookieOptions, maxAge: 0});
 }

@@ -11,6 +11,9 @@ const Role = db.role;
 
 const { TokenExpiredError } = jwt;
 
+const accessTokenMissingMsg = "Unauthorized! AccessToken is missing";
+const accessRefreshTokenBothMissingMsg = "Unauthorized! AccessToken and RefreshToken are both missing";
+
 // const catchError = (err, res) => {
 //   if (err instanceof TokenExpiredError) {
 //     // jjw: if the tokent is expired, return error to client immediately
@@ -31,16 +34,32 @@ const verifyAccToken = (req, res, next) => {
     return res.status(401).send({ message: "Try to verify AccessToken but No cookies found on the http request!" });
   }
 
-  let accessToken = req.cookies[Cookies.AccessToken];
-  
-  // TODO: for some reason, when try to directly reach a page without logging in, on the browser cookie, accessToken shows as 'undefined'
-  if (!accessToken || accessToken === "undefined") {
-    logger.logAsJsonStr("authJwt.verifyAccToken", "AccessToken not found from req.cookies:", req.cookies);
+  logger.logAsJsonStr("authJwt.verifyAccToken", "check req.cookies:", req.cookies);
 
-    return res.status(401).send({ message: "Try to verify AccessToken but no AccessToken or 'undefined' AccessToken is provided in the cookies!" });
+  let accessToken = req.cookies[Cookies.AccessToken];
+  let refreshToken = req.cookies[Cookies.RefreshToken];
+  
+  // JJW: TODO NOW!!!: for some reason, when try to directly reach a page without logging in, on the browser cookie, accessToken shows as 'undefined'
+  // JJW: TODO NOW!!!: imagine when we had a short server down time betwen user interactions, we want
+  // JJW:   it to be seamless to user as if nothing happend, so if access token is now undefined but
+  // JJW:   refreshToken is there, we should still go through 'refereshToken()', no? 
+  if (!accessToken || accessToken == "undefined") {
+    
+    logger.logAsJsonStr("authJwt.verifyAccToken", "AccessToken NOT found from req.cookies", "");
+    
+    if (refreshToken && refreshToken != "undefined") {
+
+      logger.logAsJsonStr("authJwt.verifyAccToken", "But RefreshToken is found from req.cookies, refreshToken:", refreshToken);
+      return res.status(401).send({ message: accessTokenMissingMsg });
+
+    } else {
+
+      return res.status(401).send({ message:  accessRefreshTokenBothMissingMsg});
+    
+    }
   }
 
-  logger.logAsJsonStr("authJwt.verifyAccToken", "AccessToken found, before TokenUtils.verifyToken(), encoded AccessToken:", accessToken);
+  logger.logAsJsonStr("authJwt.verifyAccToken", "AccessToken is found in req.cookies, before TokenUtils.verifyToken(), encoded AccessToken:", accessToken);
 
   /* TODO: HERE !!!
   in authJwt.verifyToken(), 'AccessToken found, before decoding:':

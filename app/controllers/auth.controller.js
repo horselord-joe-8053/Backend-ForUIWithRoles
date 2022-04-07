@@ -256,6 +256,15 @@ exports.signinNew = (req, res) => {
 
 // jjw: this gets called for "/api/auth/refreshtoken" requests 
 exports.refreshTokenNew = async (req, res) => {
+  // jjw: TODO: NOW!!! 
+  // jjw: best practice - do not use cookie but browser sessionStore???
+  // jjw:   https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#silent-refresh
+  // jjw:   https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.md#json-web-token-cheat-sheet-for-java
+
+  // jjw: TODO: NOW!!!
+  // jjw: best practice - mobile device, 'refreshtoken lives forever' so need a way to 'revoke' the access from that (device + user) combo
+  // jjw: https://stackoverflow.com/a/26834685/18362708
+
   // jjw: NOTE A: we implement Refresh Token Rotation: 
   // jjw:    https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation
   // jjw:    => when AccessToken expires, but RefreshToken has not expired, we use RefreshToken 

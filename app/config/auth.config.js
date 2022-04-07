@@ -24,7 +24,7 @@ module.exports = {
     // Access : 5 * 60,
     Access : 20, // TODO: to remove, test with very short lived AccessToken
     Refresh : 7 * 24 * 60 * 60,
-    RefreshIfLessThan : 4 * 24 * 60 * 60,
+    // RefreshIfLessThan : 4 * 24 * 60 * 60,
 
     // jjw: 2. Cookie property expiration options - apparently, 
     // jjw:     upon expiration by this, the property in the cookie of the browser will have a "undefined" value
