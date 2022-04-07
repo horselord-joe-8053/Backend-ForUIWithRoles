@@ -40,7 +40,7 @@ const verifyAccToken = (req, res, next) => {
     return res.status(401).send({ message: "Try to verify AccessToken but no AccessToken or 'undefined' AccessToken is provided in the cookies!" });
   }
 
-  logger.logAsJsonStr("authJwt.verifyAccToken", "AccessToken found, before decoding:", accessToken);
+  logger.logAsJsonStr("authJwt.verifyAccToken", "AccessToken found, before TokenUtils.verifyToken(), encoded AccessToken:", accessToken);
 
   /* TODO: HERE !!!
   in authJwt.verifyToken(), 'AccessToken found, before decoding:':
@@ -55,7 +55,7 @@ const verifyAccToken = (req, res, next) => {
 
   let decodedAccessToken = TokenUtils.verifyAccessToken(res, accessToken);
 
-  logger.logAsJsonStr("authJwt.verifyAccToken", "after TokenUtils.verifyToken(), decodedAccessToken", decodedAccessToken);
+  logger.logAsJsonStr("authJwt.verifyAccToken", "after TokenUtils.verifyToken(), decoded AccessToken", decodedAccessToken);
 
   // detect undefined: https://stackoverflow.com/a/2985773
   if (decodedAccessToken) {

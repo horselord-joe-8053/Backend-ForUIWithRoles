@@ -73,7 +73,7 @@ const verifyToken = (httpResponse, tokenType, encodedToken, secret) => {
     // jjw: https://github.com/auth0/node-jsonwebtoken/blob/eefb9d9c6eec54718fa6e41306bda84788df7bec/verify.js#L199-L211
     // jjw: https://github.com/auth0/node-jsonwebtoken/blob/eefb9d9c6eec54718fa6e41306bda84788df7bec/lib/TokenExpiredError.js
     if (err instanceof TokenExpiredError) {
-      logger.logAsJsonStr("-- tokenUtils.verifyToken", "caught TokenExpiredError:", err);
+      logger.logAsJsonStr("-- tokenUtils.verifyToken", "caught TokenExpiredError, this means the Token has expired:", err);
       // jjw: if the tokent is expired, return error to client immediately
       // jjw: hoping upon this, the client will send to /refreshToken/ end point
       httpResponse.status(401).send({ message: "Unauthorized! " + tokenType + " expired" });
@@ -120,9 +120,9 @@ exports.setTokens = (res, accessPayload, refreshPayload) => {
   if (refreshPayload) res.cookie(Cookies.RefreshToken, refreshPayload, refreshTokenCookieOptions)
 }
 
-exports.generateRefreshedTokens = (currentRefreshToken, loginSessionId, storedTokenVersion) => {
+exports.generateRefreshedTokens = (currUserId, loginSessionId, storedTokenVersion) => {
 
-  logger.logAsJsonStr("token-utils.refreshTokens", "currentRefreshToken", currentRefreshToken);
+  logger.logAsJsonStr("token-utils.refreshTokens", "currUserId", currUserId);
   logger.logAsStr("token-utils.refreshTokens", "loginSessionId", loginSessionId);
   logger.logAsStr("token-utils.refreshTokens", "storedTokenVersion", storedTokenVersion);
 
@@ -164,25 +164,33 @@ exports.generateRefreshedTokens = (currentRefreshToken, loginSessionId, storedTo
   // // jjw: otherwise, refreshPayload here will be undefined
   // const refreshToken = refreshPayload && signRefreshToken(refreshPayload)
 
-  // -- 1. Create refreshPayload + Sign it to restart its expiration cycle
-  const newRefreshPayload = {
-    "userId": currentRefreshToken.userId, 
-    "loginSessionId": loginSessionId, 
-    "loginSessionVersion": storedTokenVersion
+  var newAccessToken = null;
+  var newRefreshToken = null;
+
+  try {
+    // -- 1. Create refreshPayload + Sign it to restart its expiration cycle
+    const newRefreshPayload = {
+      "userId": currUserId, 
+      "loginSessionId": loginSessionId, 
+      "loginSessionVersion": storedTokenVersion
+    }
+    newRefreshToken = signRefreshToken(newRefreshPayload)
+    // jjw: NOTE: refreshPayload could be undefined if the refreshToken is NOT
+    // jjw:   going to expire sooner than the threshold
+    // jjw:   --> leads to refreshToken undefined
+    logger.logAsJsonStr("generateRefreshedTokens", "newRefreshPayload", newRefreshPayload);
+    logger.logAsJsonStr("generateRefreshedTokens", "newRefreshToken", newRefreshToken);
+
+    // -- 2. Create accessPayload + Sign it to restart its expiration cycle
+    const newAccessPayload = {userId: currUserId}
+    newAccessToken = signAccessToken(newAccessPayload)
+
+    logger.logAsJsonStr("generateRefreshedTokens", "newAccessPayload", newAccessPayload);
+    logger.logAsJsonStr("generateRefreshedTokens", "newAccessToken", newAccessToken);
+
+  } catch (error) {    
+    logger.logAsJsonStr("generateRefreshedTokens", "caught an error!!!", error);
   }
-  const newRefreshToken = signRefreshToken(newRefreshPayload)
-  // jjw: NOTE: refreshPayload could be undefined if the refreshToken is NOT
-  // jjw:   going to expire sooner than the threshold
-  // jjw:   --> leads to refreshToken undefined
-  logger.logAsJsonStr("generateRefreshedTokens", "newRefreshPayload", newRefreshPayload);
-  logger.logAsJsonStr("generateRefreshedTokens", "newRefreshToken", newRefreshToken);
-
-  // -- 2. Create accessPayload + Sign it to restart its expiration cycle
-  const newAccessPayload = {userId: currentRefreshToken.userId}
-  const newAccessToken = signAccessToken(newAccessPayload)
-
-  logger.logAsJsonStr("generateRefreshedTokens", "newAccessPayload", newAccessPayload);
-  logger.logAsJsonStr("generateRefreshedTokens", "newAccessToken", newAccessToken);
 
   // jjw: caller of this function will have to deal with the situation where
   // jjw:   refreshToken is undefined

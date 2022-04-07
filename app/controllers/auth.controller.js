@@ -302,7 +302,7 @@ exports.refreshTokenNew = async (req, res) => {
       throw "Try to verify RefreshToken but No token provided on the cookies!";
     }
 
-    logger.logAsJsonStr("authJwt.refreshTokenNew", "RereshToken found, before decoding:", refreshToken);
+    logger.logAsJsonStr("authJwt.refreshTokenNew", "RereshToken found, before TokenUtils.verifyToken(), encoded RefreshToken:", refreshToken);
 
     // jjw: verify and decode the refreshToken from the Cookie of the request
     // jjw: remember that RefreshToken is {userId: string, version: number, exp: number}
@@ -313,8 +313,9 @@ exports.refreshTokenNew = async (req, res) => {
     // const decodedCurrRefreshToken = TokenUtils.verifyRefreshToken(refreshToken)
     // logger.logAsJsonStr("auth.controller.refreshToken", "currRefreshToken", decodedCurrRefreshToken);
 
-    const user = await User.findOne({_id: decodedCurrRefreshToken.userId});
-    if (!user) throw "User not found for userId: {" + decodedCurrRefreshToken.userId + "}";
+    const currUserId = decodedCurrRefreshToken.userId;
+    const user = await User.findOne({_id: currUserId});
+    if (!user) throw "User not found for userId: {" + currUserId + "}";
 
     logger.logAsJsonStr("auth.controller.refreshToken", "user found:", user);
 
@@ -334,8 +335,20 @@ exports.refreshTokenNew = async (req, res) => {
     }
 
     if (decodedCurrRefreshToken.loginSessionVersion !== userLoginSessionVersionFromDB) {
-      logger.logAsStr("token-utils.refreshTokens", "!==", "version not matching!");
-      
+/*
+jjw: TODO: HERE !!! refreshing owner board page a few times causing: first, delete all log in sessions in DB
+
+in auth.controller.refreshToken(), 'currRefreshTokenLoginSessionId': 17cb1977-350e-42b6-8ee9-e29428073a73
+in auth.controller.refreshToken(), 'userLoginSessionVersionFromDB': 3
+in token-utils.refreshTokens(), 'decodedCurrRefreshToken.loginSessionVersion': 2
+in token-utils.refreshTokens(), 'userLoginSessionVersionFromDB': 3
+in token-utils.refreshTokens(), 'version not matching!!!': undefined
+
+*/      
+      logger.logAsStr("token-utils.refreshTokens", "decodedCurrRefreshToken.loginSessionVersion", decodedCurrRefreshToken.loginSessionVersion);
+      logger.logAsStr("token-utils.refreshTokens", "userLoginSessionVersionFromDB", userLoginSessionVersionFromDB);
+      logger.logAsStr("token-utils.refreshTokens", "version not matching!!!");
+
       // jjw: Need to do more
       // TODO: here!! remove the entire loginSession entry from the user
       // op1: throw exception and catch at outter level
@@ -359,46 +372,53 @@ exports.refreshTokenNew = async (req, res) => {
     // Carrying out a normal refresh operation: generating new refresh and access tokens 
 
     let updatedUserLoginSessionVersion = userLoginSessionVersionFromDB + 1; // increment the loginSession Version
+    logger.logAsStr("auth.controller.refreshToken | after increment |  updatedUserLoginSessionVersion", "updatedUserLoginSessionVersion", updatedUserLoginSessionVersion);
+
     user.loginSessions[currRefreshTokenLoginSessionId] = updatedUserLoginSessionVersion;
 
     updateUserDB(user);
 
-    logger.logAsStr("auth.controller.refreshToken | BEFORE TokenUtils.refreshTokens", "currRefreshTokenLoginSessionId", currRefreshTokenLoginSessionId);
+    logger.logAsStr("auth.controller.refreshToken | BEFORE TokenUtils.generateRefreshedTokens", "currRefreshTokenLoginSessionId", currRefreshTokenLoginSessionId);
     
     const {newAccessToken, newRefreshToken} = TokenUtils.generateRefreshedTokens(
-      decodedCurrRefreshToken, 
+      currUserId, 
       currRefreshTokenLoginSessionId, 
       updatedUserLoginSessionVersion 
     )
 
-    logger.logAsJsonStr("auth.controller.refreshToken | AFTER TokenUtils.refreshTokens", "newAccessToken", newAccessToken);
-    logger.logAsJsonStr("auth.controller.refreshToken | AFTER TokenUtils.refreshTokens", "newRefreshToken", newRefreshToken);
+    logger.logAsJsonStr("auth.controller.refreshToken | AFTER TokenUtils.generateRefreshedTokens", "newAccessToken", newAccessToken);
+    logger.logAsJsonStr("auth.controller.refreshToken | AFTER TokenUtils.generateRefreshedTokens", "newRefreshToken", newRefreshToken);
 
     // jjw: NOTE refreshToken from above may be undefined
     // jjw: setTokens() below only update the refreshToken in the cookie if it is defined
     TokenUtils.setTokens(res, newAccessToken, newRefreshToken)
-
-    logger.logAsStr("auth.controller.refreshToken | after TokenUtils.refreshTokens", "res.cookies", res.cookies);
 
     // return res.status(200).json({
     //   accessToken: newAccessToken,
     //   refreshToken: refreshToken.token,
     // });
 
-    res.status(200).send("Successfully Refreshed Tokens - a new AccessToken and a newRefreshToken have been set on the Cookie");
+    res.status(200).send("Successfully Refreshed Tokens - a new AccessToken and a new RefreshToken have been set on the Cookie");
 
   } catch (error) {
     logger.logAsJsonStr("auth.controller.refreshToken", "error", error);
-    if (error === authConfig.versionMismatchErrorMsg) {
-        //TODO:
-    } else if (error === authConfig.loginSessionNotFoundInDBErrorMsg) {
-        //TODO:
-    }
+    // if (error === authConfig.versionMismatchErrorMsg) {
+    //   // jjw: this is a form of unauthorized error
+    //   res.status(401).send({ message: error }); 
+    // } else if (error === authConfig.loginSessionNotFoundInDBErrorMsg) {
+    //   // jjw: this is a form of unauthorized error
+    //   res.status(401).send({ message: error }); 
+    // } else {
+    //   // TokenUtils.clearTokens(res); //TODO: reenable !!!!
 
-    // TokenUtils.clearTokens(res); //TODO: reenable !!!!
+    //   // jjw: TODO: need to handle this on the client side by force a log out, given that we delete the tokens
+    //   res.status(500).send({ message: error }); 
+    // }
 
-    // jjw: TODO: need to handle this on the client side by force a log out, given that we delete the tokens
-    res.status(500).send({ message: error }); 
+    TokenUtils.clearTokens(res); //TODO: reenable !!!!
+    // jjw: no matter what type of error, it should be a 'authorization failure' hence 401. TODO: true ???
+    res.status(401).send({ message: error }); 
+
   }
 
   res.end()
@@ -407,7 +427,9 @@ exports.refreshTokenNew = async (req, res) => {
 updateUserDB = (user) => {
   logger.logAsStr("auth.controller.updateUserDB start:", "user.username", user.username);
 
-  User.updateOne({_id: ObjectId(user._id)}, user).exec(async (err, updateStatusResult) => { // jjw: TODO: do we need async here?
+  User.updateOne({_id: ObjectId(user._id)}, user).exec(async (err, updateStatusResult) => { 
+    // jjw: TODO!!!: do we need async here? this may cause race conditions ???
+
     // jjw: itemUpdated will be, if successful, 
     // jjw:   'itemUpdate: {"n":1,"nModified":1,"ok":1}'
     // jjw:   https://github.com/Automattic/monk/issues/149#issuecomment-232569704
