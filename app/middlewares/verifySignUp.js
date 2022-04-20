@@ -2,6 +2,8 @@ const db = require("../models");
 const ROLES = db.ROLES;
 const User = db.user;
 
+
+// jjw: TODO, here!!! change role to sing
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
   User.findOne({

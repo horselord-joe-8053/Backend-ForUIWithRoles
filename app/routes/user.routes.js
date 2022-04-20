@@ -22,19 +22,19 @@ module.exports = function(app) {
 
   app.get(
     "/api/test/staff",
-    [authJwt.verifyAccToken, authJwt.isStaff],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastStaff],
     controller.staffBoard
   );
 
   app.get(
     "/api/test/owner",
-    [authJwt.verifyAccToken, authJwt.isOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.ownerBoard
   );
 
   app.get(
     "/api/test/admin",
-    [authJwt.verifyAccToken, authJwt.isAdmin],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastAdmin],
     controller.adminBoard
   );
 };

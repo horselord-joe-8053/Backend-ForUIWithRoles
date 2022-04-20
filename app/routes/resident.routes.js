@@ -14,31 +14,31 @@ module.exports = function(app) {
 
   app.get(
     "/api/test/residents",
-    [authJwt.verifyAccToken, authJwt.isOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.residentGetAll
   );
 
   app.get(
     "/api/test/residents/:id",
-    [authJwt.verifyAccToken, authJwt.isOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.residentGet // jjw: here??? TODO: we can remove resident.controller entirely
   ); 
 
   app.post(
     "/api/test/residents",
-    [authJwt.verifyAccToken, authJwt.isOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.residentCreate // jjw: here??? TODO: we can remove resident.controller entirely
   ); 
 
   app.put(
     "/api/test/residents/:id",
-    [authJwt.verifyAccToken, authJwt.isOwner],
-    controller.residentUpdate // jjw: here??? TODO: we can remove resident.controller entirely
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    controller.residentUpdate // jjw: here??? TODO: we can remove resident.controller entirely, just using item.controller??
   ); 
 
   app.delete(
     "/api/test/residents/:id",
-    // [authJwt.verifyToken, authJwt.isOwner],
+    // [authJwt.verifyToken, authJwt.verifyIsAtLeastOwner], // jjw: here??? TODO: why don't need verifyIsAtLeastOwner?
     [authJwt.verifyAccToken],
     controller.residentDelete
   );

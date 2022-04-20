@@ -22,7 +22,7 @@ module.exports = {
     // jjw: use expiresIn in option for jwt.sign(...), not sure about when to use 'maxAge' option for jwt.verify(...)
     // jjw:   https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback
     // Access : 5 * 60,
-    Access : 20, // TODO: to remove, test with very short lived AccessToken
+    Access : 5, // TODO: to remove, test with very short lived AccessToken
     Refresh : 7 * 24 * 60 * 60,
     // RefreshIfLessThan : 4 * 24 * 60 * 60,
 

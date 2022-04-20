@@ -9,6 +9,19 @@ const levelMap = {
   "ERROR" : 4
 }
 
+const getCircularReplacer = () => {
+  const seen = new WeakSet();
+  return (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+};
+
 logToConsole = (logStr, level) => {
   let userLevel = level? level : defaultLogLevel;
 
@@ -28,7 +41,7 @@ exports.logAsStr = (inFunction, objName, info, level) => {
 }
 
 exports.logAsJsonStr = (inFunction, objName, object, level) => {
-  logToConsole("in " + inFunction + "(), '" + objName + "':\n" + JSON.stringify(object, null, '\t'), level);
+  logToConsole("in " + inFunction + "(), '" + objName + "':\n" + JSON.stringify(object, getCircularReplacer(), '\t'), level);
 }
 
 /*
