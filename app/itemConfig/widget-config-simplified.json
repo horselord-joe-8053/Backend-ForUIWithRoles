@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "uuid_1234",
+    "key": "STAFF",
+    "maxNumColsInSummary": 5,
+    "itemMsgLabel": "Staff",
+    "itemServiceType": "staff",
+    "fieldsMap": {}
+  },
+  {
+    "_id": "uuid_1234",
+    "key": "RESIDENT",
+    "maxNumColsInSummary": 5,
+    "itemMsgLabel": "Resident",
+    "itemServiceType": "residents",
+    "fieldsMap": {}
+  }
+]

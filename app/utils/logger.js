@@ -1,18 +1,18 @@
-const logger = "INFO"; // jjw: this value we can adjust
+const logger = 'DEBUG'; // jjw: this value we can adjust
 
-const defaultLogLevel = "INFO"; // jjw: we can adjust 'logLevel' to hide all default printout
+const defaultLogLevel = 'INFO'; // jjw: we can adjust 'logLevel' to hide all default printout
 
 const levelMap = {
-  "DEBUG" : 1,
-  "INFO" : 2,
-  "WARNING" : 3,
-  "ERROR" : 4
-}
+  DEBUG: 1,
+  INFO: 2,
+  WARNING: 3,
+  ERROR: 4,
+};
 
 const getCircularReplacer = () => {
   const seen = new WeakSet();
   return (key, value) => {
-    if (typeof value === "object" && value !== null) {
+    if (typeof value === 'object' && value !== null) {
       if (seen.has(value)) {
         return;
       }
@@ -23,7 +23,7 @@ const getCircularReplacer = () => {
 };
 
 logToConsole = (logStr, level) => {
-  let userLevel = level? level : defaultLogLevel;
+  let userLevel = level ? level : defaultLogLevel;
 
   let userLevelVal = levelMap[userLevel.toUpperCase()];
   let minLevelVal = levelMap[logger.toUpperCase()];
@@ -34,15 +34,23 @@ logToConsole = (logStr, level) => {
     // jjw:   https://stackoverflow.com/questions/57685388/is-there-a-production-safe-version-of-function-caller-in-javascript
     console.log(logStr);
   }
-}
+};
 
 exports.logAsStr = (inFunction, objName, info, level) => {
-  logToConsole("in " + inFunction + "(), '" + objName + "': " + info, level)
-}
+  logToConsole('in ' + inFunction + "(), '" + objName + "': " + info, level);
+};
 
 exports.logAsJsonStr = (inFunction, objName, object, level) => {
-  logToConsole("in " + inFunction + "(), '" + objName + "':\n" + JSON.stringify(object, getCircularReplacer(), '\t'), level);
-}
+  logToConsole(
+    'in ' +
+      inFunction +
+      "(), '" +
+      objName +
+      "':\n" +
+      JSON.stringify(object, getCircularReplacer(), '\t'),
+    level
+  );
+};
 
 /*
 exports.logAsStr = (inFunction, objName, info, level) => {

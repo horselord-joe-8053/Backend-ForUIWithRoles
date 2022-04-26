@@ -5,6 +5,9 @@ const db = {};
 
 db.mongoose = mongoose;
 
+// jjw: TODO: how to do mongoose schema and model properly
+// jjw: https://stackoverflow.com/a/39871456
+// jjw: https://mongoosejs.com/docs/2.7.x/docs/schematypes.html
 db.resident = require("./resident.model");
 
 db.user = require("./user.model");
