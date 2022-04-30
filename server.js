@@ -81,8 +81,9 @@ app.get('/', (req, res) => {
 // jjw:   contain the 'sub routes'
 // routes
 require('./app/routes/auth.routes')(app);
-require('./app/routes/user.routes')(app);
+// require('./app/routes/user.routes')(app);
 require('./app/routes/resident.routes')(app);
+require('./app/routes/staff.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
