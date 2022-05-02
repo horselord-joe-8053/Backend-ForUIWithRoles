@@ -1,0 +1,7 @@
+[
+  { "name": "PUBLICUSER" },
+  { "name": "PRIVATEUSER" },
+  { "name": "STAFF" },
+  { "name": "OWNER" },
+  { "name": "ADMIN" }
+]

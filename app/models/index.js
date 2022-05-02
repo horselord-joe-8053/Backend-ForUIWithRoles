@@ -10,12 +10,21 @@ db.mongoose = mongoose;
 // jjw: https://mongoosejs.com/docs/2.7.x/docs/schematypes.html
 db.resident = require('./resident.model');
 db.staff = require('./staff.model');
+db.shiftsInADay = require('./shiftsInADay.model');
 
 db.user = require('./user.model');
 db.role = require('./role.model');
 db.refreshToken = require('./refreshToken.model');
 
 // db.ROLES = ["user", "admin", "moderator"];
-db.ROLES = ['user', 'staff', 'owner', 'admin'];
+db.ROLES = ['PRIVATEUSER', 'PUBLICUSER', 'STAFF', 'OWNER', 'ADMIN'];
 
 module.exports = db;
+
+/*
+  Admin = 'ADMIN',
+  Owner = 'OWNER',
+  Staff = 'STAFF',
+  PrivateUser = 'PRIVATEUSER',
+  PublicUser = 'PUBLICUSER',
+*/

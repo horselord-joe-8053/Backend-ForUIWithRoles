@@ -1,10 +1,8 @@
-// const Logger = require("../utils/logger.tsx");
 const logger = require('../../utils/logger');
 
 const configHelper = require('../../itemConfig/widget-config-helper-simplified');
 
-const db = require('../../models');
-const { resident: Resident } = db;
+// const db = require('../../models');
 const ObjectId = require('mongodb').ObjectID;
 
 // GET ALL
@@ -15,86 +13,86 @@ exports.itemGetAll = (req, res, mongoosModel, configKey) => {
 
   let itemMsgLabel = configHelper.getConfigMsgLabel(configKey);
 
-  // mongoosModel.find({}).exec(async (err, items) => {
   mongoosModel
     .find({})
     .lean() // jjw: NOTE: need to convert mongoose doc to a simple object https://stackoverflow.com/a/18070111
-    .exec(async (err, items) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-
-      if (!items) {
-        return res.status(404).send({ message: 'No ' + itemMsgLabel + ' found.' });
-      }
-
-      // Successful case
-      logger.logAsJsonStr(
-        'itemGetAll',
-        'before populateFields(), raw items from mongoose',
-        items,
-        'debug'
-      );
-
-      let itemsJson = [];
-      items.map((x) => {
-        // jjw: dynamically populate all the fields (except for id) based on
-        // jjw:   configuration and item from the data source
-        // let itemJson = populateFields(x, configKey); // jjw: re-thinking, we don't need this actually.
-
-        // jjw: NOTE: to remove properties from objects and result another object
-        // https://stackoverflow.com/a/208106
-        // 1. by delete: delete myObject.propA
-        // 2. by destructuring: as below.
-        // NOTE: it is not creating a new object but using 'object reference': https://stackoverflow.com/a/44355489
-        //    so be careful in case you will need to mutate the object you obtained from the
-        //    destructuring - as it will impact the original object.
-        // To 'partially cloning' the object,
-        //  - use Object.assign: https://stackoverflow.com/q/44354705
-        //  - or spreading syntax after ES6: https://stackoverflow.com/a/43376980
-        const { _id, __v, ...itemJson } = x;
-
-        itemJson.id = x._id;
-
-        logger.logAsJsonStr('itemGetAll', 'itemJson after populateFields()', itemJson, 'debug');
-        itemsJson.push(itemJson);
-      });
-      logger.logAsJsonStr('itemGetAll', 'itemsJson:', itemsJson, 'debug');
-      res.status(200).send(itemsJson);
-    });
+    .exec((err, items) => handleItems(err, items, itemMsgLabel, res));
 
   logger.logAsStr('itemGetAll', 'end', '');
 };
 
-var populateFields = (itemFromDataSource, configKey) => {
-  let populatedFieldsMap = { id: itemFromDataSource._id }; // init the map with id field
-
-  let configFieldsMap = configHelper.getLoadedConfigFieldsMap(configKey);
-  logger.logAsJsonStr('populateFields', 'configFieldsMap', configFieldsMap, 'DEBUG');
-
-  for ([key, val] of Object.entries(configFieldsMap)) {
-    logger.logAsStr('populateFields loop:', 'key', key, 'DEBUG');
-    logger.logAsJsonStr('populateFields loop:', 'val', val, 'DEBUG');
-
-    let fieldNameInDS = val['nameInDataSource'];
-    logger.logAsStr('populateFields loop:', 'fieldNameInDS', fieldNameInDS, 'DEBUG');
-
-    let fieldValueFromDS = itemFromDataSource[fieldNameInDS];
-    logger.logAsStr('populateFields loop:', 'fieldValueFromDS', fieldValueFromDS, 'DEBUG');
-
-    populatedFieldsMap[fieldNameInDS] = fieldValueFromDS;
-
-    // firstName: x.firstName,
-    // lastName: x.lastName,
-    // DOB: x.DOB, // jjw: ???TODO: DOB not showing
-    // lastKnownPayDate: x.lastKnownPayDate,
-    // payFrequency: x.payFrequency
+// NOTE: define async function https://www.w3schools.com/js/js_async.asp
+async function handleItems(err, items, itemMsgLabel, res) {
+  // jjw: TODO: does it need to be async here???
+  if (err) {
+    res.status(500).send({ message: err });
+    return;
   }
-  logger.logAsJsonStr('populateFields', 'populatedFieldsMap', populatedFieldsMap, 'DEBUG');
 
-  return populatedFieldsMap;
-};
+  if (!items) {
+    return res.status(404).send({ message: 'No ' + itemMsgLabel + ' found.' });
+  }
+
+  // Successful case
+  logger.logAsJsonStr('handleItems', 'raw ' + itemMsgLabel + ' item from mongoose', items, 'debug');
+
+  let itemsJson = [];
+  items.map((x) => {
+    // jjw: dynamically populate all the fields (except for id) based on
+    // jjw:   configuration and item from the data source
+    // let itemJson = populateFields(x, configKey); // jjw: re-thinking, we don't need this actually.
+
+    // jjw: NOTE: to remove properties from objects and result another object
+    // https://stackoverflow.com/a/208106
+    // 1. by delete: delete myObject.propA
+    // 2. by destructuring: as below.
+    // NOTE: it is not creating a new object but using 'object reference': https://stackoverflow.com/a/44355489
+    //    so be careful in case you will need to mutate the object you obtained from the
+    //    destructuring - as it will impact the original object.
+    // To 'partially cloning' the object,
+    //  - use Object.assign: https://stackoverflow.com/q/44354705
+    //  - or spreading syntax after ES6: https://stackoverflow.com/a/43376980
+    const { _id, __v, ...itemJson } = x;
+
+    itemJson.id = x._id;
+
+    logger.logAsJsonStr('handleItems', 'itemJson', itemJson, 'debug');
+    itemsJson.push(itemJson);
+  });
+  logger.logAsJsonStr('handleItems', 'itemsJson:', itemsJson, 'debug');
+  res.status(200).send(itemsJson);
+}
+// NOTE: define exportable local function: https://stackoverflow.com/a/13859434
+exports.handleItems = handleItems;
+
+// var populateFields = (itemFromDataSource, configKey) => {
+//   let populatedFieldsMap = { id: itemFromDataSource._id }; // init the map with id field
+
+//   let configFieldsMap = configHelper.getLoadedConfigFieldsMap(configKey);
+//   logger.logAsJsonStr('populateFields', 'configFieldsMap', configFieldsMap, 'DEBUG');
+
+//   for ([key, val] of Object.entries(configFieldsMap)) {
+//     logger.logAsStr('populateFields loop:', 'key', key, 'DEBUG');
+//     logger.logAsJsonStr('populateFields loop:', 'val', val, 'DEBUG');
+
+//     let fieldNameInDS = val['nameInDataSource'];
+//     logger.logAsStr('populateFields loop:', 'fieldNameInDS', fieldNameInDS, 'DEBUG');
+
+//     let fieldValueFromDS = itemFromDataSource[fieldNameInDS];
+//     logger.logAsStr('populateFields loop:', 'fieldValueFromDS', fieldValueFromDS, 'DEBUG');
+
+//     populatedFieldsMap[fieldNameInDS] = fieldValueFromDS;
+
+//     // firstName: x.firstName,
+//     // lastName: x.lastName,
+//     // DOB: x.DOB, // jjw: ???TODO: DOB not showing
+//     // lastKnownPayDate: x.lastKnownPayDate,
+//     // payFrequency: x.payFrequency
+//   }
+//   logger.logAsJsonStr('populateFields', 'populatedFieldsMap', populatedFieldsMap, 'DEBUG');
+
+//   return populatedFieldsMap;
+// };
 
 // GET BY ID
 exports.itemGet = (req, res, mongoosModel, configKey) => {

@@ -1,0 +1,325 @@
+import * as Logger from './logger';
+
+// jjw: inspired by https://stackoverflow.com/a/66446126
+export const DateUtils = {
+  getScheduledDatesWithIntervalInMonth,
+  getScheduledDatesWithIntervalInFornight,
+  getScheduledDatesWithIntervalInFourWeeks,
+  getDateIncrementedByDays,
+  toISODateWithoutTimeString,
+};
+
+// export const DateUtils = {
+//   inSeconds,
+//   inMinutes,
+//   inHours,
+//   inDays: inDaysFrac,
+//   inWeeks: inWeeksFrac,
+//   inMonths,
+//   inYears,
+// };
+
+/*
+// jjw: NOTE: we need to do comparison of the Date without the Time
+// https://stackoverflow.com/a/29602313
+Date.prototype.withoutTime = function () {
+  // var d = new Date(this);
+  // d.setHours(0, 0, 0, 0);
+  // return d;
+
+  // jjw: quite mad, but in our specific application, we never care about the time,
+  // so we do this to save the cost of creating a new Date that used above
+  this.setHours(0, 0, 0, 0);
+  return this;
+};
+*/
+const precision = 4;
+const ignorableEpsilon = Math.pow(10, -1 * precision);
+
+function getDateIncrementedByDays(baseDate, days) {
+  var date = new Date(baseDate);
+  date.setDate(baseDate.getDate() + days);
+  return date;
+}
+
+function getScheduledDatesWithIntervalInMonth(knownPrevDateStr) {
+  var knownPrevDate = new Date(knownPrevDateStr);
+  return getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate);
+}
+
+function getScheduledDatesWithIntervalInFornight(knownPrevDateStr) {
+  return getScheduledDatesWithIntervalInWeek(knownPrevDateStr, 2);
+}
+
+function getScheduledDatesWithIntervalInFourWeeks(knownPrevDateStr) {
+  return getScheduledDatesWithIntervalInWeek(knownPrevDateStr, 4);
+}
+
+function getScheduledDatesWithIntervalInWeek(knownPrevDateStr, weeksPerInterval) {
+  var knownPrevDate = new Date(knownPrevDateStr);
+  return getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerInterval);
+}
+
+function getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate) {
+  // jjw: we need to clear the time portion so that the time difference between within the same day that we
+  // jjw:   don't care about in this application will not affect the fraction we generate
+
+  // knownPrevDate.setHours(0, 0, 0, 0);
+
+  Logger.logAsJsonStr(
+    'date-utils.getScheduledDatesWithIntervalInMonthWithDate',
+    'knownPrevDate',
+    knownPrevDate,
+    'debug'
+  );
+
+  var diffInMonthInt = timeBeforeNowInMonthInt(knownPrevDate);
+  Logger.logAsStr(
+    'date-utils.getScheduledDatesWithIntervalInMonthWithDate',
+    'diffInMonthInt',
+    diffInMonthInt,
+    'debug'
+  );
+
+  // caculate the next scheduled date
+  // jjw: NOTE: https://stackoverflow.com/a/2706169
+  var nextDate = new Date(knownPrevDate); // increment from knownPrevDate
+  nextDate.setMonth(knownPrevDate.getMonth() + diffInMonthInt); // this may result as today's date
+
+  // caculate the last scheduled date
+  var lastDate = new Date(knownPrevDate); // increment from knownPrevDate
+  lastDate.setMonth(knownPrevDate.getMonth() + diffInMonthInt - 1);
+  if (lastDate < knownPrevDate) {
+    // if calculated last scheduled date is still earlier than the last known date, no point to get it
+    lastDate = null;
+  }
+
+  var secondLastScheduledDate = null;
+  if (lastDate > knownPrevDate) {
+    // if calculated last scheduled date is no later than the last known date, no point to caculate the 2nd last date
+    secondLastScheduledDate = new Date(knownPrevDate);
+    secondLastScheduledDate.setMonth(knownPrevDate.getMonth() + diffInMonthInt - 2);
+    if (secondLastScheduledDate < knownPrevDate) {
+      // if calculated 2nd last scheduled date is still earlier than the last known date, no point to get it
+      secondLastScheduledDate = null;
+    }
+  }
+  return {
+    secondLastDate: secondLastScheduledDate,
+    lastDate: lastDate,
+    nextDate: nextDate,
+  };
+}
+
+function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerInterval) {
+  // jjw: we need to clear the time portion so that the time difference between within the same day that we
+  // jjw:   don't care about in this application will not affect the fraction we generate
+  Logger.logAsJsonStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'knownPrevDate, before set hours to 0',
+    knownPrevDate,
+    'debug'
+  );
+
+  // knownPrevDate.setHours(0, 0, 0, 0);
+  // jjw: this will not work in junction with print out the date using JSON.Stringify()
+  // jjw: , which seems to use toUTCString() of the date object, not localized
+  // jjw: it also seems not necessary in our context
+
+  // jjw: TODO: read more below and find a safer way to do dates
+  // jjw: https://stackoverflow.com/a/49407725 (about set hours with toString)
+  // jjw: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setHours
+  // jjw: TODO: question is that if setHour is set hours in local time, why when it is enabled our result
+  // jjw:   is unexpected (or does it just appear so in the log? but why it appears correct without setHour
+  // jjw:   in the log?
+  // jjw: TODO: more reading:
+  // jjw: https://stackoverflow.com/a/63166934 (Aus timezone)
+  // jjw: https://stackoverflow.com/a/15171030 (more comprehensive about Date)
+
+  Logger.logAsJsonStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'knownPrevDate',
+    knownPrevDate,
+    'debug'
+  );
+
+  var diffInWeeksFrac = timeBeforeNowInWeeksFrac(knownPrevDate);
+  Logger.logAsStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'diffInWeeksFrac',
+    diffInWeeksFrac,
+    'debug'
+  );
+  var diffInIntervalFrac = diffInWeeksFrac / weeksPerInterval;
+  diffInIntervalFrac = ignoreEpsilon(diffInIntervalFrac, ignorableEpsilon, precision);
+
+  var diffInIntervalInt = Math.ceil(diffInIntervalFrac); // NOTE: ceil(1.000) = 1.000
+  Logger.logAsStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'diffInIntervalInt',
+    diffInIntervalInt,
+    'debug'
+  );
+
+  // caculate the next scheduled date
+  // jjw: NOTE: https://stackoverflow.com/a/42261330, we can
+  // jjw: increment date of the Date object
+  var nextScheduledDate = new Date(knownPrevDate); // increment from knownPrevDate
+  nextScheduledDate.setDate(nextScheduledDate.getDate() + diffInIntervalInt * weeksPerInterval * 7); // this may result as today's date
+  // jjw: OR increment microsecond to the time of the Date Object
+  // nextScheduledDate.setDate(nextScheduledDate.getTime() + diffInWeekInt * 24 * 3600 * 1000 * 7);
+  Logger.logAsJsonStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'nextScheduledDate',
+    nextScheduledDate,
+    'debug'
+  );
+
+  // caculate the last scheduled date
+  var lastScheduledDate = new Date(knownPrevDate); // increment from knownPrevDate
+  lastScheduledDate.setDate(
+    lastScheduledDate.getDate() + (diffInIntervalInt - 1) * weeksPerInterval * 7
+  );
+  if (lastScheduledDate < knownPrevDate) {
+    // if calculated last scheduled date is still earlier than the last known date, no point to get it
+    lastScheduledDate = null;
+  }
+  Logger.logAsJsonStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'lastScheduledDate',
+    lastScheduledDate,
+    'debug'
+  );
+
+  var secondLastScheduledDate = null;
+  if (lastScheduledDate > knownPrevDate) {
+    // if calculated last scheduled date is no later than the last known date, no point to caculate the 2nd last date
+    secondLastScheduledDate = new Date(knownPrevDate); // increment from knownPrevDate
+    secondLastScheduledDate.setDate(
+      secondLastScheduledDate.getDate() + (diffInIntervalInt - 2) * weeksPerInterval * 7
+    );
+    if (secondLastScheduledDate < knownPrevDate) {
+      // if calculated 2nd last scheduled date is still earlier  than the last known date, no point to get it
+      secondLastScheduledDate = null;
+    }
+  }
+  Logger.logAsJsonStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'secondLastScheduledDate',
+    secondLastScheduledDate,
+    'debug'
+  );
+
+  return {
+    secondLastDate: secondLastScheduledDate,
+    lastDate: lastScheduledDate,
+    nextDate: nextScheduledDate,
+  };
+}
+
+function timeBeforeNowInWeeksFrac(prevDate) {
+  var now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  var diffInWeeks = inWeeksFrac(prevDate, now);
+
+  return ignoreEpsilon(diffInWeeks, ignorableEpsilon, precision);
+}
+
+function timeBeforeNowInMonthInt(prevDate) {
+  var now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  var diffInMonths = inMonths(prevDate, now);
+
+  return diffInMonths;
+}
+
+function ignoreEpsilon(fraction, epsilon, prec) {
+  // jjw: the purpose of this function is to
+  // jjw:   'smooth' the episilon resulted from fraction caculation
+  // jjw:   so that these episilon will not result in 'one off' error for us
+  let result = fraction;
+  if (fraction - Math.floor(fraction) < epsilon) {
+    result = Math.floor(fraction).toFixed(prec);
+  } else if (Math.ceil(fraction) - fraction < epsilon) {
+    result = Math.ceil(fraction).toFixed(prec);
+  }
+  return result;
+}
+
+function toISODateWithoutTimeString(date) {
+  let result = '';
+  if (isString(date)) {
+    result = new Date(date).toISOString().split('T')[0];
+  } else if (isDateObj(date)) {
+    result = date.toISOString().split('T')[0];
+    // result = date.toLocaleDateString();
+  } else {
+    Logger.logAsJsonStr(
+      'date-utils.toDateString',
+      'Unexpected Error: the object representing date is neither a date object or a string:',
+      date
+    );
+  }
+  return result;
+}
+
+function isString(obj) {
+  // jjw: NOTE: check if it is a string: https://stackoverflow.com/a/9436948
+  return typeof obj === 'string' || obj instanceof String;
+}
+
+function isDateObj(obj) {
+  // jjw: NOTE: check if it is a Date object: https://stackoverflow.com/a/643827
+  return Object.prototype.toString.call(obj) === '[object Date]';
+}
+
+function inSeconds(d1, d2) {
+  var t2 = d2.getTime();
+  var t1 = d1.getTime();
+
+  return parseInt((t2 - t1) / 1000);
+}
+
+function inMinutes(d1, d2) {
+  var t2 = d2.getTime();
+  var t1 = d1.getTime();
+
+  return parseInt((t2 - t1) / 60000);
+}
+
+function inHours(d1, d2) {
+  var t2 = d2.getTime();
+  var t1 = d1.getTime();
+
+  return parseInt((t2 - t1) / 3600000);
+}
+
+function inDaysFrac(d1, d2) {
+  var t2 = d2.getTime();
+  var t1 = d1.getTime();
+
+  return parseFloat((t2 - t1) / (24 * 3600 * 1000)).toFixed(precision);
+}
+
+function inWeeksFrac(d1, d2) {
+  var t2 = d2.getTime();
+  var t1 = d1.getTime();
+
+  // return parseInt((t2 - t1) / (24 * 3600 * 1000 * 7));
+  return parseFloat((t2 - t1) / (24 * 3600 * 1000 * 7)).toFixed(precision);
+}
+
+function inMonths(d1, d2) {
+  var d1Y = d1.getFullYear();
+  var d2Y = d2.getFullYear();
+  var d1M = d1.getMonth();
+  var d2M = d2.getMonth();
+
+  return d2M + 12 * d2Y - (d1M + 12 * d1Y);
+}
+
+function inYears(d1, d2) {
+  return d2.getFullYear() - d1.getFullYear();
+}
