@@ -1,4 +1,4 @@
-const logger = 'DEBUG'; // jjw: this value we can adjust
+const logger = 'INFO'; // jjw: this value we can adjust
 
 const defaultLogLevel = 'INFO'; // jjw: we can adjust 'logLevel' to hide all default printout
 

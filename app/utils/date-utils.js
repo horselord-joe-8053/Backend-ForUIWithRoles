@@ -1,10 +1,12 @@
-import * as Logger from './logger';
+const Logger = require('../utils/logger');
 
-// jjw: inspired by https://stackoverflow.com/a/66446126
-export const DateUtils = {
+// jjw: https://stackoverflow.com/a/67679003
+module.exports = {
+  getDerivedScheduledDates,
   getScheduledDatesWithIntervalInMonth,
   getScheduledDatesWithIntervalInFornight,
   getScheduledDatesWithIntervalInFourWeeks,
+  getDateIncremented,
   getDateIncrementedByDays,
   toISODateWithoutTimeString,
 };
@@ -36,9 +38,110 @@ Date.prototype.withoutTime = function () {
 const precision = 4;
 const ignorableEpsilon = Math.pow(10, -1 * precision);
 
+function getDerivedScheduledDates(payFrequency, lastKnowPayDateStr) {
+  Logger.logAsStr(
+    'DerivedValueHandler.getDerivedData',
+    'lastKnowPayDate',
+    lastKnowPayDateStr,
+    'DEBUG'
+  );
+  Logger.logAsStr('DerivedValueHandler.getDerivedData', 'payFrequency', payFrequency, 'DEBUG');
+
+  // let secondLastDate = null;
+  // let lastDate = null;
+  // let nextDate = null;
+
+  let scheduledDates = undefined;
+
+  // jjw: inspired by https://stackoverflow.com/a/66446126
+  switch (payFrequency.toUpperCase()) {
+    // jjw: case param needs to be consistent with the value in
+    //    <option value="..." ...> in the config file for the payFrequency field
+    case 'FORTNIGHTLY': {
+      scheduledDates = getScheduledDatesWithIntervalInFornight(lastKnowPayDateStr);
+      break;
+    }
+    case 'EVERY 4 WEEKS': {
+      // jjw: We kept the 'value' of Option of the <SELECT/> consistent with display value
+      // jjw: only because we want the summary table row shows the same as in the Add/Edit view
+      // jjw: and this is the simplest and cleanest way to do it, for now.
+      scheduledDates = getScheduledDatesWithIntervalInFourWeeks(lastKnowPayDateStr);
+      break;
+    }
+    case 'MONTHLY': {
+      scheduledDates = getScheduledDatesWithIntervalInMonth(lastKnowPayDateStr);
+      break;
+    }
+    default: {
+      Logger.logAsStr(
+        'DerivedValueHandler',
+        'getDerivedData, switch(), ERROR: unexpected payFrequency value',
+        payFrequency,
+        'ERROR'
+      );
+      break;
+    }
+  }
+
+  Logger.logAsJsonStr(
+    'DerivedValueHandler.getDerivedData',
+    'scheduledDates',
+    scheduledDates,
+    'DEBUG'
+  );
+
+  return scheduledDates;
+}
+
+function getDateIncremented(baseDate, frequencyIncrementUnit, numOfIncrementUnits) {
+  var resultDate = null;
+  switch (frequencyIncrementUnit.toUpperCase()) {
+    // jjw: case param needs to be consistent with the value in
+    //    <option value="..." ...> in the config file for the payFrequency field
+    case 'FORTNIGHTLY': {
+      resultDate = getDateIncrementedByDays(baseDate, 14 * numOfIncrementUnits);
+      break;
+    }
+    // TODO: later may need functionality incremented by other frequency such as 'MONTHLY'
+    default: {
+      Logger.logAsStr(
+        'date-utils.getDateIncremented',
+        'switch(), ERROR: unexpected frequencyIncrementUnit value',
+        frequencyIncrementUnit,
+        'ERROR'
+      );
+      break;
+    }
+  }
+
+  return resultDate;
+}
+
+// function getDateIncrementedByDays(baseDate, days) {
+//   var date = new Date(baseDate);
+//   date.setDate(baseDate.getDate() + days);
+//   return date;
+// }
+
 function getDateIncrementedByDays(baseDate, days) {
-  var date = new Date(baseDate);
-  date.setDate(baseDate.getDate() + days);
+  // jjw: NOTE: if we need to ping the hours to be the exactly the same
+  // jjw:   when we printout these Date object (which will be in UTC time),
+  // jjw:   then we have to use incrememnt on 'Time' not 'Days' or 'Months'
+  // jjw:   REASON: Daylight Saving Time (DST)
+  // jjw:   UTC doesn't observe DST therefore
+  // jjw:   - if you increment by days, it will
+  // jjw:     increment to the same local time of the base date, which may have
+  // jjw:     crossed DST during this increment hence, when printout to UTC, there
+  // jjw:     will be discrepancy of 1h.
+  // jjw:   - if you increment by Time, on the other hand, it will be incrementing
+  // jjw:     UTC time which ignores DST, hence when printout as UTC time, there
+  // jjw:     will be no discrepancy.
+  // jjw:   Printout is a trivial issue maybe, but MongoDB is using UTC time internally
+  // jjw:     so without the extra layer of logic to handle local, we need our code
+  // jjw:     logic to strictly consistent with UTC to do strict comparsion between
+  // jjw:     our Date and Date stored in MongoDB with timeportion strictly kept at
+  // jjw:     0;
+  var date = new Date(baseDate.getTime() + 24 * 3600 * 1000 * days);
   return date;
 }
 
@@ -161,13 +264,24 @@ function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerI
     'debug'
   );
 
+  Logger.logAsJsonStr(
+    'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
+    'knownPrevDate',
+    knownPrevDate,
+    'debug'
+  );
   // caculate the next scheduled date
-  // jjw: NOTE: https://stackoverflow.com/a/42261330, we can
-  // jjw: increment date of the Date object
-  var nextScheduledDate = new Date(knownPrevDate); // increment from knownPrevDate
-  nextScheduledDate.setDate(nextScheduledDate.getDate() + diffInIntervalInt * weeksPerInterval * 7); // this may result as today's date
-  // jjw: OR increment microsecond to the time of the Date Object
-  // nextScheduledDate.setDate(nextScheduledDate.getTime() + diffInWeekInt * 24 * 3600 * 1000 * 7);
+  // NOTE: see note for caveat in getDateIncrementedByDays()
+  // jjw: TODO:
+  // 1. on server code here, replace any other
+  // setDate(x.getDate() + ...) or
+  // setMonth(x.getMonth() + ...)???
+  // 2. on UI code, replace similar places
+  var nextScheduledDate = getDateIncrementedByDays(
+    knownPrevDate,
+    diffInIntervalInt * weeksPerInterval * 7
+  );
+
   Logger.logAsJsonStr(
     'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
     'nextScheduledDate',
@@ -176,10 +290,11 @@ function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerI
   );
 
   // caculate the last scheduled date
-  var lastScheduledDate = new Date(knownPrevDate); // increment from knownPrevDate
-  lastScheduledDate.setDate(
-    lastScheduledDate.getDate() + (diffInIntervalInt - 1) * weeksPerInterval * 7
+  var lastScheduledDate = getDateIncrementedByDays(
+    knownPrevDate,
+    (diffInIntervalInt - 1) * weeksPerInterval * 7
   );
+
   if (lastScheduledDate < knownPrevDate) {
     // if calculated last scheduled date is still earlier than the last known date, no point to get it
     lastScheduledDate = null;
@@ -194,10 +309,11 @@ function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerI
   var secondLastScheduledDate = null;
   if (lastScheduledDate > knownPrevDate) {
     // if calculated last scheduled date is no later than the last known date, no point to caculate the 2nd last date
-    secondLastScheduledDate = new Date(knownPrevDate); // increment from knownPrevDate
-    secondLastScheduledDate.setDate(
-      secondLastScheduledDate.getDate() + (diffInIntervalInt - 2) * weeksPerInterval * 7
+    secondLastScheduledDate = getDateIncrementedByDays(
+      knownPrevDate,
+      (diffInIntervalInt - 2) * weeksPerInterval * 7
     );
+
     if (secondLastScheduledDate < knownPrevDate) {
       // if calculated 2nd last scheduled date is still earlier  than the last known date, no point to get it
       secondLastScheduledDate = null;

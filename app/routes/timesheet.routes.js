@@ -12,8 +12,14 @@ module.exports = function (app) {
     next();
   });
 
+  // app.get(
+  //   '/api/test/timesheet/:fromDateStr/:toDateStr',
+  //   [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+  //   controller.getShiftsInDaysByStartEnd
+  // );
+
   app.get(
-    '/api/test/timesheet/:fromDateStr/:toDateStr',
+    '/api/test/timesheet/:lastKnownSalaryDateStr',
     [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.getShiftsInDays
   );

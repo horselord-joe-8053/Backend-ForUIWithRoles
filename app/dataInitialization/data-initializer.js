@@ -1,6 +1,6 @@
 const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
-const timesheetInitializer = require('./timesheets/timesheet-initializer');
+const timesheetInitializer = require('./timesheets/timesheet-initializer.js');
 
 const roleDataArr = require('./roles/roles.json');
 
@@ -24,16 +24,21 @@ const logger = require('../utils/logger');
 // };
 
 exports.initial = () => {
+  logger.logAsStr('data-initializer.initial', 'start', '');
+
   initRoles();
   // jjw: TODO: here!!! cleanup roles including initialize them properly
   // initItems(roleDataArr, Role, 'Role');
-
-  // initResidents();
 
   initItems(residentsInitializer.getData(), Resident, 'Resident');
   initItems(staffInitializer.getData(), Staff, 'Staff');
   initItems(timesheetInitializer.getData(), ShiftsInADay, 'ShiftsInADay');
 
+  logger.logAsStr(
+    'data-initializer.initial',
+    'end',
+    ' but DB data initialization may continue asynchronously...'
+  );
   // initItems(timeSheetInitializer.getData(), ShiftsInADay, 'ShiftsInADay'); // TODO: need staff to be populated first
 };
 

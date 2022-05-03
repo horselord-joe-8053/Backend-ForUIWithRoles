@@ -1,0 +1,12 @@
+const logger = require('../../utils/logger');
+
+exports.getData = () => {
+  var context = require.context('./', true, /\.(json)$/);
+  var files = {};
+
+  context.keys().forEach((filename) => {
+    console.log(filename);
+    files[filename] = context(filename);
+  });
+  logger.logAsJsonStr('getData', 'files', files);
+};
