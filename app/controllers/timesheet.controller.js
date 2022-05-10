@@ -4,6 +4,123 @@ const logger = require('../utils/logger');
 const DateUtils = require('../utils/date-utils');
 const itemController = require('./item/item.controller');
 
+exports.updateShifts = async (req, res) => {
+  let shiftsToUpdate = req.body;
+  // the req.body is expected to carry payload of shifts to update, like:
+  // {
+  //   "2022-05-09_office": "626ec19ba5fbb5558989de15",
+  //   "2022-05-10_office": "626ec19ba5fbb5558989de15"
+  // }
+
+  logger.logAsJsonStr(
+    'timesheet.controller.updateShifts',
+    'shiftsToUpdate = req.body',
+    shiftsToUpdate
+  );
+
+  logger.logAsStr(
+    'timesheet.controller.updateShifts if',
+    'Object.keys(shiftsToUpdate).length',
+    Object.keys(shiftsToUpdate).length
+  );
+
+  if (!shiftsToUpdate || Object.keys(shiftsToUpdate).length == 0) {
+    // https://stackoverflow.com/a/44570060
+    // for (const [key, val] of Object.entries(shiftsToUpdate)){
+
+    res
+      .status(401)
+      .send({ message: 'List of shift to update for update shift request is undefined or empty' });
+    return;
+  }
+
+  let updateResultsForServerRecord = {};
+  let updateResultsForClient = {};
+
+  logger.logAsJsonStr(
+    'timesheet.controller.updateShifts',
+    'Object.entries(shiftsToUpdate)',
+    Object.entries(shiftsToUpdate)
+  );
+
+  // Object.entries(shiftsToUpdate).forEach(([key, val], index) => {
+  // NOTE: asynchronous iteration is another beast - await doesn't work in foreach
+  //    https://stackoverflow.com/a/37576787
+  // a simple for loop works
+  for (const [index, [key, val]] of Object.entries(shiftsToUpdate).entries()) {
+    // NOTE: need to use a plain for loop instead of foreach as we do asyn/wait call
+    //  inside of each loop https://stackoverflow.com/a/45251630
+    logger.logAsStr('timesheet.controller.updateShifts for loop', 'index', index);
+
+    [dateWithoutTimeStr, shiftKey] = key.split(DateUtils.DATE_SHIFTKEY_DELIMITER);
+    logger.logAsJsonStr(
+      'timesheet.controller.updateShifts for loop',
+      `[${dateWithoutTimeStr}, ${shiftKey}]`,
+      // NOTE: Template Literals https://stackoverflow.com/a/28088965
+      ''
+    );
+
+    // https://stackoverflow.com/a/66846878
+    // query = { $expr: {$eq: [dateWithoutTimeStr, { $dateToString: {date: "$date", format: "%Y-%m-%d"}}]}}
+
+    let inputDate = new Date(dateWithoutTimeStr);
+    let result = await updateShift(shiftKey, val, inputDate);
+
+    // NOTE: test a property exists and true
+    //  https://stackoverflow.com/a/3902047
+
+    // construct results to return to client end (simplified)
+    if (result.acknowledged && result.matchedCount && result.matchedCount == 1) {
+      if (result.modifiedCount == 0) {
+        updateResultsForClient[key] = 'Unmodified';
+      } else {
+        updateResultsForClient[key] = 'Modified';
+      }
+    } else {
+      updateResultsForClient[key] = 'Failed';
+    }
+
+    // construct aggregated results for record keep on server side (keeping the original)
+    updateResultsForServerRecord[key] = result;
+  } // end of for
+  // }); // end of foreach
+
+  logger.logAsJsonStr(
+    'timesheet.controller.updateShifts',
+    'updateResultsForClient',
+    updateResultsForClient
+  );
+  logger.logAsJsonStr(
+    'timesheet.controller.updateShifts',
+    'updateResultsForServerRecord',
+    updateResultsForServerRecord
+  );
+
+  res.status(200).send(updateResultsForClient);
+};
+
+const updateShift = async (shiftKey, shiftVal, inputDate) => {
+  logger.logAsStr('timesheet.controller.updateShift', 'shiftKey', shiftKey);
+  logger.logAsStr('timesheet.controller.updateShift', 'shiftVal', shiftVal);
+  logger.logAsJsonStr('timesheet.controller.updateShift', 'inputDate', inputDate);
+
+  let query = { date: { $eq: inputDate } };
+  // NOTE: here we counted on new Date(strWithoutTime) give us inputDate with 0 hours to be consistent
+  //  and comparable with the Date store in MongoDB
+
+  try {
+    const result = await ShiftsInADay.updateOne(query, {
+      // https://www.mongodb.com/docs/manual/reference/operator/update/set/#set-top-level-fields
+      $set: { [shiftKey]: shiftVal }, // NOTE: need to use []
+    });
+    logger.logAsJsonStr('timesheet.controller.updateShift', 'result', result);
+
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.getShiftsInDays = async (req, res) => {
   var salaryFrequency = 'FORTNIGHTLY'; // TODO: need to get from config?
   logger.logAsJsonStr('timesheet.controller.getShiftsInDays', 'req.params', req.params);

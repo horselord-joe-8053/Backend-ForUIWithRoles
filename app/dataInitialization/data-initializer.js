@@ -100,6 +100,7 @@ function initItems(dataArr, mongoosModel, itemMsgLabel) {
 
 function initItems(dataArr, mongoosModel, itemMsgLabel) {
   logger.logAsJsonStr('server.js initItems for ' + itemMsgLabel, 'dataArr', dataArr, 'debug');
+  logger.logAsJsonStr('server.js initItems for ' + itemMsgLabel, 'dataArr.length', dataArr.length);
 
   mongoosModel.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
@@ -108,11 +109,15 @@ function initItems(dataArr, mongoosModel, itemMsgLabel) {
           if (err) {
             logger.logAsJsonStr(
               'dataInitializer.initItems',
-              'ERROR! when creating a ' + itemMsgLabel,
+              'ERROR! when creating a ' + itemMsgLabel + ' at index ' + index,
               err
             );
           } else {
-            logger.logAsStr('dataInitializer.initItems', 'Success! created a ' + itemMsgLabel, '');
+            logger.logAsStr(
+              'dataInitializer.initItems',
+              'Success! created a ' + itemMsgLabel + ' at index ' + index,
+              ''
+            );
           }
         });
         // jjw: TODO: this needs to be syncrhonized for purpose

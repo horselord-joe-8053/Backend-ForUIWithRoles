@@ -23,4 +23,11 @@ module.exports = function (app) {
     [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.getShiftsInDays
   );
+
+  // jjw: put workshift query here for now, need organize file and URL better
+  app.put(
+    '/api/test/shifts',
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    controller.updateShifts
+  );
 };

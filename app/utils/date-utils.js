@@ -9,6 +9,7 @@ module.exports = {
   getDateIncremented,
   getDateIncrementedByDays,
   toISODateWithoutTimeString,
+  DATE_SHIFTKEY_DELIMITER: '_',
 };
 
 // export const DateUtils = {
