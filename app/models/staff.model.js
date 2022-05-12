@@ -6,6 +6,7 @@ const Staff = mongoose.model(
     firstName: String,
     lastName: String,
     shorthandName: String,
+    hasCashPay: { type: Boolean, default: false }, // NOTE: mongoose default value: https://stackoverflow.com/a/34027357
   })
 );
 

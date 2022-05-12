@@ -1,5 +1,6 @@
 {
   "firstName": "Yinghua",
   "lastName": "Yao",
-  "shorthandName": "Grace"
+  "shorthandName": "Grace",
+  "hasCashPay": true
 }
