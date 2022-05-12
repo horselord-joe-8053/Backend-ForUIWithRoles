@@ -1,6 +1,7 @@
 const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
 const timesheetInitializer = require('./timesheets/timesheet-initializer.js');
+const shiftTypeInitializer = require('./shiftType/shiftType-initializer.js');
 
 const roleDataArr = require('./roles/roles.json');
 
@@ -9,6 +10,7 @@ const Role = db.role;
 const Resident = db.resident;
 const Staff = db.staff;
 const ShiftsInADay = db.shiftsInADay;
+const ShiftType = db.shiftType;
 
 const logger = require('../utils/logger');
 
@@ -33,6 +35,7 @@ exports.initial = () => {
   initItems(residentsInitializer.getData(), Resident, 'Resident');
   initItems(staffInitializer.getData(), Staff, 'Staff');
   initItems(timesheetInitializer.getData(), ShiftsInADay, 'ShiftsInADay');
+  initItems(shiftTypeInitializer.getData(), ShiftType, 'ShiftType');
 
   logger.logAsStr(
     'data-initializer.initial',

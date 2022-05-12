@@ -11,6 +11,7 @@ db.mongoose = mongoose;
 db.resident = require('./resident.model');
 db.staff = require('./staff.model');
 db.shiftsInADay = require('./shiftsInADay.model');
+db.shiftType = require('./shiftType.model');
 
 db.user = require('./user.model');
 db.role = require('./role.model');

@@ -1,0 +1,32 @@
+[
+  {
+    "payMethod": "cash",
+    "taxWithholdingType": "none",
+    "hourlyRate": "19",
+    "numOfHours": "9",
+    "usedFor": "pca",
+    "isDisplayShortHand": true,
+    "displayShortHand": "cash19x9",
+    "isInUse": true
+  },
+  {
+    "payMethod": "cash",
+    "taxWithholdingType": "none",
+    "hourlyRate": "19",
+    "numOfHours": "6",
+    "usedFor": "cleaning",
+    "isDisplayShortHand": true,
+    "displayShortHand": "cash19x6",
+    "isInUse": true
+  },
+  {
+    "payMethod": "cash",
+    "taxWithholdingType": "none",
+    "hourlyRate": "19",
+    "numOfHours": "3",
+    "usedFor": "night",
+    "isDisplayShortHand": true,
+    "displayShortHand": "cash19x3",
+    "isInUse": true
+  }
+]

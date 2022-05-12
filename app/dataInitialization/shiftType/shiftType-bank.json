@@ -1,0 +1,32 @@
+[
+  {
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "hourlyRate": "25",
+    "numOfHours": "9",
+    "usedFor": "pca",
+    "isDisplayShortHand": true,
+    "displayShortHand": "bank25x9",
+    "isInUse": true
+  },
+  {
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "hourlyRate": "23",
+    "numOfHours": "6",
+    "usedFor": "cleaning",
+    "isDisplayShortHand": true,
+    "displayShortHand": "bank23x6",
+    "isInUse": true
+  },
+  {
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "hourlyRate": "25",
+    "numOfHours": "3",
+    "usedFor": "night",
+    "isDisplayShortHand": true,
+    "displayShortHand": "bank23x3",
+    "isInUse": true
+  }
+]
