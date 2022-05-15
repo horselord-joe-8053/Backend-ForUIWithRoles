@@ -24,6 +24,12 @@ module.exports = function (app) {
     controller.getShiftsInDays
   );
 
+  app.get(
+    '/api/test/shifttypes',
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    controller.getShiftTypes
+  );
+
   // jjw: put workshift query here for now, need organize file and URL better
   app.put(
     '/api/test/shifts',

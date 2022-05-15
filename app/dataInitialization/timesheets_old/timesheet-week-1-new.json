@@ -1,0 +1,13 @@
+[
+  {
+    "date": "2022-04-16",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pcaAm": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  }
+]

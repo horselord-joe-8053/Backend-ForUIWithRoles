@@ -3,6 +3,7 @@ const { shiftsInADay: ShiftsInADay } = db;
 const logger = require('../utils/logger');
 const DateUtils = require('../utils/date-utils');
 const itemController = require('./item/item.controller');
+const ShiftType = require('../models/shiftType.model');
 
 exports.updateShifts = async (req, res) => {
   let shiftsToUpdate = req.body;
@@ -11,6 +12,16 @@ exports.updateShifts = async (req, res) => {
   //   "2022-05-09_office": "626ec19ba5fbb5558989de15",
   //   "2022-05-10_office": "626ec19ba5fbb5558989de15"
   // }
+
+  if (!shiftsToUpdate || Object.keys(shiftsToUpdate).length == 0) {
+    // https://stackoverflow.com/a/44570060
+    // for (const [key, val] of Object.entries(shiftsToUpdate)){
+
+    res
+      .status(401)
+      .send({ message: 'List of shift to update for update shift request is undefined or empty' });
+    return;
+  }
 
   logger.logAsJsonStr(
     'timesheet.controller.updateShifts',
@@ -24,24 +35,8 @@ exports.updateShifts = async (req, res) => {
     Object.keys(shiftsToUpdate).length
   );
 
-  if (!shiftsToUpdate || Object.keys(shiftsToUpdate).length == 0) {
-    // https://stackoverflow.com/a/44570060
-    // for (const [key, val] of Object.entries(shiftsToUpdate)){
-
-    res
-      .status(401)
-      .send({ message: 'List of shift to update for update shift request is undefined or empty' });
-    return;
-  }
-
   let updateResultsForServerRecord = {};
   let updateResultsForClient = {};
-
-  logger.logAsJsonStr(
-    'timesheet.controller.updateShifts',
-    'Object.entries(shiftsToUpdate)',
-    Object.entries(shiftsToUpdate)
-  );
 
   // Object.entries(shiftsToUpdate).forEach(([key, val], index) => {
   // NOTE: asynchronous iteration is another beast - await doesn't work in foreach
@@ -108,11 +103,31 @@ const updateShift = async (shiftKey, shiftVal, inputDate) => {
   // NOTE: here we counted on new Date(strWithoutTime) give us inputDate with 0 hours to be consistent
   //  and comparable with the Date store in MongoDB
 
+  // NOTE: we need the following to update only specified properties because in shiftVal
+  // sometimes we have
+  // {
+  // 	"staff": "627e2ac617a433aab0951272",
+  // 	"shiftType": "627e27ee7e8d31993119bd68"
+  // },
+  // sometimes we may have only
+  // {
+  // 	"staff": "627e2ac617a433aab095126f"
+  // }
+  let updateOps = {};
+  for (const propKey in shiftVal) {
+    updateOps[`${shiftKey}.${propKey}`] = shiftVal[propKey];
+  }
+
+  logger.logAsJsonStr('timesheet.controller.updateShift', 'updateOps', updateOps);
+
   try {
-    const result = await ShiftsInADay.updateOne(query, {
-      // https://www.mongodb.com/docs/manual/reference/operator/update/set/#set-top-level-fields
-      $set: { [shiftKey]: shiftVal }, // NOTE: need to use []
-    });
+    // const result = await ShiftsInADay.updateOne(query, {
+    //   // https://www.mongodb.com/docs/manual/reference/operator/update/set/#set-top-level-fields
+    //   $set: { [shiftKey]: shiftVal }, // NOTE: need to use []
+    // });
+
+    const result = await ShiftsInADay.updateOne(query, { $set: updateOps });
+
     logger.logAsJsonStr('timesheet.controller.updateShift', 'result', result);
 
     return result;
@@ -121,8 +136,12 @@ const updateShift = async (shiftKey, shiftVal, inputDate) => {
   }
 };
 
+exports.getShiftTypes = async (req, res) => {
+  itemController.itemGetAll(req, res, ShiftType, 'SHIFT_TYPE');
+};
+
 exports.getShiftsInDays = async (req, res) => {
-  var salaryFrequency = 'FORTNIGHTLY'; // TODO: need to get from config?
+  var salaryFrequency = 'FORTNIGHTLY'; // TODO: need to get from req.params?
   logger.logAsJsonStr('timesheet.controller.getShiftsInDays', 'req.params', req.params);
 
   var lastKnownSalaryDateStr = req.params.lastKnownSalaryDateStr;
@@ -238,39 +257,54 @@ const getShiftsByStartEndDates = async (fromDate, toDate) => {
   // https://stackoverflow.com/a/31831107
   // https://stackoverflow.com/a/51117744
 
-  shiftsInADayArr = null;
+  shiftsInADayArr = [];
 
   try {
     shiftsInADayArr = await ShiftsInADay.find({
       date: { $gte: fromDate, $lte: toDate },
     })
       .sort('date') // have to be sorted here so that the client end won't need to spend time doing this
-      // .populate('office')
-      .populate({ path: 'office', select: '_id shorthandName', options: { lean: true } })
-      .populate({ path: 'pcaAm', select: '_id shorthandName', options: { lean: true } })
-      .populate({ path: 'pcaPm', select: '_id shorthandName', options: { lean: true } })
-      .populate({ path: 'cleaning', select: '_id shorthandName', options: { lean: true } })
-      .populate({ path: 'night', select: '_id shorthandName', options: { lean: true } })
+      // NOTE: doing multi-level for 'path' here. https://stackoverflow.com/a/62607266
+      // populate 'office' shift
+      .populate({
+        path: 'office.staff',
+        select: '_id shorthandName',
+        options: { lean: true },
+      })
+      .populate({
+        path: 'office.shiftType',
+        select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
+        options: { lean: true },
+      })
+      // populate 'pca' shift //TODO: maybe merge the path into space delimited ''
+      .populate({
+        path: 'pca.staff',
+        select: '_id shorthandName',
+        options: { lean: true },
+      })
+      .populate({
+        path: 'pca.shiftType',
+        select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
+        options: { lean: true },
+      })
+      // TODO: populate the rest of shifts
 
-      // .populate({ path: 'pacAm', select: '_id shothandName' })
-      // .populate({ path: 'pacPm', select: '_id shothandName' })
-      // .populate({ path: 'cleaning', select: '_id shothandName' })
-      // .populate({ path: 'night', select: '_id shothandName' })
+      // .populate({ path: 'pcaAm', select: '_id shorthandName', options: { lean: true } })
+      // .populate({ path: 'pcaPm', select: '_id shorthandName', options: { lean: true } })
+      // .populate({ path: 'cleaning', select: '_id shorthandName', options: { lean: true } })
+      // .populate({ path: 'night', select: '_id shorthandName', options: { lean: true } })
       .lean()
       // Note:
       //  1. we need lean() here, as we need to send back not mongoose document but the plain json object;
       //  2. after lean(), the printout (JSON.Stringify()) won't show the child level json properly for
-      //    some reason, but it doesn't affect anything
+      //    some reason, but it doesn't affect anything!!!!!
       .exec();
   } catch (err) {
     throw err;
   }
 
-  // (err, shiftsInADayArr) => {
-  // if (isNotEmpty(err)) {
-  //   logger.logAsJsonStr('timesheet.controller.getShiftsInDays', 'err', err);
-  // } else {
-  if (shiftsInADayArr) {
+  // if (shiftsInADayArr) {
+  if (shiftsInADayArr.length > 0) {
     logger.logAsJsonStr(
       'timesheet.controller.getShiftsInDays',
       'shiftsInADayArr.length',
@@ -284,10 +318,17 @@ const getShiftsByStartEndDates = async (fromDate, toDate) => {
     );
     // itemController.handleItems(err, shiftsInADayArr, 'ShiftsInADay', res);
   } else {
+    // logger.logAsJsonStr(
+    //   'timesheet.controller.getShiftsInDays',
+    //   'ERROR: undefined or null shiftsInADayArr',
+    //   shiftsInADayArr
+    // );
+
     logger.logAsJsonStr(
       'timesheet.controller.getShiftsInDays',
-      'ERROR: undefined or null shiftsInADayArr',
-      shiftsInADayArr
+      'WARNING: empty shiftsInADayArr',
+      shiftsInADayArr,
+      'Warning'
     );
   }
 

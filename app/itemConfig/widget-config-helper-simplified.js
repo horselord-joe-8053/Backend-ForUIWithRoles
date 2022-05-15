@@ -49,8 +49,8 @@ exports.getConfigMsgLabel = (configKey) => {
 // 	return config["addEditLayout"];
 // }
 
-// export function getLoadedConfigFieldsMap(configKey) {
-exports.getLoadedConfigFieldsMap = (configKey) => {
-  var config = getLoadedConfig(configKey);
-  return config['fieldsMap'];
-};
+// // export function getLoadedConfigFieldsMap(configKey) {
+// exports.getLoadedConfigFieldsMap = (configKey) => {
+//   var config = getLoadedConfig(configKey);
+//   return config['fieldsMap'];
+// };

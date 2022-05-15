@@ -32,11 +32,17 @@ exports.initial = () => {
   // jjw: TODO: here!!! cleanup roles including initialize them properly
   // initItems(roleDataArr, Role, 'Role');
 
-  initItems(residentsInitializer.getData(), Resident, 'Resident');
-  initItems(staffInitializer.getData(), Staff, 'Staff');
-  initItems(timesheetInitializer.getData(), ShiftsInADay, 'ShiftsInADay');
-  initItems(shiftTypeInitializer.getData(), ShiftType, 'ShiftType');
+  //TODO: recover
+  // initItems(residentsInitializer.getData(), Resident, 'Resident');
+  // initItems(staffInitializer.getData(), Staff, 'Staff');
+  // initItems(shiftTypeInitializer.getData(), ShiftType, 'ShiftType');
+  // timesheetInitializer.getData().then((dataArr) => {
+  initItems(timesheetInitializer, ShiftsInADay, 'ShiftsInADay');
+  // });
 
+  // shiftTypeInitializer.getData();
+
+  // TODO: A. once we did 'TODO: B' below, we can remove this.
   logger.logAsStr(
     'data-initializer.initial',
     'end',
@@ -101,12 +107,19 @@ function initItems(dataArr, mongoosModel, itemMsgLabel) {
 }
 */
 
-function initItems(dataArr, mongoosModel, itemMsgLabel) {
-  logger.logAsJsonStr('server.js initItems for ' + itemMsgLabel, 'dataArr', dataArr, 'debug');
-  logger.logAsJsonStr('server.js initItems for ' + itemMsgLabel, 'dataArr.length', dataArr.length);
-
-  mongoosModel.estimatedDocumentCount((err, count) => {
+function initItems(initializer, mongoosModel, itemMsgLabel) {
+  // TODO: B. should make the entire initItems async and do a await on the mongoosModel.estimatedDocumentCount
+  mongoosModel.estimatedDocumentCount(async (err, count) => {
     if (!err && count === 0) {
+      dataArr = await initializer.getData();
+
+      logger.logAsJsonStr('server.js initItems for ' + itemMsgLabel, 'dataArr', dataArr, 'debug');
+      logger.logAsJsonStr(
+        'server.js initItems for ' + itemMsgLabel,
+        'dataArr.length',
+        dataArr.length
+      );
+
       dataArr.forEach((data, index) => {
         mongoosModel.create(data, (err, itemCreated) => {
           if (err) {

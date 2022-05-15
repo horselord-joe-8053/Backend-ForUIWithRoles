@@ -1,32 +1,38 @@
 [
   {
+    "uniqueReadableId": "pca_cash19x9",
     "payMethod": "cash",
-    "taxWithholdingType": "none",
-    "hourlyRate": "19",
-    "numOfHours": "9",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": true,
+    "hourlyRate": 19,
+    "numOfHours": 9,
     "usedFor": "pca",
     "isDisplayShortHand": true,
-    "displayShortHand": "cash19x9",
+    "displayShortHand": "$19x9h Cash",
     "isInUse": true
   },
   {
+    "uniqueReadableId": "cleaning_cash19x6",
     "payMethod": "cash",
-    "taxWithholdingType": "none",
-    "hourlyRate": "19",
-    "numOfHours": "6",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": true,
+    "hourlyRate": 19,
+    "numOfHours": 6,
     "usedFor": "cleaning",
     "isDisplayShortHand": true,
-    "displayShortHand": "cash19x6",
+    "displayShortHand": "$19x6h Cash",
     "isInUse": true
   },
   {
+    "uniqueReadableId": "night_cash19x3",
     "payMethod": "cash",
-    "taxWithholdingType": "none",
-    "hourlyRate": "19",
-    "numOfHours": "3",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": true,
+    "hourlyRate": 19,
+    "numOfHours": 3,
     "usedFor": "night",
     "isDisplayShortHand": true,
-    "displayShortHand": "cash19x3",
+    "displayShortHand": "$19x3h Cash",
     "isInUse": true
   }
 ]

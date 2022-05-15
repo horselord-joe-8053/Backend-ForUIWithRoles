@@ -1,32 +1,38 @@
 [
   {
+    "uniqueReadableId": "pca_bank25x9",
     "payMethod": "bank",
     "taxWithholdingType": "withFreeThreshold",
-    "hourlyRate": "25",
-    "numOfHours": "9",
+    "isHourly": true,
+    "hourlyRate": 25,
+    "numOfHours": 9,
     "usedFor": "pca",
     "isDisplayShortHand": true,
-    "displayShortHand": "bank25x9",
+    "displayShortHand": "$25x9h Bank",
     "isInUse": true
   },
   {
+    "uniqueReadableId": "cleaning_bank23x6",
     "payMethod": "bank",
     "taxWithholdingType": "withFreeThreshold",
-    "hourlyRate": "23",
-    "numOfHours": "6",
+    "isHourly": true,
+    "hourlyRate": 23,
+    "numOfHours": 6,
     "usedFor": "cleaning",
     "isDisplayShortHand": true,
-    "displayShortHand": "bank23x6",
+    "displayShortHand": "$23x6h Bank",
     "isInUse": true
   },
   {
+    "uniqueReadableId": "night_bank25x3",
     "payMethod": "bank",
     "taxWithholdingType": "withFreeThreshold",
-    "hourlyRate": "25",
-    "numOfHours": "3",
+    "isHourly": true,
+    "hourlyRate": 25,
+    "numOfHours": 3,
     "usedFor": "night",
     "isDisplayShortHand": true,
-    "displayShortHand": "bank23x3",
+    "displayShortHand": "$25x3h Bank",
     "isInUse": true
   }
 ]

@@ -2,11 +2,7 @@ const logger = require('../../utils/logger');
 const fileUtils = require('../../utils/file-utils');
 
 exports.getData = () => {
-  const dir = './app/dataInitialization/shiftType';
+  const dir = './app/dataInitialization/timesheets';
   // thid directory path needs to be relative to the location of executable such as server.js
-  const mergedJson = fileUtils.getMergedJsonArraysFromDir(dir);
-
-  // logger.logAsJsonStr('shiftType-initializer', 'mergedJson', mergedJson);
-
-  return mergedJson;
+  return fileUtils.getMergedJsonArraysFromDir(dir);
 };

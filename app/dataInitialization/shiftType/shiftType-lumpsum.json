@@ -1,0 +1,38 @@
+[
+  {
+    "uniqueReadableId": "office_lump_fortnight_200",
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": false,
+    "lumpSumFrequency": "fortnight",
+    "lumpSumAmount": 200,
+    "usedFor": "office",
+    "isDisplayShortHand": true,
+    "displayShortHand": "200 per fortnight",
+    "isInUse": true
+  },
+  {
+    "uniqueReadableId": "night_lump_fortnight_200",
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": false,
+    "lumpSumFrequency": "fortnight",
+    "lumpSumAmount": 200,
+    "usedFor": "night",
+    "isDisplayShortHand": true,
+    "displayShortHand": "200 per fortnight",
+    "isInUse": true
+  },
+  {
+    "uniqueReadableId": "maintenance_lump_fortnight_200",
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": false,
+    "lumpSumFrequency": "fortnight",
+    "lumpSumAmount": 200,
+    "usedFor": "maintenance",
+    "isDisplayShortHand": true,
+    "displayShortHand": "200 per fortnight",
+    "isInUse": true
+  }
+]
