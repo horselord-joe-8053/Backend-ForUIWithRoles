@@ -1,0 +1,79 @@
+[
+  {
+    "date": "2022-05-07",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  },
+  {
+    "date": "2022-05-08",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  },
+  {
+    "date": "2022-05-09",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  },
+  {
+    "date": "2022-05-10",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  },
+  {
+    "date": "2022-05-11",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  },
+  {
+    "date": "2022-05-12",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  },
+  {
+    "date": "2022-05-13",
+    "office": {
+      "staff": { "query": { "shorthandName": "Jenny" } },
+      "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
+    },
+    "pca": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    }
+  }
+]

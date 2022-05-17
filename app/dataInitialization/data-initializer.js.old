@@ -2,17 +2,15 @@ const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
 const timesheetInitializer = require('./timesheets/timesheet-initializer.js');
 const shiftTypeInitializer = require('./shiftType/shiftType-initializer.js');
-const cashPaymentInitializer = require('./cashPayment/cashPayment-initializer.js');
 
 const roleDataArr = require('./roles/roles.json');
 
-const db = require('../../app/models');
+const db = require('../models');
 const Role = db.role;
 const Resident = db.resident;
 const Staff = db.staff;
 const ShiftsInADay = db.shiftsInADay;
 const ShiftType = db.shiftType;
-const CashPayment = db.cashPayment;
 
 const logger = require('../utils/logger');
 
@@ -34,13 +32,13 @@ exports.initial = () => {
   // jjw: TODO: here!!! cleanup roles including initialize them properly
   // initItems(roleDataArr, Role, 'Role');
 
-  // TODO: recover
-  // TODO: totaly async this function and use await for orderly initialization
-  // initItems(residentsInitializer, Resident, 'Resident');
-  // initItems(staffInitializer, Staff, 'Staff');
-  initItems(shiftTypeInitializer, ShiftType, 'ShiftType');
+  //TODO: recover
+  // initItems(residentsInitializer.getData(), Resident, 'Resident');
+  // initItems(staffInitializer.getData(), Staff, 'Staff');
+  // initItems(shiftTypeInitializer.getData(), ShiftType, 'ShiftType');
+  // timesheetInitializer.getData().then((dataArr) => {
   initItems(timesheetInitializer, ShiftsInADay, 'ShiftsInADay');
-  initItems(cashPaymentInitializer, CashPayment, 'CashPayment');
+  // });
 
   // shiftTypeInitializer.getData();
 

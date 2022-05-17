@@ -23,14 +23,14 @@ const ShiftsInADay = mongoose.model(
     //   staff: { type: Schema.Types.ObjectId, ref: 'Staff', required: true },
     //   shiftType: { type: Schema.Types.ObjectId, ref: 'ShiftType', required: true },
     // },
-    // cleaning: {
-    //   staff: { type: Schema.Types.ObjectId, ref: 'Staff', required: true },
-    //   shiftType: { type: Schema.Types.ObjectId, ref: 'ShiftType', required: true },
-    // },
-    // night: {
-    //   staff: { type: Schema.Types.ObjectId, ref: 'Staff', required: true },
-    //   shiftType: { type: Schema.Types.ObjectId, ref: 'ShiftType', required: true },
-    // },
+    cleaning: {
+      staff: { type: Schema.Types.ObjectId, ref: 'Staff', required: true },
+      shiftType: { type: Schema.Types.ObjectId, ref: 'ShiftType', required: true },
+    },
+    night: {
+      staff: { type: Schema.Types.ObjectId, ref: 'Staff', required: true },
+      shiftType: { type: Schema.Types.ObjectId, ref: 'ShiftType', required: true },
+    },
   })
 );
 

@@ -273,7 +273,7 @@ const getShiftsByStartEndDates = async (fromDate, toDate) => {
       })
       .populate({
         path: 'office.shiftType',
-        select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
+        // select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
         options: { lean: true },
       })
       // populate 'pca' shift //TODO: maybe merge the path into space delimited ''
@@ -284,7 +284,29 @@ const getShiftsByStartEndDates = async (fromDate, toDate) => {
       })
       .populate({
         path: 'pca.shiftType',
-        select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
+        // select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
+        options: { lean: true },
+      })
+      // populate 'cleaning' shift //TODO: maybe merge the path into space delimited ''
+      .populate({
+        path: 'cleaning.staff',
+        select: '_id shorthandName',
+        options: { lean: true },
+      })
+      .populate({
+        path: 'cleaning.shiftType',
+        // select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
+        options: { lean: true },
+      })
+      // populate 'cleaning' shift //TODO: maybe merge the path into space delimited ''
+      .populate({
+        path: 'night.staff',
+        select: '_id shorthandName',
+        options: { lean: true },
+      })
+      .populate({
+        path: 'night.shiftType',
+        // select: '_id uniqueReadableId isDisplayShortHand displayShortHand payMethod isInUse',
         options: { lean: true },
       })
       // TODO: populate the rest of shifts

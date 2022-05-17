@@ -6,7 +6,7 @@ exports.getData = () => {
   // thid directory path needs to be relative to the location of executable such as server.js
   const mergedJson = fileUtils.getMergedJsonArraysFromDir(dir);
 
-  // logger.logAsJsonStr('shiftType-initializer', 'mergedJson', mergedJson);
+  logger.logAsJsonStr('shiftType-initializer', 'mergedJson', mergedJson);
 
   return mergedJson;
 };

@@ -1,6 +1,7 @@
 [
   {
     "uniqueReadableId": "pca_cash19x9",
+    "frequency": "Fortnightly",
     "payMethod": "cash",
     "taxWithholdingType": "withFreeThreshold",
     "isHourly": true,
@@ -13,6 +14,7 @@
   },
   {
     "uniqueReadableId": "cleaning_cash19x6",
+    "frequency": "Fortnightly",
     "payMethod": "cash",
     "taxWithholdingType": "withFreeThreshold",
     "isHourly": true,
@@ -25,6 +27,7 @@
   },
   {
     "uniqueReadableId": "night_cash19x3",
+    "frequency": "Fortnightly",
     "payMethod": "cash",
     "taxWithholdingType": "withFreeThreshold",
     "isHourly": true,

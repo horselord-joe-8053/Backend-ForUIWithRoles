@@ -19,5 +19,10 @@
     "_id": "uuid_1236",
     "key": "SHIFT_TYPE",
     "itemMsgLabel": "ShiftType"
+  },
+  {
+    "_id": "uuid_1237",
+    "key": "CASH_PAYMENT",
+    "itemMsgLabel": "CashPayment"
   }
 ]

@@ -8,6 +8,14 @@
     "pca": {
       "staff": { "query": { "shorthandName": "Grace" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Wendy" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   },
   {
@@ -17,8 +25,16 @@
       "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
     },
     "pca": {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Bob" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Ma" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Bob" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   },
   {
@@ -30,6 +46,14 @@
     "pca": {
       "staff": { "query": { "shorthandName": "Grace" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Wendy" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Grace" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   },
   {
@@ -39,8 +63,16 @@
       "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
     },
     "pca": {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Bob" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Wendy" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Angela" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   },
   {
@@ -50,8 +82,16 @@
       "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
     },
     "pca": {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Rui" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Ma" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Rui" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   },
   {
@@ -61,8 +101,16 @@
       "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
     },
     "pca": {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Bob" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Wendy" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Bob" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   },
   {
@@ -72,8 +120,16 @@
       "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
     },
     "pca": {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Rui" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
+    },
+    "cleaning": {
+      "staff": { "query": { "shorthandName": "Wendy" } },
+      "shiftType": { "query": { "uniqueReadableId": "cleaning_bank23x6" } }
+    },
+    "night": {
+      "staff": { "query": { "shorthandName": "Angela" } },
+      "shiftType": { "query": { "uniqueReadableId": "night_bank25x3" } }
     }
   }
 ]
