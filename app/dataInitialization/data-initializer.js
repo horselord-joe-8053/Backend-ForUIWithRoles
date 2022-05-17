@@ -38,9 +38,9 @@ exports.initial = () => {
   // TODO: totaly async this function and use await for orderly initialization
   // initItems(residentsInitializer, Resident, 'Resident');
   // initItems(staffInitializer, Staff, 'Staff');
-  initItems(shiftTypeInitializer, ShiftType, 'ShiftType');
+  // initItems(shiftTypeInitializer, ShiftType, 'ShiftType');
   initItems(timesheetInitializer, ShiftsInADay, 'ShiftsInADay');
-  initItems(cashPaymentInitializer, CashPayment, 'CashPayment');
+  // initItems(cashPaymentInitializer, CashPayment, 'CashPayment');
 
   // shiftTypeInitializer.getData();
 

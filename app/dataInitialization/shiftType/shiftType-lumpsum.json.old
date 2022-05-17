@@ -34,5 +34,17 @@
     "isDisplayShortHand": true,
     "displayShortHand": "200/fortnight",
     "isInUse": true
+  },
+  {
+    "uniqueReadableId": "maintenance_lump_fortnight_200",
+    "frequency": "Fortnightly",
+    "payMethod": "bank",
+    "taxWithholdingType": "withFreeThreshold",
+    "isHourly": false,
+    "lumpSumAmount": 200,
+    "usedFor": "maintenance",
+    "isDisplayShortHand": true,
+    "displayShortHand": "200/fortnight",
+    "isInUse": true
   }
 ]

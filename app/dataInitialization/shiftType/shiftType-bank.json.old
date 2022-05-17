@@ -1,6 +1,6 @@
 [
   {
-    "uniqueReadableId": "office_bank25x5",
+    "uniqueReadableId": "pca_bank25x9",
     "frequency": "Fortnightly",
     "payMethod": "bank",
     "taxWithholdingType": "withFreeThreshold",
@@ -9,7 +9,7 @@
     "numOfHours": 5,
     "usedFor": "office",
     "isDisplayShortHand": true,
-    "displayShortHand": "5h",
+    "displayShortHand": "$25x5h Bank",
     "isInUse": true
   },
   {
@@ -22,7 +22,7 @@
     "numOfHours": 9,
     "usedFor": "pca",
     "isDisplayShortHand": true,
-    "displayShortHand": "9h",
+    "displayShortHand": "$25x9h Bank",
     "isInUse": true
   },
   {
@@ -35,7 +35,7 @@
     "numOfHours": 6,
     "usedFor": "cleaning",
     "isDisplayShortHand": true,
-    "displayShortHand": "6h",
+    "displayShortHand": "$23x6h Bank",
     "isInUse": true
   },
   {
@@ -48,7 +48,7 @@
     "numOfHours": 3,
     "usedFor": "night",
     "isDisplayShortHand": true,
-    "displayShortHand": "3h",
+    "displayShortHand": "$25x3h Bank",
     "isInUse": true
   }
 ]
