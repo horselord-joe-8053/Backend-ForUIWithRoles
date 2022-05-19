@@ -4,6 +4,7 @@ const logger = require('../utils/logger');
 const DateUtils = require('../utils/date-utils');
 const itemController = require('./item/item.controller');
 const ShiftType = require('../models/shiftType.model');
+const CashPayment = require('../models/cashPayment.model');
 
 exports.updateShifts = async (req, res) => {
   let shiftsToUpdate = req.body;
@@ -138,6 +139,36 @@ const updateShift = async (shiftKey, shiftVal, inputDate) => {
 
 exports.getShiftTypes = async (req, res) => {
   itemController.itemGetAll(req, res, ShiftType, 'SHIFT_TYPE');
+};
+
+exports.getCashPayments = async (req, res) => {
+  itemController.itemGetAll(req, res, CashPayment, 'CASH_PAYMENT');
+};
+
+exports.getCashPayments = async (req, res) => {
+  CashPayment.find({})
+    .populate({
+      path: 'staff',
+      select: '_id shorthandName',
+      // options: { sort: [['staff.shorthandName', 'asc']] }, // NOTE: causing "Error: Invalid sort() argument, must be array of arrays" TODO: still can't find why
+      // options: { sort: { shorthandName: 'desc' } }, // NOTE: has no effect
+    })
+    // .sort({ 'staff.shorthandName': -1 }) // NOTE: has no effect
+    .lean() // jjw: NOTE: need to convert mongoose doc to a simple object https://stackoverflow.com/a/18070111
+    .exec((err, items) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!items) {
+        res.status(404).send({ message: 'No ' + itemMsgLabel + ' found.' });
+        return;
+      }
+
+      logger.logAsJsonStr('getCashPayments', 'items:', items, 'debug');
+      res.status(200).send(items);
+    });
 };
 
 exports.getShiftsInDays = async (req, res) => {
