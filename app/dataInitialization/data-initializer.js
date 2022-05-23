@@ -2,7 +2,7 @@ const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
 const timesheetInitializer = require('./timesheets/timesheet-initializer.js');
 const shiftTypeInitializer = require('./shiftType/shiftType-initializer.js');
-const cashPaymentInitializer = require('./cashPayment/cashPayment-initializer.js');
+const paymentInitializer = require('./paymentArrangements/payment-initializer.js');
 
 const roleDataArr = require('./roles/roles.json');
 
@@ -12,7 +12,7 @@ const Resident = db.resident;
 const Staff = db.staff;
 const ShiftsInADay = db.shiftsInADay;
 const ShiftType = db.shiftType;
-const CashPayment = db.cashPayment;
+const PaymentArrangement = db.paymentArrangement;
 
 const logger = require('../utils/logger');
 
@@ -40,7 +40,7 @@ exports.initial = () => {
   // initItems(staffInitializer, Staff, 'Staff');
   // initItems(shiftTypeInitializer, ShiftType, 'ShiftType');
   initItems(timesheetInitializer, ShiftsInADay, 'ShiftsInADay');
-  // initItems(cashPaymentInitializer, CashPayment, 'CashPayment');
+  initItems(paymentInitializer, PaymentArrangement, 'PaymentArrangement');
 
   // shiftTypeInitializer.getData();
 

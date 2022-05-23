@@ -22,7 +22,7 @@
   },
   {
     "_id": "uuid_1237",
-    "key": "CASH_PAYMENT",
-    "itemMsgLabel": "CashPayment"
+    "key": "PAYMENT_ARRANGEMENT",
+    "itemMsgLabel": "PaymentArrangement"
   }
 ]

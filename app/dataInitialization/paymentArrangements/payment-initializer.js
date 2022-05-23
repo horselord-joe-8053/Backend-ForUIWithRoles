@@ -3,14 +3,14 @@ const fileUtils = require('../../utils/file-utils');
 const Staff = require('../../models/staff.model');
 
 exports.getData = async () => {
-  const dir = './app/dataInitialization/cashPayment';
+  const dir = './app/dataInitialization/paymentArrangements';
   // thid directory path needs to be relative to the location of executable such as server.js
-  const mergedJsonArr = fileUtils.getCombinedJsonObjectsFromDir(dir);
+  const mergedJsonArr = fileUtils.getMergedJsonArraysFromDir(dir);
 
   let convertedMergedJsonArr = [];
 
-  logger.logAsJsonStr('cashPayment.getData', 'mergedJsonArr', mergedJsonArr);
-  logger.logAsStr('cashPayment.getData', 'mergedJsonArr.length', mergedJsonArr.length);
+  logger.logAsJsonStr('initializer.getData', 'mergedJsonArr', mergedJsonArr);
+  logger.logAsStr('initializer.getData', 'mergedJsonArr.length', mergedJsonArr.length);
 
   /*
   [
@@ -30,7 +30,7 @@ exports.getData = async () => {
   const queryKey = 'query';
 
   if (mergedJsonArr && mergedJsonArr.length > 0) {
-    // For all the cashPayment arrangments
+    // For all the payment arrangments
     for (let objIdx = 0; objIdx < mergedJsonArr.length; objIdx++) {
       // use this old-fashioned
       // 1. to perserve the order as before it's converted
@@ -50,12 +50,12 @@ exports.getData = async () => {
         // use this old-fashioned
         // 1. to perserve the order as before it's converted
         // 2. can't use forEach as there is an asycn wait inside
-        logger.logAsStr('cashPayment.getData', 'propKey', propKey);
+        logger.logAsStr('initializer.getData', 'propKey', propKey);
 
         // convert from query to _id
         let query = obj[propKey][queryKey];
         let queryResult = await propToConvertModels[keyIdx].findOne(query).exec();
-        logger.logAsJsonStr('cashPayment.getData', 'queryResult', queryResult);
+        logger.logAsJsonStr('initializer.getData', 'queryResult', queryResult);
 
         convertedObj[propKey] = queryResult._id;
       }
@@ -64,7 +64,7 @@ exports.getData = async () => {
     }
   }
 
-  logger.logAsJsonStr('cashPayment.getData', 'convertedMergedJsonArr', convertedMergedJsonArr);
+  logger.logAsJsonStr('initializer.getData', 'convertedMergedJsonArr', convertedMergedJsonArr);
 
   return convertedMergedJsonArr;
 };

@@ -30,10 +30,16 @@ module.exports = function (app) {
     controller.getShiftTypes
   );
 
+  // app.get(
+  //   '/api/test/cashpayments',
+  //   [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+  //   controller.getCashPayments
+  // );
+
   app.get(
-    '/api/test/cashpayments',
+    '/api/test/paymentArrangements',
     [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
-    controller.getCashPayments
+    controller.getPaymentArrangements
   );
 
   // jjw: put workshift query here for now, need organize file and URL better
