@@ -19,7 +19,7 @@ module.exports = function (app) {
   // );
 
   app.get(
-    '/api/test/timesheet/:lastKnownSalaryDateStr',
+    '/api/test/timesheet/:lastKnownSalaryDateStr/:salaryFrequency/:anchorDateStr',
     [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.getShiftsInDays
   );

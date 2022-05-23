@@ -39,12 +39,18 @@ Date.prototype.withoutTime = function () {
 const precision = 4;
 const ignorableEpsilon = Math.pow(10, -1 * precision);
 
-function getDerivedScheduledDates(payFrequency, lastKnowPayDateStr) {
+function getDerivedScheduledDates(payFrequency, lastKnowPayDateStr, anchorDateStr) {
   Logger.logAsStr(
     'DerivedValueHandler.getDerivedData',
     'lastKnowPayDate',
     lastKnowPayDateStr,
     'DEBUG'
+  );
+  Logger.logAsStr(
+    'DerivedValueHandler.getDerivedData',
+    'anchorDateStr',
+    anchorDateStr
+    // 'DEBUG' //TODO: recover
   );
   Logger.logAsStr('DerivedValueHandler.getDerivedData', 'payFrequency', payFrequency, 'DEBUG');
 
@@ -53,24 +59,25 @@ function getDerivedScheduledDates(payFrequency, lastKnowPayDateStr) {
   // let nextDate = null;
 
   let scheduledDates = undefined;
+  let anchorDate = new Date(anchorDateStr);
 
   // jjw: inspired by https://stackoverflow.com/a/66446126
   switch (payFrequency.toUpperCase()) {
     // jjw: case param needs to be consistent with the value in
     //    <option value="..." ...> in the config file for the payFrequency field
     case 'FORTNIGHTLY': {
-      scheduledDates = getScheduledDatesWithIntervalInFornight(lastKnowPayDateStr);
+      scheduledDates = getScheduledDatesWithIntervalInFornight(lastKnowPayDateStr, anchorDate);
       break;
     }
     case 'EVERY 4 WEEKS': {
       // jjw: We kept the 'value' of Option of the <SELECT/> consistent with display value
       // jjw: only because we want the summary table row shows the same as in the Add/Edit view
       // jjw: and this is the simplest and cleanest way to do it, for now.
-      scheduledDates = getScheduledDatesWithIntervalInFourWeeks(lastKnowPayDateStr);
+      scheduledDates = getScheduledDatesWithIntervalInFourWeeks(lastKnowPayDateStr, anchorDate);
       break;
     }
     case 'MONTHLY': {
-      scheduledDates = getScheduledDatesWithIntervalInMonth(lastKnowPayDateStr);
+      scheduledDates = getScheduledDatesWithIntervalInMonth(lastKnowPayDateStr, anchorDate);
       break;
     }
     default: {
@@ -146,25 +153,29 @@ function getDateIncrementedByDays(baseDate, days) {
   return date;
 }
 
-function getScheduledDatesWithIntervalInMonth(knownPrevDateStr) {
+function getScheduledDatesWithIntervalInMonth(knownPrevDateStr, anchorDate) {
   var knownPrevDate = new Date(knownPrevDateStr);
-  return getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate);
+  return getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate, anchorDate);
 }
 
-function getScheduledDatesWithIntervalInFornight(knownPrevDateStr) {
-  return getScheduledDatesWithIntervalInWeek(knownPrevDateStr, 2);
+function getScheduledDatesWithIntervalInFornight(knownPrevDateStr, anchorDate) {
+  return getScheduledDatesWithIntervalInWeek(knownPrevDateStr, 2, anchorDate);
 }
 
-function getScheduledDatesWithIntervalInFourWeeks(knownPrevDateStr) {
-  return getScheduledDatesWithIntervalInWeek(knownPrevDateStr, 4);
+function getScheduledDatesWithIntervalInFourWeeks(knownPrevDateStr, anchorDate) {
+  return getScheduledDatesWithIntervalInWeek(knownPrevDateStr, 4, anchorDate);
 }
 
-function getScheduledDatesWithIntervalInWeek(knownPrevDateStr, weeksPerInterval) {
+function getScheduledDatesWithIntervalInWeek(knownPrevDateStr, weeksPerInterval, anchorDate) {
   var knownPrevDate = new Date(knownPrevDateStr);
-  return getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerInterval);
+  return getNextScheduledDateWithIntervalInWeekWithDate(
+    knownPrevDate,
+    weeksPerInterval,
+    anchorDate
+  );
 }
 
-function getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate) {
+function getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate, anchorDate) {
   // jjw: we need to clear the time portion so that the time difference between within the same day that we
   // jjw:   don't care about in this application will not affect the fraction we generate
 
@@ -177,7 +188,7 @@ function getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate) {
     'debug'
   );
 
-  var diffInMonthInt = timeBeforeNowInMonthInt(knownPrevDate);
+  var diffInMonthInt = timeBeforeDateInMonthInt(knownPrevDate, anchorDate);
   Logger.logAsStr(
     'date-utils.getScheduledDatesWithIntervalInMonthWithDate',
     'diffInMonthInt',
@@ -215,7 +226,11 @@ function getScheduledDatesWithIntervalInMonthWithDate(knownPrevDate) {
   };
 }
 
-function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerInterval) {
+function getNextScheduledDateWithIntervalInWeekWithDate(
+  knownPrevDate,
+  weeksPerInterval,
+  anchorDate
+) {
   // jjw: we need to clear the time portion so that the time difference between within the same day that we
   // jjw:   don't care about in this application will not affect the fraction we generate
   Logger.logAsJsonStr(
@@ -247,7 +262,7 @@ function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerI
     'debug'
   );
 
-  var diffInWeeksFrac = timeBeforeNowInWeeksFrac(knownPrevDate);
+  var diffInWeeksFrac = timeBeforeDateInWeeksFrac(knownPrevDate, anchorDate);
   Logger.logAsStr(
     'date-utils.getNextScheduledDateWithIntervalInWeekWithDate',
     'diffInWeeksFrac',
@@ -334,23 +349,41 @@ function getNextScheduledDateWithIntervalInWeekWithDate(knownPrevDate, weeksPerI
   };
 }
 
-function timeBeforeNowInWeeksFrac(prevDate) {
-  var now = new Date();
-  now.setHours(0, 0, 0, 0);
+function timeBeforeDateInWeeksFrac(prevDate, anchorDate) {
+  var anchorDateCp = new Date(anchorDate.valueOf());
+  anchorDateCp.setHours(0, 0, 0, 0);
 
-  var diffInWeeks = inWeeksFrac(prevDate, now);
+  var diffInWeeks = inWeeksFrac(prevDate, anchorDateCp);
 
   return ignoreEpsilon(diffInWeeks, ignorableEpsilon, precision);
 }
 
-function timeBeforeNowInMonthInt(prevDate) {
-  var now = new Date();
-  now.setHours(0, 0, 0, 0);
+// function timeBeforeNowInWeeksFrac(prevDate) {
+//   var now = new Date();
+//   now.setHours(0, 0, 0, 0);
 
-  var diffInMonths = inMonths(prevDate, now);
+//   var diffInWeeks = inWeeksFrac(prevDate, now);
+
+//   return ignoreEpsilon(diffInWeeks, ignorableEpsilon, precision);
+// }
+
+function timeBeforeDateInMonthInt(prevDate, anchorDate) {
+  var anchorDateCp = new Date(anchorDate.valueOf()); // in case the original param var will be used by calling function
+  anchorDateCp.setHours(0, 0, 0, 0);
+
+  var diffInMonths = inMonths(prevDate, anchorDateCp);
 
   return diffInMonths;
 }
+
+// function timeBeforeNowInMonthInt(prevDate) {
+//   var now = new Date();
+//   now.setHours(0, 0, 0, 0);
+
+//   var diffInMonths = inMonths(prevDate, now);
+
+//   return diffInMonths;
+// }
 
 function ignoreEpsilon(fraction, epsilon, prec) {
   // jjw: the purpose of this function is to

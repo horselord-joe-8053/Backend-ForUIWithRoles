@@ -202,10 +202,23 @@ exports.getShiftsInDays = async (req, res) => {
   logger.logAsJsonStr('timesheet.controller.getShiftsInDays', 'req.params', req.params);
 
   var lastKnownSalaryDateStr = req.params.lastKnownSalaryDateStr;
+  var salaryFrequency = req.params.salaryFrequency;
+  var anchorDateStr = req.params.anchorDateStr;
+
   if (!lastKnownSalaryDateStr || lastKnownSalaryDateStr.length == 0) {
     res.status(404).send({
       message:
         'ERROR: lastKnownSalaryDateStr supposed to be passed on the request via URL was absent or empty',
+    });
+  } else if (!salaryFrequency || salaryFrequency.length == 0) {
+    res.status(404).send({
+      message:
+        'ERROR: salaryFrequency supposed to be passed on the request via URL was absent or empty',
+    });
+  } else if (!anchorDateStr || anchorDateStr.length == 0) {
+    res.status(404).send({
+      message:
+        'ERROR: anchorDateStr supposed to be passed on the request via URL was absent or empty',
     });
   } else {
     logger.logAsStr(
@@ -213,11 +226,14 @@ exports.getShiftsInDays = async (req, res) => {
       'lastKnownSalaryDateStr',
       lastKnownSalaryDateStr
     );
+    logger.logAsStr('timesheet.controller.getShiftsInDays', 'salaryFrequency', salaryFrequency);
+    logger.logAsStr('timesheet.controller.getShiftsInDays', 'anchorDateStr', anchorDateStr);
 
     // let scheduledDates = DateUtils.getScheduledDatesWithIntervalInFornight(lastKnownSalaryDateStr);
     let scheduledDates = DateUtils.getDerivedScheduledDates(
       salaryFrequency,
-      lastKnownSalaryDateStr
+      lastKnownSalaryDateStr,
+      anchorDateStr
     );
 
     logger.logAsJsonStr('timesheet.controller.getShiftsInDays', 'scheduledDates', scheduledDates);
