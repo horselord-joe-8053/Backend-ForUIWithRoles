@@ -198,7 +198,7 @@ exports.getPaymentArrangements = async (req, res) => {
 };
 
 exports.getShiftsInDays = async (req, res) => {
-  var salaryFrequency = 'FORTNIGHTLY'; // TODO: need to get from req.params?
+  // var salaryFrequency = 'FORTNIGHTLY'; // TODO: need to get from req.params?
   logger.logAsJsonStr('timesheet.controller.getShiftsInDays', 'req.params', req.params);
 
   var lastKnownSalaryDateStr = req.params.lastKnownSalaryDateStr;

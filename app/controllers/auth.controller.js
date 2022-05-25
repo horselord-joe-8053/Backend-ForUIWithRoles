@@ -261,7 +261,7 @@ exports.signinNew = (req, res) => {
 // };
 
 // jjw: this gets called for "/api/auth/refreshtoken" requests
-exports.refreshTokenNew = async (req, res) => {
+exports.refreshToken = async (req, res) => {
   // jjw: TODO: NOW!!!
   // jjw: best practice - do not use cookie but browser sessionStore???
   // jjw:   https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#silent-refresh
@@ -298,17 +298,17 @@ exports.refreshTokenNew = async (req, res) => {
   // jjw: TODO: what will request of '/logout-all' trigger ????
   // jjw:    const result = await coll.findOneAndUpdate({id: userId}, {$inc: {tokenVersion: 1}})
 
-  logger.logAsStr('authJwt.refreshTokenNew', 'start', '');
+  logger.logAsStr('auth.controller.refreshToken', 'start', '');
 
   try {
     if (!req.cookies) {
-      logger.logAsStr('authJwt.refreshTokenNew', 'No cookies found on the http request!', '');
+      logger.logAsStr('auth.controller.refreshToken', 'No cookies found on the http request!', '');
 
       throw 'Try to verify RefreshToken but No cookies found on the http request!';
     }
 
     logger.logAsStr(
-      'authJwt.refreshTokenNew',
+      'auth.controller.refreshToken',
       'cookies successfully found on the http request!',
       ''
     );
@@ -317,7 +317,7 @@ exports.refreshTokenNew = async (req, res) => {
 
     if (!refreshToken) {
       logger.logAsJsonStr(
-        'authJwt.refreshTokenNew',
+        'auth.controller.refreshToken',
         'RereshToken not found from req.cookies:',
         req.cookies
       );
@@ -326,7 +326,7 @@ exports.refreshTokenNew = async (req, res) => {
     }
 
     logger.logAsJsonStr(
-      'authJwt.refreshTokenNew',
+      'auth.controller.refreshToken',
       'RereshToken found, before TokenUtils.verifyToken(), encoded RefreshToken:',
       refreshToken
     );
@@ -336,7 +336,7 @@ exports.refreshTokenNew = async (req, res) => {
 
     const decodedCurrRefreshToken = TokenUtils.verifyRefreshToken(res, refreshToken);
     logger.logAsJsonStr(
-      'authJwt.refreshTokenNew',
+      'auth.controller.refreshToken',
       'after TokenUtils.verifyToken(), decodedCurrRefreshToken',
       decodedCurrRefreshToken
     );
@@ -385,16 +385,16 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
 
 */
       logger.logAsStr(
-        'token-utils.refreshTokens',
+        'auth.controller.refreshToken',
         'decodedCurrRefreshToken.loginSessionVersion',
         decodedCurrRefreshToken.loginSessionVersion
       );
       logger.logAsStr(
-        'token-utils.refreshTokens',
+        'auth.controller.refreshToken',
         'userLoginSessionVersionFromDB',
         userLoginSessionVersionFromDB
       );
-      logger.logAsStr('token-utils.refreshTokens', 'version not matching!!!');
+      logger.logAsStr('auth.controller.refreshToken', 'version not matching!!!');
 
       // jjw: Need to do more
       // TODO: here!! remove the entire loginSession entry from the user
@@ -403,7 +403,7 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
       // TODO: below shouldn't be relevant anymore, we need to return somehow???
 
       logger.logAsJsonStr(
-        'token-utils.refreshTokens, BEFORE delete sessionId: (' +
+        'auth.controller.refreshToken, BEFORE delete sessionId: (' +
           currRefreshTokenLoginSessionId +
           ')',
         'user',
@@ -415,7 +415,7 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
       delete user.loginSessions[currRefreshTokenLoginSessionId];
 
       logger.logAsJsonStr(
-        'token-utils.refreshTokens, AFTER delete sessionId: (' +
+        'auth.controller.refreshToken, AFTER delete sessionId: (' +
           currRefreshTokenLoginSessionId +
           ')',
         'user',
