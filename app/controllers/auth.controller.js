@@ -389,12 +389,7 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
         'decodedCurrRefreshToken.loginSessionVersion',
         decodedCurrRefreshToken.loginSessionVersion
       );
-      logger.logAsStr(
-        'auth.controller.refreshToken',
-        'userLoginSessionVersionFromDB',
-        userLoginSessionVersionFromDB
-      );
-      logger.logAsStr('auth.controller.refreshToken', 'version not matching!!!');
+      logger.logAsStr('auth.controller.refreshToken', 'version not matching!!!', '');
 
       // jjw: Need to do more
       // TODO: here!! remove the entire loginSession entry from the user
@@ -403,10 +398,8 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
       // TODO: below shouldn't be relevant anymore, we need to return somehow???
 
       logger.logAsJsonStr(
-        'auth.controller.refreshToken, BEFORE delete sessionId: (' +
-          currRefreshTokenLoginSessionId +
-          ')',
-        'user',
+        'auth.controller.refreshToken',
+        'BEFORE delete sessionId: (' + currRefreshTokenLoginSessionId + '), user',
         user
       );
 
@@ -415,10 +408,8 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
       delete user.loginSessions[currRefreshTokenLoginSessionId];
 
       logger.logAsJsonStr(
-        'auth.controller.refreshToken, AFTER delete sessionId: (' +
-          currRefreshTokenLoginSessionId +
-          ')',
-        'user',
+        'auth.controller.refreshToken',
+        'AFTER delete sessionId: (' + currRefreshTokenLoginSessionId + '), user',
         user
       );
 
