@@ -102,16 +102,16 @@ const verifyAccToken = (req, res, next) => {
 };
 
 /*---- functions to verify roles ----*/
-const verifyIsAtLeastStaff = (req, res, next) => {
-  return verifyIsAtLeast(isAtLeastStaff, 'staff', req, res, next);
+const verifyIsAtLeastStaff = async (req, res, next) => {
+  return await verifyIsAtLeast(isAtLeastStaff, 'staff', req, res, next);
 };
 
-const verifyIsAtLeastOwner = (req, res, next) => {
-  return verifyIsAtLeast(isAtLeastOwner, 'owner', req, res, next);
+const verifyIsAtLeastOwner = async (req, res, next) => {
+  return await verifyIsAtLeast(isAtLeastOwner, 'owner', req, res, next);
 };
 
-const verifyIsAtLeastAdmin = (req, res, next) => {
-  return verifyIsAtLeast(isAtLeastAdmin, 'admin', req, res, next);
+const verifyIsAtLeastAdmin = async (req, res, next) => {
+  return await verifyIsAtLeast(isAtLeastAdmin, 'admin', req, res, next);
 };
 
 const verifyIsAtLeast = async (isAtLeastFunc, atLeastRole, req, res, next) => {
@@ -119,6 +119,13 @@ const verifyIsAtLeast = async (isAtLeastFunc, atLeastRole, req, res, next) => {
   logger.logAsJsonStr('authJwt.verifyIsAtLeast', 'start... isAtLeastFunc:', isAtLeastFunc);
 
   try {
+    // NOTE: for the 'Async all the way' principle:
+    //  https://stackoverflow.com/a/35380558
+    //  https://docs.microsoft.com/en-us/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming#async-all-the-way
+    //  https://stackoverflow.com/a/29809054 (c# but similar principle)
+    // We can actually stopped at this level, no need for async/wait further up because
+    //  the key linkage 'next()' that associated with our main goal of making handling of
+    //  all the logic flow of the same 'root request' atomic, lies in right here
     let isAtLeastResult = await isAtLeastFunc(req);
     // jjw: NOTE: this 'await' is needed hence also need to make this function async
 
@@ -153,26 +160,26 @@ const isAtLeastOwner = async (req) => {
 };
 
 const isAtLeastAdmin = async (req) => {
-  let result = isAdmin(req);
+  let result = await isAdmin(req);
   logger.logAsStr('authJwt.isAtLeastAdmin', 'result:', result);
   return result;
 };
 
 // is* functions
-const isUser = (req) => {
-  return verifyRole(req, 'user');
+const isUser = async (req) => {
+  return await verifyRole(req, 'user');
 };
 
-const isStaff = (req) => {
-  return verifyRole(req, 'staff');
+const isStaff = async (req) => {
+  return await verifyRole(req, 'staff');
 };
 
-const isOwner = (req) => {
-  return verifyRole(req, 'owner');
+const isOwner = async (req) => {
+  return await verifyRole(req, 'owner');
 };
 
-const isAdmin = (req) => {
-  return verifyRole(req, 'admin');
+const isAdmin = async (req) => {
+  return await verifyRole(req, 'admin');
 };
 
 const verifyRole = async (req, roleToVerify) => {

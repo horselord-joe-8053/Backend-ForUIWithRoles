@@ -262,6 +262,11 @@ exports.signinNew = (req, res) => {
 
 // jjw: this gets called for "/api/auth/refreshtoken" requests
 exports.refreshToken = async (req, res) => {
+  // NOTE: need to use await as we are keeping the entire 'refershToken' process atomic
+  //  for that there could be multiple requests that requires 'refreshToken' process,
+  //  fired on the client side at the same time. This needs to includes all async calls
+  //  that 'refreshToken' process calls.
+
   // jjw: TODO: NOW!!!
   // jjw: best practice - do not use cookie but browser sessionStore???
   // jjw:   https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#silent-refresh
@@ -413,7 +418,11 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
         user
       );
 
-      updateUserDB(user);
+      // NOTE: need to use await as we are keeping the entire 'refershToken' process atomic
+      //  for that there could be multiple requests that requires 'refreshToken' process,
+      //  fired on the client side at the same time. This needs to includes all async calls
+      //  that 'refreshToken' process calls.
+      await updateUserDB(user);
 
       throw authConfig.versionMismatchErrorMsg;
     }
@@ -429,7 +438,11 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
 
     user.loginSessions[currRefreshTokenLoginSessionId] = updatedUserLoginSessionVersion;
 
-    updateUserDB(user);
+    // NOTE: need to use await as we are keeping the entire 'refershToken' process atomic
+    //  for that there could be multiple requests that requires 'refreshToken' process,
+    //  fired on the client side at the same time. This needs to includes all async calls
+    //  that 'refreshToken' process calls.
+    await updateUserDB(user);
 
     logger.logAsStr(
       'auth.controller.refreshToken | BEFORE TokenUtils.generateRefreshedTokens',
@@ -491,30 +504,45 @@ in token-utils.refreshTokens(), 'version not matching!!!': undefined
   res.end();
 };
 
-updateUserDB = (user) => {
+updateUserDB = async (user) => {
   logger.logAsStr('auth.controller.updateUserDB start:', 'user.username', user.username);
 
-  User.updateOne({ _id: ObjectId(user._id) }, user).exec(async (err, updateStatusResult) => {
-    // jjw: TODO!!!: do we need async here? this may cause race conditions ???
-
-    // jjw: itemUpdated will be, if successful,
-    // jjw:   'itemUpdate: {"n":1,"nModified":1,"ok":1}'
-    // jjw:   https://github.com/Automattic/monk/issues/149#issuecomment-232569704
-    // jjw:     - n is the number of matched documents
-    // jjw:     - nModified is the number of modified documents
-    if (err) {
-      res.status(500).send({ message: 'Updating user in DB, error:' + err });
-      return;
-    }
-
-    logger.logAsStr('auth.controller.updateUserDB end:', 'user.username', user.username);
+  try {
+    // NOTE: need to use await as we are keeping the entire 'refershToken' process atomic
+    //  for that there could be multiple requests that requires 'refreshToken' process,
+    //  fired on the client side at the same time. updateUserDB is part of this process
+    const updateStatusResult = await User.updateOne({ _id: ObjectId(user._id) }, user);
     logger.logAsJsonStr(
       'auth.controller.updateUserDB end',
       'updateStatusResult',
       updateStatusResult,
       'info'
     );
-  });
+  } catch (err) {
+    throw 'Error occurred during updating user in DB:' + JSON.stringify(err);
+  }
+
+  // User.updateOne({ _id: ObjectId(user._id) }, user).exec(async (err, updateStatusResult) => {
+  //   // jjw: TODO!!!: do we need async here? this may cause race conditions ???
+
+  //   // jjw: itemUpdated will be, if successful,
+  //   // jjw:   'itemUpdate: {"n":1,"nModified":1,"ok":1}'
+  //   // jjw:   https://github.com/Automattic/monk/issues/149#issuecomment-232569704
+  //   // jjw:     - n is the number of matched documents
+  //   // jjw:     - nModified is the number of modified documents
+  //   if (err) {
+  //     res.status(500).send({ message: 'Updating user in DB, error:' + err });
+  //     return;
+  //   }
+
+  //   logger.logAsStr('auth.controller.updateUserDB end:', 'user.username', user.username);
+  //   logger.logAsJsonStr(
+  //     'auth.controller.updateUserDB end',
+  //     'updateStatusResult',
+  //     updateStatusResult,
+  //     'info'
+  //   );
+  // });
 };
 // // jjw: this gets called for "/api/auth/refreshtoken" requests
 // exports.refreshToken = async (req, res) => {
