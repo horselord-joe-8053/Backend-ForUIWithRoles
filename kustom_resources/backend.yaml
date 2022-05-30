@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: balm-backend-gke
+spec:
+  selector:
+    app: balm-backend-gke
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      name: balm-backend-gke-lb-port
+      # port of LoadBalancer service
+      targetPort: 8080
+      # the port of each pod application that LB will forward to,
+      # therefore this need to match with the port the application normally runs on
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: balm-backend-gke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: balm-backend-gke
+  template:
+    metadata:
+      labels:
+        app: balm-backend-gke
+    spec:
+      containers:
+        - name: app
+          image:
+            gcr.io/PROJECT_ID/IMAGE:TAG
+            # corresponding to field in pipeline.yaml to be
+            # set by kustomize to the latest gcr.io/$PROJECT_ID/$IMAGE:$TAG
+            # whenever we build and deploy again
+          imagePullPolicy: Always

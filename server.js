@@ -57,7 +57,7 @@ app.use(function (req, res, next) {
 const db = require('./app/models');
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(`mongodb://${dbConfig.CONNECT_STR}/${dbConfig.DB}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
