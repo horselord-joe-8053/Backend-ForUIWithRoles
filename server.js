@@ -56,10 +56,10 @@ app.use(function (req, res, next) {
 
 const db = require('./app/models');
 const db_connect_str = `mongodb://${dbConfig.CONNECT_STR}/${dbConfig.DB}`;
-logger.logAsStr('server.js', 'db_connect_str', db_connect_str);
+console.log('db_connect_str:' + db_connect_str);
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.CONNECT_STR}/${dbConfig.DB}`, {
+  .connect(db_connect_str, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
