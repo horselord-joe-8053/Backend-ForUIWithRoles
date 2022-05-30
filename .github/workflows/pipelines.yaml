@@ -8,8 +8,8 @@ on:
 
 env:
   PROJECT_ID: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}} # modifiable based from GKE
-  GKE_CLUSTER: balm-website-cluster-3 # modifiable based from GKE
-  GKE_ZONE: australia-southeast1-a
+  GKE_CLUSTER: balm-website-cluster-2 # modifiable based from GKE
+  GKE_ZONE: australia-southeast1
   DEPLOYMENT_NAME: balm-backend-gke # need to be the same in deployment.yaml
   IMAGE: balm-backend-gke-image
   TAG: 1.0.0
