@@ -55,7 +55,7 @@ app.use(function (req, res, next) {
 });
 
 const db = require('./app/models');
-const db_connect_str = `mongodb://${dbConfig.CONNECT_STR}/${dbConfig.DB}`;
+const db_connect_str = `mongodb://${dbConfig.CONNECT_STR}/${dbConfig.DB}?authSource=admin`;
 console.log('db_connect_str:' + db_connect_str);
 
 db.mongoose
