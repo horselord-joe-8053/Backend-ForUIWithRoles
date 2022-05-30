@@ -164,7 +164,17 @@ function initRoles() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: 'user',
+        name: 'publicuser',
+      }).save((err) => {
+        if (err) {
+          console.log('error', err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+      new Role({
+        name: 'privateuser',
       }).save((err) => {
         if (err) {
           console.log('error', err);
