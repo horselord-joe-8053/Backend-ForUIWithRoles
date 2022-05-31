@@ -11,7 +11,7 @@ const logger = require('./app/utils/logger');
 // const { isEmpty } = require('lodash');
 
 let corsOptions = {
-  credentials: true,
+  // credentials: true,
   // origin: 'http://localhost:8081',
   // origin: '*',
 };
