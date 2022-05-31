@@ -12,7 +12,7 @@ env:
   GKE_ZONE: australia-southeast1
   DEPLOYMENT_NAME: balm-backend-gke # need to be the same in deployment.yaml
   IMAGE: balm-backend-gke-image
-  TAG: 1.0.0
+  # TAG: 1.0.1 # we Change to set the tag by grabbing the last commit info
 
 jobs:
   setup-build-publish-deploy:
@@ -31,10 +31,20 @@ jobs:
           node-version: 16
           # cache: 'yarn'
 
-      - name: Build React App
-        # working-directory: .
-        run: npm ci
-        #TODO: is this necessary? as we have this in Dockerfile already
+      - name: set env-var Git last commit info as 'TAG'
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+        # https://stackoverflow.com/a/57969570
+        run: |-
+          echo "TAG=$(git show -1 -s --format=%cd_%h_%an --date=format:'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: TEST - get set env-var Git last commit info WITHOUT curly
+        run: |-
+          echo "get from env-var WITHOUT curly IS -- $TAG"
+
+      # - name: Build React App
+      #   # working-directory: .
+      #   run: npm ci
+      #   #TODO: is this necessary? as we have this in Dockerfile already
 
       # - name: Setup JDK 1.8
       #   uses: actions/setup-java@v1
@@ -117,3 +127,7 @@ jobs:
           ./kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/$DEPLOYMENT_NAME 
           kubectl get services -o wide
+
+      # TODO: consider using kubectl rollout status deployment/test-deploy
+      #   but it seems to be only applicable for against existing deployment on the cloud not against dir/files
+      #   https://medium.com/the-programmer/working-with-deployments-roll-back-and-rolling-updates-bb4299488e34
