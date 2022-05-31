@@ -12,7 +12,8 @@ const logger = require('./app/utils/logger');
 
 let corsOptions = {
   credentials: true,
-  origin: 'http://localhost:8081',
+  // origin: 'http://localhost:8081',
+  origin: '*',
 };
 
 app.use(cors(corsOptions));
