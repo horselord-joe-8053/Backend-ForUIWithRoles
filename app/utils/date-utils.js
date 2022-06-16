@@ -2,12 +2,15 @@ const Logger = require('../utils/logger');
 
 // jjw: https://stackoverflow.com/a/67679003
 module.exports = {
+  getDateWithZeroTimeFromDateOnlyStr,
   getDerivedScheduledDates,
   getScheduledDatesWithIntervalInMonth,
   getScheduledDatesWithIntervalInFornight,
   getScheduledDatesWithIntervalInFourWeeks,
   getDateIncremented,
   getDateIncrementedByDays,
+  getDateIncrementedByHours,
+  getDateIncrementedBySeconds,
   toISODateWithoutTimeString,
   DATE_SHIFTKEY_DELIMITER: '_',
 };
@@ -38,6 +41,10 @@ Date.prototype.withoutTime = function () {
 */
 const precision = 4;
 const ignorableEpsilon = Math.pow(10, -1 * precision);
+
+function getDateWithZeroTimeFromDateOnlyStr(dateOnlyStr) {
+  return new Date(dateOnlyStr);
+}
 
 function getDerivedScheduledDates(payFrequency, lastKnowPayDateStr, anchorDateStr) {
   Logger.logAsStr(
@@ -150,6 +157,18 @@ function getDateIncrementedByDays(baseDate, days) {
   // jjw:     our Date and Date stored in MongoDB with timeportion strictly kept at
   // jjw:     0;
   var date = new Date(baseDate.getTime() + 24 * 3600 * 1000 * days);
+  return date;
+}
+
+function getDateIncrementedByHours(baseDate, hours) {
+  // jjw: NOTE as above func
+  var date = new Date(baseDate.getTime() + 1000 * 60 * 60 * hours);
+  return date;
+}
+
+function getDateIncrementedBySeconds(baseDate, seconds) {
+  // jjw: NOTE as above func
+  var date = new Date(baseDate.getTime() + 1000 * seconds);
   return date;
 }
 

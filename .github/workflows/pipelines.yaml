@@ -4,7 +4,8 @@ name: Build and Deploy to kubernetes Backend
 on:
   push:
     branches:
-      - feature
+      # - feature
+      - main
 
 env:
   PROJECT_ID: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}} # modifiable based from GKE

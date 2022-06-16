@@ -25,6 +25,12 @@ module.exports = function (app) {
   );
 
   app.get(
+    '/api/test/timesheet/copy/:prevPeriodStartDateStr/:prevPeriodEndDateStr/:copyToGapInDays',
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    controller.copyShiftsFromPreviousPeriod
+  );
+
+  app.get(
     '/api/test/shifttypes',
     [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
     controller.getShiftTypes

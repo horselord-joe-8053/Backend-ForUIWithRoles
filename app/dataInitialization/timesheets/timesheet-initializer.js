@@ -63,6 +63,11 @@ exports.getData = async () => {
           );
 
           let staffQuery = value['staff']['query'];
+          logger.logAsJsonStr(
+            'timesheet-initializer.getData',
+            'in loop level 2 if... staffQuery',
+            staffQuery
+          );
           let staffPopulated = await Staff.findOne(staffQuery).exec();
           logger.logAsJsonStr(
             'timesheet-initializer.getData',

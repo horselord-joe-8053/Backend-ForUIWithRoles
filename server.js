@@ -10,9 +10,17 @@ const logger = require('./app/utils/logger');
 
 // const { isEmpty } = require('lodash');
 
+// // for deployment
+// let corsOptions = {
+//   // credentials: true,
+//   // origin: 'http://localhost:8081',
+//   // origin: '*',
+// };
+
+// for local testing
 let corsOptions = {
-  // credentials: true,
-  // origin: 'http://localhost:8081',
+  credentials: true,
+  origin: 'http://localhost:8081',
   // origin: '*',
 };
 
