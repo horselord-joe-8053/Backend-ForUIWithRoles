@@ -13,6 +13,7 @@ db.staff = require('./staff.model');
 db.shiftsInADay = require('./shiftsInADay.model');
 db.shiftType = require('./shiftType.model');
 db.paymentArrangement = require('./paymentArrangement.model');
+db.contact = require('./contact.model');
 
 db.user = require('./user.model');
 db.role = require('./role.model');

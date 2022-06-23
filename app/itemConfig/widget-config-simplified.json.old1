@@ -2,17 +2,18 @@
   {
     "_id": "uuid_1234",
     "key": "STAFF",
-    "itemMsgLabel": "Staff"
+    "maxNumColsInSummary": 5,
+    "itemMsgLabel": "Staff",
+    "itemServiceType": "staff",
+    "fieldsMap": {}
   },
   {
     "_id": "uuid_1235",
     "key": "RESIDENT",
-    "itemMsgLabel": "Resident"
-  },
-  {
-    "_id": "uuid_1238",
-    "key": "CONTACT",
-    "itemMsgLabel": "Contact"
+    "maxNumColsInSummary": 5,
+    "itemMsgLabel": "Resident",
+    "itemServiceType": "residents",
+    "fieldsMap": {}
   },
   {
     "_id": "uuid_1236",

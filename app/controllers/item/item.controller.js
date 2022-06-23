@@ -25,6 +25,8 @@ exports.itemGetAll = (req, res, mongoosModel, configKey) => {
 async function handleItems(err, items, itemMsgLabel, res) {
   // jjw: TODO: does it need to be async here???
   if (err) {
+    logger.logAsJsonStr('handleItems', 'ERROR:', err);
+
     res.status(500).send({ message: err });
     return;
   }
@@ -105,6 +107,8 @@ exports.itemGet = (req, res, mongoosModel, configKey) => {
 
   mongoosModel.findOne({ _id: ObjectId(itemId) }).exec(async (err, itemFound) => {
     if (err) {
+      logger.logAsJsonStr('itemGet', 'ERROR:', err);
+
       res.status(500).send({ message: err });
       return;
     }
@@ -160,6 +164,8 @@ exports.itemCreate = (req, res, mongoosModel, configKey) => {
     // jjw:     - n is the number of matched documents
     // jjw:     - nModified is the number of modified documents
     if (err) {
+      logger.logAsJsonStr('itemCreate', 'ERROR:', err);
+
       res.status(500).send({ message: err });
       return;
     }
@@ -197,6 +203,8 @@ exports.itemUpdate = (req, res, mongoosModel, configKey) => {
     // jjw:     - n is the number of matched documents
     // jjw:     - nModified is the number of modified documents
     if (err) {
+      logger.logAsJsonStr('itemUpdate', 'ERROR:', err);
+
       res.status(500).send({ message: err });
       return;
     }
@@ -226,6 +234,8 @@ exports.itemDelete = (req, res, mongoosModel, configKey) => {
 
   mongoosModel.findOneAndDelete({ _id: ObjectId(itemId) }).exec(async (err, itemDeleted) => {
     if (err) {
+      logger.logAsJsonStr('itemDelete', 'ERROR:', err);
+
       res.status(500).send({ message: err });
       return;
     }
