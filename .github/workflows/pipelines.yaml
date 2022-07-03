@@ -9,9 +9,9 @@ on:
 
 env:
   PROJECT_ID: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}} # modifiable based from GKE
-  GKE_CLUSTER: balm-website-cluster-2 # modifiable based from GKE
-  GKE_ZONE: australia-southeast1
-  DEPLOYMENT_NAME: balm-backend-gke # need to be the same in deployment.yaml
+  GKE_CLUSTER: balm-website-cluster-1 # modifiable based from GKE
+  GKE_ZONE: australia-southeast2
+  DEPLOYMENT_NAME: balm-backend-gke # need to be the same in kustom_resources/backend.yaml -> kind: Deployment - name
   IMAGE: balm-backend-gke-image
   # TAG: 1.0.1 # we Change to set the tag by grabbing the last commit info
 
@@ -63,9 +63,9 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true # (quickfix for some kinks in setup-gcloud action)
         with:
+          # NOTE! this secrets IDs must be the same key as per in Github under your repository name,
+          # select (maybe under …) -> Settings -> Secrets
           service_account_key: ${{secrets.BALMORAL_SITE_GKE_PROJECT_SECRET}}
-          # NOTE! this must be the same key as per in Github under your repository name, select (maybe under …)
-          # Settings -> Secrets
           project_id: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}}
 
       # not modify

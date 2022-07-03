@@ -14,13 +14,14 @@ module.exports = function (app) {
 
   app.get(
     '/api/test/staff',
-    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastStaff],
+    // [authJwt.verifyAccToken, authJwt.verifyIsAtLeastStaff],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastPrivateUser],
     controller.staffGetAll
   );
 
   app.get(
     '/api/test/staff/:id',
-    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastPrivateUser],
     controller.staffGet // jjw: here??? TODO: we can remove staff.controller entirely
 
     /*
@@ -50,8 +51,8 @@ module.exports = function (app) {
 
   app.delete(
     '/api/test/staff/:id',
-    // [authJwt.verifyToken, authJwt.verifyIsAtLeastOwner], // jjw: here??? TODO: why don't need verifyIsAtLeastOwner?
-    [authJwt.verifyAccToken],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner], // jjw: here??? TODO: why don't need verifyIsAtLeastOwner?
+    // [authJwt.verifyAccToken],
     controller.staffDelete
   );
 };

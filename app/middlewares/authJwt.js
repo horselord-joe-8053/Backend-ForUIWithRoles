@@ -102,6 +102,14 @@ const verifyAccToken = (req, res, next) => {
 };
 
 /*---- functions to verify roles ----*/
+const verifyIsAtLeastPublicUser = async (req, res, next) => {
+  return await verifyIsAtLeast(isAtLeastStaff, 'publicuser', req, res, next);
+};
+
+const verifyIsAtLeastPrivateUser = async (req, res, next) => {
+  return await verifyIsAtLeast(isAtLeastStaff, 'privateuser', req, res, next);
+};
+
 const verifyIsAtLeastStaff = async (req, res, next) => {
   return await verifyIsAtLeast(isAtLeastStaff, 'staff', req, res, next);
 };
@@ -166,8 +174,12 @@ const isAtLeastAdmin = async (req) => {
 };
 
 // is* functions
-const isUser = async (req) => {
-  return await verifyRole(req, 'user');
+const isPublicUser = async (req) => {
+  return await verifyRole(req, 'publicuser');
+};
+
+const isPrivateUser = async (req) => {
+  return await verifyRole(req, 'privateuser');
 };
 
 const isStaff = async (req) => {
@@ -251,6 +263,8 @@ const verifyRole = async (req, roleToVerify) => {
 
 const authJwt = {
   verifyAccToken,
+  verifyIsAtLeastPublicUser,
+  verifyIsAtLeastPrivateUser,
   verifyIsAtLeastStaff,
   verifyIsAtLeastOwner,
   verifyIsAtLeastAdmin,

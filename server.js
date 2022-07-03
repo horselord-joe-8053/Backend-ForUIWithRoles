@@ -74,7 +74,15 @@ db.mongoose
   })
   .then(() => {
     console.log('Successfully connect to MongoDB.');
-    dataInitializer.initial();
+    dataInitializer
+      .initialize()
+      .then(() => {
+        console.log('Data Initialization Completed');
+      })
+      .catch((err) => {
+        console.error('Data Initialization error', err);
+        process.exit();
+      });
   })
   .catch((err) => {
     console.error('Connection error', err);

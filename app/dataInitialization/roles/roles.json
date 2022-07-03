@@ -1,7 +1,7 @@
 [
-  { "name": "PUBLICUSER" },
-  { "name": "PRIVATEUSER" },
-  { "name": "STAFF" },
-  { "name": "OWNER" },
-  { "name": "ADMIN" }
+  { "name": "publicuser" },
+  { "name": "privateuser" },
+  { "name": "staff" },
+  { "name": "owner" },
+  { "name": "admin" }
 ]
