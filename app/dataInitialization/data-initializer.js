@@ -14,6 +14,7 @@ const ShiftType = db.shiftType;
 const PaymentArrangement = db.paymentArrangement;
 
 const logger = require('../utils/logger');
+const { estimatedDocumentCount } = require('../models/resident.model');
 
 // https://stackoverflow.com/a/42964310
 exports.initialize = async () => {
@@ -32,7 +33,22 @@ exports.initialize = async () => {
 
 // https://www.w3schools.com/js/js_async.asp
 async function initItems(initializer, mongoosModel, itemMsgLabel) {
-  let count = mongoosModel.countDocuments({}); // assume this is async
+  // https://mongoosejs.com/docs/api.html#model_Model.count
+  // This method is deprecated. If you want to count the number of documents in a collection, e.g. count({}), use the estimatedDocumentCount() function instead. Otherwise, use the countDocuments() function instead.
+  // let count = await mongoosModel.count({}); // return a promise
+
+  // https://mongoosejs.com/docs/api.html#model_Model.countDocuments
+  // let count = await mongoosModel.countDocuments({}); // assume this is async
+
+  // https://mongoosejs.com/docs/api.html#model_Model.estimatedDocumentCount
+  let count = await mongoosModel.estimatedDocumentCount({}); // assume this is async
+
+  mongoosModel;
+  logger.logAsStr(
+    'dataInitializer.initItems',
+    itemMsgLabel + ' countDocuments() -> Count: ',
+    count
+  );
   if (count > 0) {
     logger.logAsStr(
       'dataInitializer.initItems',
