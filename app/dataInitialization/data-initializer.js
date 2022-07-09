@@ -1,12 +1,14 @@
 const roleInitializer = require('./roles/role-initializer');
 const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
+const contactInitializer = require('./contacts/contact-initializer');
 const timesheetInitializer = require('./timesheets/timesheet-initializer.js');
 const shiftTypeInitializer = require('./shiftType/shiftType-initializer.js');
 const paymentInitializer = require('./paymentArrangements/payment-initializer.js');
 
 const db = require('../../app/models');
 const Role = db.role;
+const Contact = db.contact;
 const Resident = db.resident;
 const Staff = db.staff;
 const ShiftsInADay = db.shiftsInADay;
@@ -24,6 +26,7 @@ exports.initialize = async () => {
   await initItems(roleInitializer, Role, 'Role');
   await initItems(residentsInitializer, Resident, 'Resident');
   await initItems(staffInitializer, Staff, 'Staff');
+  await initItems(contactInitializer, Contact, 'Contact');
   await initItems(shiftTypeInitializer, ShiftType, 'ShiftType');
   await initItems(timesheetInitializer, ShiftsInADay, 'ShiftsInADay');
   await initItems(paymentInitializer, PaymentArrangement, 'PaymentArrangement');

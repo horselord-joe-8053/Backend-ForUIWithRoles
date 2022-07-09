@@ -11,6 +11,7 @@ const Contact = mongoose.model(
     email: { type: String },
     contactPersonName: { type: String },
     address: { type: String },
+    operatingHours: { type: String },
     note: { type: String },
   })
 );
