@@ -1,5 +1,18 @@
 {
   "firstName": "Yinghua",
   "lastName": "Yao",
-  "shorthandName": "Grace"
+  "shorthandName": "Grace",
+  "primaryContactNumber": "0468717418",
+  "secondaryContactNumber": "",
+  "dob": "1968-11-26",
+  "address": "Unit 4, 1-3 Radcliff Ave, Cheltenham, VIC 3192",
+  "designation": "PCA, Night-time, Office Manager",
+  "qualification": "Certificate III",
+  "commencementDate": "2018-06-06",
+  "emergencyContactPerson": "",
+  "emergencyContactNumber": "",
+  "staffFileFolderLink": "https://drive.google.com/drive/folders/1fkOYWWRcnV1iEpORTzzUzKOP5lhD6o0V?usp=sharing",
+  "tfn": "??",
+  "superName": "??",
+  "superNumber": "??"
 }

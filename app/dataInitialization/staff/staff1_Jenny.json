@@ -1,5 +1,18 @@
 {
   "firstName": "Jenny",
   "lastName": "Zhang",
-  "shorthandName": "Jenny"
+  "shorthandName": "Jenny",
+  "primaryContactNumber": "0412296232",
+  "secondaryContactNumber": "",
+  "dob": "1953-12-28",
+  "address": "75 Waverley Road, Malvern East, VIC 3145",
+  "designation": "PCA, Night-time, Office Manager",
+  "qualification": "Certificate III",
+  "commencementDate": "2004-10-01",
+  "emergencyContactPerson": "James",
+  "emergencyContactNumber": "0406988841",
+  "staffFileFolderLink": "https://drive.google.com/drive/folders/1fgheJWoS7R9i9BD2NjV_EuYntX4ynhs-?usp=sharing",
+  "tfn": "??",
+  "superName": "??",
+  "superNumber": "??"
 }

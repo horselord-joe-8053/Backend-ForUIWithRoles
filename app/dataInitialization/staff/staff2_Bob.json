@@ -1,5 +1,18 @@
 {
   "firstName": "Yong",
   "lastName": "Yuan",
-  "shorthandName": "Bob"
+  "shorthandName": "Bob",
+  "primaryContactNumber": "0404097807",
+  "secondaryContactNumber": "(03)98991389",
+  "dob": "1957-01-03",
+  "address": "5A Agnes St, Mont Albert, VIC 3127",
+  "designation": "PCA, Night-time",
+  "qualification": "Certificate III",
+  "commencementDate": "2011-01-30",
+  "emergencyContactPerson": "",
+  "emergencyContactNumber": "",
+  "staffFileFolderLink": "https://drive.google.com/drive/folders/1fgheJWoS7R9i9BD2NjV_EuYntX4ynhs-?usp=sharing",
+  "tfn": "183539889",
+  "superName": "Hostplus",
+  "superNumber": "100747718"
 }
