@@ -14,7 +14,7 @@ db.shiftsInADay = require('./shiftsInADay.model');
 db.shiftType = require('./shiftType.model');
 db.paymentArrangement = require('./paymentArrangement.model');
 db.contact = require('./contact.model');
-
+db.businessDoc = require('./businessDoc.model');
 db.user = require('./user.model');
 db.role = require('./role.model');
 db.refreshToken = require('./refreshToken.model');

@@ -20,7 +20,7 @@ module.exports = function (app) {
 
   app.get(
     '/api/test/contact/:id',
-    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastStaff],
     controller.contactGet // jjw: here??? TODO: we can remove staff.controller entirely
 
     /*

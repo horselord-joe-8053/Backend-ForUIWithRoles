@@ -15,6 +15,11 @@
     "itemMsgLabel": "Contact"
   },
   {
+    "_id": "uuid_1290",
+    "key": "BUSINESS_DOC",
+    "itemMsgLabel": "BusinessDoc"
+  },
+  {
     "_id": "uuid_1236",
     "key": "SHIFT_TYPE",
     "itemMsgLabel": "ShiftType"
