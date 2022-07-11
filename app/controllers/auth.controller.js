@@ -41,24 +41,19 @@ exports.signup = (req, res) => {
       return;
     }
 
-    if (req.body.roles) {
-      // jjw: find all the roles in the list of 'req.body.roles'
+    let roleFromReq = req.body.role;
+    if (roleFromReq) {
       Role.find(
         {
-          name: { $in: req.body.roles },
+          name: { $eq: roleFromReq },
         },
-        (err, roles) => {
+        (err, role) => {
           if (err) {
             res.status(500).send({ message: err });
             return;
           }
 
-          // jjw: user.roles is a list {}, assigned value by the roles.map(...)
-          // jjw:   , i.e. based on what roles sent in the request from UI, we
-          // jjw:   1. look up these roles objects from DB,
-          // jjw:   2. get their IDs
-          // jjw:   3. put these IDs in a list as a property of the user and save user
-          user.roles = roles.map((role) => role._id);
+          user.role = role._id;
           user.save((err) => {
             if (err) {
               res.status(500).send({ message: err });
@@ -70,14 +65,14 @@ exports.signup = (req, res) => {
         }
       );
     } else {
-      // jjw: if 'req.body.roles' is not specified, we default it to 'user' role
+      // jjw: if 'req.body.role' is not specified, we default it to 'publicuser' role
       Role.findOne({ name: 'publicuser' }, (err, role) => {
         if (err) {
           res.status(500).send({ message: err });
           return;
         }
 
-        user.roles = [role._id];
+        user.role = [role._id];
         user.save((err) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -95,7 +90,7 @@ exports.signinNew = (req, res) => {
   User.findOne({
     username: req.body.username,
   })
-    .populate('roles', '-__v')
+    .populate('role', '-__v')
     .exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -177,14 +172,9 @@ exports.signinNew = (req, res) => {
           res.cookies
         );
 
-        let authorities = user.roles && user.roles.name.toUpperCase();
-        // jjw: HERE!!! TODO: make role singular in all functions of this file
+        let userRole = user.role && user.role.name.toUpperCase();
 
-        // for (let i = 0; i < user.roles.length; i++) {
-        //   authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-        // }
-
-        logger.logAsJsonStr('auth.controller.signin | in updateOne', 'authorities', authorities);
+        logger.logAsJsonStr('auth.controller.signin | in updateOne', 'userRole', userRole);
 
         // jjw: HERE TODO!!!  on log in need to set the tokens based on user
         // jjw: HERE TODO!!! instead of sending tokens here, set them on the cookies of the browser,
@@ -193,72 +183,13 @@ exports.signinNew = (req, res) => {
           id: user._id,
           username: user.username,
           email: user.email,
-          roles: authorities,
+          role: userRole,
           // accessToken: token, // jjw: a signed JWT token object
           // refreshToken: refreshToken, // jjw: just a UUID
         });
       });
     });
 };
-
-// exports.signin = (req, res) => {
-//   User.findOne({
-//     username: req.body.username,
-//   })
-//   .populate("roles", "-__v")
-//   .exec(async (err, user) => {
-//     if (err) {
-//       res.status(500).send({ message: err });
-//       return;
-//     }
-
-//     if (!user) {
-//       return res.status(404).send({ message: "User Not found." });
-//     };
-
-//     logger.logAsJsonStr("exports.signin", "user after populate", user);
-
-//     let passwordIsValid = bcrypt.compareSync(
-//       req.body.password,
-//       user.password
-//     );
-
-//     if (!passwordIsValid) {
-//       return res.status(401).send({
-//         accessToken: null,
-//         message: "Invalid Password!",
-//       });
-//     }
-
-//     // jjw: as long as we sign in with right username/password, we start
-//     // jjw:   creating a pair of tokens and return them in response
-//     let token = jwt.sign({ id: user.id }, config.accessTokenSecret, {
-//       expiresIn: config.jwtExpiration,
-//     });
-
-//     // jjw: note that 'refreshToken' returned here is NOT a JWT 'token' object
-//     // jjw:   as above, but just an UUID.
-//     let refreshToken = await RefreshToken.createToken(user);
-
-//     let authorities = [];
-
-//     for (let i = 0; i < user.roles.length; i++) {
-//       authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-//     }
-
-//     // jjw: HERE TODO!!!  on log in need to set the tokens based on user
-//     // jjw: HERE TODO!!! instead of sending tokens here, set them on the cookies of the browser,
-//     // jjw:   like here: https://github.com/flolu/auth/blob/master/api/index.ts
-//     res.status(200).send({
-//       id: user._id,
-//       username: user.username,
-//       email: user.email,
-//       roles: authorities,
-//       accessToken: token, // jjw: a signed JWT token object
-//       refreshToken: refreshToken, // jjw: just a UUID
-//     });
-//   });
-// };
 
 // jjw: this gets called for "/api/auth/refreshtoken" requests
 exports.refreshToken = async (req, res) => {
@@ -379,16 +310,6 @@ exports.refreshToken = async (req, res) => {
     }
 
     if (decodedCurrRefreshToken.loginSessionVersion !== userLoginSessionVersionFromDB) {
-      /*
-jjw: TODO: HERE !!! refreshing owner board page a few times causing: first, delete all log in sessions in DB
-
-in auth.controller.refreshToken(), 'currRefreshTokenLoginSessionId': 17cb1977-350e-42b6-8ee9-e29428073a73
-in auth.controller.refreshToken(), 'userLoginSessionVersionFromDB': 3
-in token-utils.refreshTokens(), 'decodedCurrRefreshToken.loginSessionVersion': 2
-in token-utils.refreshTokens(), 'userLoginSessionVersionFromDB': 3
-in token-utils.refreshTokens(), 'version not matching!!!': undefined
-
-*/
       logger.logAsStr(
         'auth.controller.refreshToken',
         'decodedCurrRefreshToken.loginSessionVersion',
@@ -521,84 +442,4 @@ updateUserDB = async (user) => {
   } catch (err) {
     throw 'Error occurred during updating user in DB:' + JSON.stringify(err);
   }
-
-  // User.updateOne({ _id: ObjectId(user._id) }, user).exec(async (err, updateStatusResult) => {
-  //   // jjw: TODO!!!: do we need async here? this may cause race conditions ???
-
-  //   // jjw: itemUpdated will be, if successful,
-  //   // jjw:   'itemUpdate: {"n":1,"nModified":1,"ok":1}'
-  //   // jjw:   https://github.com/Automattic/monk/issues/149#issuecomment-232569704
-  //   // jjw:     - n is the number of matched documents
-  //   // jjw:     - nModified is the number of modified documents
-  //   if (err) {
-  //     res.status(500).send({ message: 'Updating user in DB, error:' + err });
-  //     return;
-  //   }
-
-  //   logger.logAsStr('auth.controller.updateUserDB end:', 'user.username', user.username);
-  //   logger.logAsJsonStr(
-  //     'auth.controller.updateUserDB end',
-  //     'updateStatusResult',
-  //     updateStatusResult,
-  //     'info'
-  //   );
-  // });
 };
-// // jjw: this gets called for "/api/auth/refreshtoken" requests
-// exports.refreshToken = async (req, res) => {
-//   // jjw; 'requestToken' from {refreshToken:<requestToken>} is just aUUID
-//   const { refreshToken: requestToken } = req.body;
-
-//   if (requestToken == null) {
-//     return res.status(403).json({ message: "Refresh Token is required!" });
-//   }
-
-//   try {
-//     // jjw: find the 'refreshToken' document in DB by the UUID given in the request,
-//     // jjw: NOTE: findOne(...): as we have the UUID of the last saved RefreshToken
-//     // jjw: Document, we should be fine by using findOne(...)
-//     // jjw: NOTE: storing refreshingTokens in DB is NOT usual practice, as usually
-//     // jjw:   we actually transmit the signed refreshToken payload in a JWT to client
-//     // jjw:   and back to server and so on so forth. more secure as with the JWT,
-//     // jjw:   if the payload itself has been tempered with, we will know; while with
-//     // jjw:   the just a naked UUID, we can't tell.
-//     let refreshToken = await RefreshToken.findOne({ token: requestToken });
-
-//     if (!refreshToken) {
-//       res.status(403).json({ message: "Refresh token is not in database!" });
-//       return;
-//     }
-
-//     if (RefreshToken.verifyExpiration(refreshToken)) {
-//       // jjw: if the refreshToken is also expired, we remove this refreshToken and return error to the client
-//       // jjw:   asking them to re-signin, upon wich, we will call
-//       // jjw:   'let refreshToken = await RefreshToken.createToken(user);'
-//       // jjw:   and create an unexpired refreshToken.
-//       RefreshToken.findByIdAndRemove(refreshToken._id, { useFindAndModify: false }).exec();
-//       res.status(403).json({
-//         message: "Refresh token was expired. Please make a new signin request",
-//       });
-//       return;
-//     }
-
-//     // jjw: if refreshToken is not expired, we just took the user._id in the
-//     // jjw: refreshToken document we found in the DB, and use it to generate a
-//     // jjw: new signed JWT token as the new accessToken.
-//     let newAccessToken = jwt.sign({ id: refreshToken.user._id }, config.accessTokenSecret, {
-//       expiresIn: config.jwtExpiration,
-//     });
-
-//     // jjw: HERE TODO!!! instead of sending tokens here, set them on the cookies of the browser,
-//     // jjw:   like here: https://github.com/flolu/auth/blob/master/api/index.ts
-
-//     // jjw: return
-//     // jjw: - the new signed JWT accessToken AND
-//     // jjw: - the UUID associated with the current refreshToken
-//     return res.status(200).json({
-//       accessToken: newAccessToken,
-//       refreshToken: refreshToken.token,
-//     });
-//   } catch (err) {
-//     return res.status(500).send({ message: err });
-//   }
-// };

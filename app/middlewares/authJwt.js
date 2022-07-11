@@ -101,7 +101,7 @@ const verifyAccToken = (req, res, next) => {
   }
 };
 
-/*---- functions to verify roles ----*/
+/*---- functions to verify user role ----*/
 const verifyIsAtLeastPublicUser = async (req, res, next) => {
   return await verifyIsAtLeast(isAtLeastStaff, 'publicuser', req, res, next);
 };
@@ -205,8 +205,9 @@ const verifyRole = async (req, roleToVerify) => {
 
   // 1. find user
   let user = undefined;
+  let reqUserId = req.userId;
   try {
-    logger.logAsStr('authJwt.verifyRole', 'try to find user by req.userId', req.userId);
+    logger.logAsStr('authJwt.verifyRole', 'try to find user by reqUserId', reqUserId);
 
     // user = await User.findById(req.userId);
     user = await User.findById(req.userId).exec();
@@ -224,19 +225,18 @@ const verifyRole = async (req, roleToVerify) => {
     // throw 'Try to find user with userId: ' + req.userId + '. Error: ' + JSON.stringify(err.stack);
     throw (
       'Try to find user with userId: ' +
-      req.userId +
+      reqUserId +
       '. Unexpected Server Side Error: ' +
       JSON.stringify(err.message)
     );
   }
 
-  // jjw: TODO: cleanup roles including initialize them properly
   // 2. find the role associated with the user
-  let roleId = user && user.roles;
+  let roleId = user && user.role;
 
   let role = undefined;
   try {
-    logger.logAsStr('authJwt.verifyRole', 'try to find roleId by user.roles', roleId);
+    logger.logAsStr('authJwt.verifyRole', 'try to find roleId by user.role', roleId);
 
     role = await Role.findById(roleId).exec();
   } catch (err) {
@@ -245,8 +245,8 @@ const verifyRole = async (req, roleToVerify) => {
     throw (
       'Try to find role with roleId: ' +
       roleId +
-      ' for userId:' +
-      userId +
+      ' for reqUserId:' +
+      reqUserId +
       '. Unexpected Server Side Error: ' +
       JSON.stringify(err.message)
     );

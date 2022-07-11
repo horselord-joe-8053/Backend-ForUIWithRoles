@@ -22,7 +22,7 @@ module.exports = function (app) {
 
   app.post(
     '/api/auth/signup',
-    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
+    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRoleExisted],
     controller.signup
   );
 
@@ -32,7 +32,7 @@ module.exports = function (app) {
     id: user._id,
     username: user.username,
     email: user.email,
-    roles: authorities,
+    role: userRole,
     accessToken: token, // jjw: a signed JWT token object
     refreshToken: refreshToken, // jjw: just a UUID
   });

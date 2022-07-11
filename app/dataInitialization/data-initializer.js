@@ -18,7 +18,6 @@ const ShiftType = db.shiftType;
 const PaymentArrangement = db.paymentArrangement;
 
 const logger = require('../utils/logger');
-const { estimatedDocumentCount } = require('../models/resident.model');
 
 // https://stackoverflow.com/a/42964310
 exports.initialize = async () => {
