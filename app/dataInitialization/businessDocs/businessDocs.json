@@ -1,0 +1,30 @@
+[
+  {
+    "category": "Financial Documents",
+    "subCategory": "Yearly Report",
+    "pdfDocumentLink": "https://drive.google.com/file/d/1j4rZQ6qhxPIhX3L8oRDeVelHTVHpwC6_/view?usp=sharing",
+    "summary": "Report for FY Ending June 30, 2021",
+    "note": "some notes 2"
+  },
+  {
+    "category": "Financial Documents",
+    "subCategory": "Yearly Report",
+    "pdfDocumentLink": "https://drive.google.com/file/d/1gp02j6UnwNNt4Z93PNiTrYZcnLtnC6IY/view?usp=sharing",
+    "summary": "Report for FY Ending June 30, 2020",
+    "note": "some notes 1"
+  },
+  {
+    "category": "Lease Documents",
+    "subCategory": "Lease",
+    "pdfDocumentLink": "https://drive.google.com/file/d/1a8tn4jBP8xpVxv7gJrdTf6-mbVkBlj-K/view?usp=sharing",
+    "summary": "Current Lease, with Option to 2034",
+    "note": "some notes 3"
+  },
+  {
+    "category": "Lease Documents",
+    "subCategory": "Disclosure Statement",
+    "pdfDocumentLink": "https://drive.google.com/file/d/1jDMuGjIhnxQS2B0XxMM89D74qajsLfAJ/view?usp=sharing",
+    "summary": "Disclosure Statement signed By the Landlord",
+    "note": "some notes 4"
+  }
+]
