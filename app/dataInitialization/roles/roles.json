@@ -1,6 +1,7 @@
 [
   { "name": "publicuser" },
   { "name": "privateuser" },
+  { "name": "superuser" },
   { "name": "staff" },
   { "name": "owner" },
   { "name": "admin" }

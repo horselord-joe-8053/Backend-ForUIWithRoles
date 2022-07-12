@@ -102,12 +102,12 @@ const verifyAccToken = (req, res, next) => {
 };
 
 /*---- functions to verify user role ----*/
-const verifyIsAtLeastPublicUser = async (req, res, next) => {
-  return await verifyIsAtLeast(isAtLeastStaff, 'publicuser', req, res, next);
-};
-
 const verifyIsAtLeastPrivateUser = async (req, res, next) => {
   return await verifyIsAtLeast(isAtLeastStaff, 'privateuser', req, res, next);
+};
+
+const verifyIsAtLeastSuperUser = async (req, res, next) => {
+  return await verifyIsAtLeast(isAtLeastSuperUser, 'superuser', req, res, next);
 };
 
 const verifyIsAtLeastStaff = async (req, res, next) => {
@@ -154,6 +154,27 @@ const verifyIsAtLeast = async (isAtLeastFunc, atLeastRole, req, res, next) => {
 };
 
 // isAtLeast* functions
+const isAtLeastPrivateUser = async (req) => {
+  let result =
+    (await isPrivateUser(req)) ||
+    (await isSuperUser(req)) ||
+    (await isStaff(req)) ||
+    (await isOwner(req)) ||
+    (await isAdmin(req));
+  // jjw: need 'await' here to make sure we get each eval result in order for '||' work properly
+  logger.logAsStr('authJwt.isAtLeastStaff', 'result:', result);
+  return result;
+};
+
+// NOTE: Superuser (such as agent) and Staff are on the same level, one does not have higher authority than the other
+const isAtLeastSuperUser = async (req) => {
+  let result = (await isSuperUser(req)) || (await isOwner(req)) || (await isAdmin(req));
+  // jjw: need 'await' here to make sure we get each eval result in order for '||' work properly
+  logger.logAsStr('authJwt.isAtLeastStaff', 'result:', result);
+  return result;
+};
+
+// NOTE: Superuser (such as agent) and Staff are on the same level, one does not have higher authority than the other
 const isAtLeastStaff = async (req) => {
   let result = (await isStaff(req)) || (await isOwner(req)) || (await isAdmin(req));
   // jjw: need 'await' here to make sure we get each eval result in order for '||' work properly
@@ -180,6 +201,10 @@ const isPublicUser = async (req) => {
 
 const isPrivateUser = async (req) => {
   return await verifyRole(req, 'privateuser');
+};
+
+const isSuperUser = async (req) => {
+  return await verifyRole(req, 'superuser');
 };
 
 const isStaff = async (req) => {
@@ -263,8 +288,8 @@ const verifyRole = async (req, roleToVerify) => {
 
 const authJwt = {
   verifyAccToken,
-  verifyIsAtLeastPublicUser,
   verifyIsAtLeastPrivateUser,
+  verifyIsAtLeastSuperUser,
   verifyIsAtLeastStaff,
   verifyIsAtLeastOwner,
   verifyIsAtLeastAdmin,

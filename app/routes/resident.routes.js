@@ -14,13 +14,13 @@ module.exports = function (app) {
 
   app.get(
     '/api/test/residents',
-    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastStaff],
     controller.residentGetAll
   );
 
   app.get(
     '/api/test/residents/:id',
-    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastOwner],
+    [authJwt.verifyAccToken, authJwt.verifyIsAtLeastStaff],
     controller.residentGet // jjw: here??? TODO: we can remove resident.controller entirely
 
     /*
