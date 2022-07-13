@@ -33,9 +33,12 @@
   "primaryProSecondaryPhone": "",
   "primaryProContactEmail": "k.obrien@cgmc.org.au",
 
-  "secondaryProContactName": "Sec Pro Contact",
-  "secondaryProContactOrg": "Sec Pro Org",
-  "secondaryProPrimaryPhone": "00000000",
-  "secondaryProSecondaryPhone": "10000000",
-  "secondaryProContactEmail": ""
+  "secondaryProContactName": "",
+  "secondaryProContactOrg": "",
+  "secondaryProPrimaryPhone": "",
+  "secondaryProSecondaryPhone": "",
+  "secondaryProContactEmail": "",
+
+  "residentCarePlanFileLink": "https://drive.google.com/file/d/1JQ6caOVl_WFzzX6b7mKQjHJtzx3gk5-4/view?usp=sharing",
+  "residentFileFolderLink": "https://drive.google.com/drive/folders/1ADvV6n5PVf-FOCIW0JJZ8L4EUCs07HyG?usp=sharing"
 }

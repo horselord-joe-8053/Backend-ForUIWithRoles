@@ -70,6 +70,9 @@ const Resident = mongoose.model(
     secondaryProPrimaryPhone: String,
     secondaryProSecondaryPhone: String,
     secondaryProContactEmail: String,
+
+    residentCarePlanFileLink: String,
+    residentFileFolderLink: String,
   })
 );
 
