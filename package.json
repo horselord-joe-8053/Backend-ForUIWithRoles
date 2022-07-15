@@ -4,7 +4,7 @@
   "description": "Node.js JWT Refresh Token with MongoDB",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "node.js",
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
-    "@types/jsonwebtoken": "^8.5.8"
+    "@types/jsonwebtoken": "^8.5.8",
+    "jest": "^28.1.3"
   }
 }

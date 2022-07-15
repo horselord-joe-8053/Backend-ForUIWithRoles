@@ -1,4 +1,4 @@
-const Logger = require('../utils/logger');
+const Logger = require('./logger');
 
 // jjw: https://stackoverflow.com/a/67679003
 module.exports = {
