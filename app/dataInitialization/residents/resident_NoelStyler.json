@@ -1,17 +1,27 @@
 {
   "firstName": "Noel",
   "lastName": "Styler",
+  "sex": "Male",
+
   "room": "8a",
   "dob": "1948-01-12",
   "admissionDate": "2009-01-22",
   "pocketMoneyAmount": 12.34,
 
   "pensionCardNumber": "304515581T",
+
+  "payMethod": "CommBank",
+  "payToBankAccount": "063301 10206191",
+  "notesForPayment": "search keyword 'styler'",
+  "payer": "State Trustee",
+  "notesForPayer": "",
+
   "payFrequency": "Fortnightly",
   "paymentAmount": 975,
-  "lastKnownPayDate": "2021-11-11",
+  "lastKnownPayDate": "2022-05-26",
+  "paidDateList": ["2022-06-09", "2022-06-23"],
 
-  "medicareNumber": "3150718898",
+  "medicareNumber": "3150718898-?",
   "diabeticStatus": "Type II",
   "medicalSummary": "Schizophrenia, Hypertention, Type II diabetes",
   "gpName": "Dr. Doris Daglas",

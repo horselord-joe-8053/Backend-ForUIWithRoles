@@ -1,0 +1,53 @@
+{
+  "firstName": "Dimitos",
+  "lastName": "Samaras",
+  "sex": "Male",
+  "room": "2",
+  "dob": "1961-10-01",
+  "admissionDate": "2009-03-19",
+  "pocketMoneyAmount": 0,
+
+  "pensionCardNumber": "304473441J",
+
+  "payMethod": "CommBank",
+  "payToBankAccount": "063301 10206191",
+  "notesForPayment": "search keyword 'samaras'",
+  "payer": "Relative or Guardian",
+  "notesForPayer": "",
+
+  "payFrequency": "Monthly",
+  "paymentAmount": 2056,
+  "lastKnownPayDate": "2022-07-19",
+  "paidDateList": ["2022-07-19"],
+
+  "medicareNumber": "3017231655-?",
+  "diabeticStatus": "Type II",
+  "medicalSummary": "1st and 2nd degree heart block, Hypertention, Knee Surgery (Right), Hepatitis C treatment, Schizophrenia, Type II Diabetes",
+  "gpName": "Dr. Jack Goldberg",
+  "gpPrimaryPhone": "98241689",
+  "gpSecondaryPhone": "",
+  "gpEmail": "",
+  "gpClinicName": "MyClinic South Yarra",
+  "gpAddress": "6/300 Toorak Rd, South Yarra VIC 3141",
+
+  "nextOfKinName": "Dr. Nick Samaras",
+  "nextOfKinRelationship": "Brother",
+  "nextOfKinPrimaryPhone": "0409447746",
+  "nextOfKinSecondaryPhone": "59871317 (Tony - Father)",
+  "nextOfKinEmail": "",
+
+  "primaryProContactName": "Athena Donohue (Case Manager)",
+  "primaryProContactOrg": "Start Health",
+  "primaryProPrimaryPhone": "0458788024",
+  "primaryProSecondaryPhone": "90661416",
+  "primaryProContactEmail": "adonohue@starhealth.org.au",
+
+  "secondaryProContactName": "Mark",
+  "secondaryProContactOrg": "Support Worker",
+  "secondaryProPrimaryPhone": "0413334466",
+  "secondaryProSecondaryPhone": "",
+  "secondaryProContactEmail": "",
+
+  "residentCarePlanFileLink": "https://drive.google.com/file/d/16a1nMhLmQdZndTSx9hBAorMWMpgTfmmA/view?usp=sharing",
+  "residentFileFolderLink": "https://drive.google.com/drive/folders/12er9n5njQrRncHp2olMO8Qyr9yTzgFT3?usp=sharing"
+}

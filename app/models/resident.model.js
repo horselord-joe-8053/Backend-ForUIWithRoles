@@ -14,6 +14,10 @@ const Resident = mongoose.model(
     // general info
     firstName: String,
     lastName: String,
+    sex: {
+      type: String,
+      enum: ['Male', 'Female'],
+    },
     room: String,
     dob: Date,
     admissionDate: Date,
@@ -21,6 +25,25 @@ const Resident = mongoose.model(
 
     // payment info
     pensionCardNumber: String,
+
+    payMethod: {
+      type: String,
+      enum: ['CommBank', 'Check', 'Cash'],
+      // default: 'CommBank',
+    },
+    payToBankAccount: {
+      type: String,
+      enum: ['None', '063301 10206191', '063301 10129659'],
+      // default: '063301 10206191',
+    },
+    notesForPayment: String,
+    payer: {
+      type: String,
+      enum: ['State Trustee', 'Centrelink', 'Relative or Guardian', 'Self'],
+      // default: 'State Trustee',
+    },
+    notesForPayer: String,
+
     payFrequency: {
       type: String,
       enum: ['Fortnightly', 'Monthly', 'Every 4 Weeks'],
@@ -31,16 +54,17 @@ const Resident = mongoose.model(
     },
     paymentAmount: Number,
     lastKnownPayDate: Date,
+    paidDateList: [Date],
 
     // medical info
     medicareNumber: String, //jjw: TODO: ideally boolean but frontend is using 'yes', 'no', the conversion has to happen somewhere in expense of generality
     diabeticStatus: {
       type: String,
-      enum: ['No', 'Type I', 'Type II'],
+      enum: ['None', 'Type I', 'Type II'],
       // jjw: TODO: ENUM change enum <option value="".../> to be consistent with the text it shows
       // jjw:   so that when it shows in the summary list, it will look consistent.
       // jjw:   apparently, these values can have space
-      default: 'no',
+      default: 'None',
     },
     medicalSummary: String,
     gpName: String,
@@ -73,6 +97,8 @@ const Resident = mongoose.model(
 
     residentCarePlanFileLink: String,
     residentFileFolderLink: String,
+
+    // unpaidDateList: {type: Array, "default": []},
   })
 );
 
