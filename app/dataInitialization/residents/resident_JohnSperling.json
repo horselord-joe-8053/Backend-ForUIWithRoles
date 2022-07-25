@@ -1,0 +1,58 @@
+{
+  "firstName": "John",
+  "lastName": "Sperling",
+  "sex": "Male",
+
+  "room": "14",
+  "dob": "1952-09-21",
+  "admissionDate": "2022-06-08",
+  "pocketMoneyAmount": 0,
+
+  "pensionCardNumber": "",
+
+  "payMethod": "CommBank",
+  "payToBankAccount": "None",
+  "notesForPayment": "",
+  "payer": "Self",
+  "notesForPayer": "",
+
+  "payFrequency": "Fortnightly",
+  "paymentAmount": 0,
+  "lastKnownPayDate": "2022-05-26",
+  "paidDateList": ["2022-06-09", "2022-06-23"],
+  "lastDateOfIncrease": "2021-12-15",
+  "prevPaymentAmount": 0,
+
+  "medicareNumber": "3183250518-1",
+  "diabeticStatus": "None",
+  "medicalSummary": "",
+  "gpName": "",
+  "gpPrimaryPhone": "",
+  "gpSecondaryPhone": "",
+  "gpEmail": "",
+  "gpClinicName": "",
+  "gpAddress": "",
+
+  "nextOfKinName": "",
+  "nextOfKinRelationship": "",
+  "nextOfKinPrimaryPhone": "",
+  "nextOfKinSecondaryPhone": "",
+  "nextOfKinEmail": "",
+
+  "primaryProContactName": "",
+  "primaryProContactRole": "",
+  "primaryProContactOrg": "",
+  "primaryProPrimaryPhone": "",
+  "primaryProSecondaryPhone": "",
+  "primaryProContactEmail": "",
+
+  "secondaryProContactName": "",
+  "secondaryProContactRole": "",
+  "secondaryProContactOrg": "",
+  "secondaryProPrimaryPhone": "",
+  "secondaryProSecondaryPhone": "",
+  "secondaryProContactEmail": "",
+
+  "residentCarePlanFileLink": "",
+  "residentFileFolderLink": ""
+}
