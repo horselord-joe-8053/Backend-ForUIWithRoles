@@ -9,16 +9,16 @@
 
   "pensionCardNumber": "303988196A",
 
-  "payMethod": "Check",
-  "payToBankAccount": "None",
-  "notesForPayment": "",
+  "payMethod": "Cheque",
+  "payToBankAccount": "063-301 10258653",
+  "notesForPayment": "Payment date shown here may be different from the date the check is deposited; In bank account, search keyword 'cheque'",
   "payer": "Self",
-  "notesForPayer": "who writes the check??",
+  "notesForPayer": "",
 
   "payFrequency": "Fortnightly",
   "paymentAmount": 870,
-  "lastKnownPayDate": "2021-11-19",
-  "paidDateList": ["2021-11-19"],
+  "lastKnownPayDate": "2022-07-15",
+  "paidDateList": ["2022-07-15"],
 
   "medicareNumber": "3213545148-?",
   "diabeticStatus": "None",
@@ -37,12 +37,14 @@
   "nextOfKinEmail": "",
 
   "primaryProContactName": "No Case Manager or Support Worker?",
+  "primaryProContactRole": "",
   "primaryProContactOrg": "",
   "primaryProPrimaryPhone": "",
   "primaryProSecondaryPhone": "",
   "primaryProContactEmail": "",
 
   "secondaryProContactName": "",
+  "secondaryProContactRole": "",
   "secondaryProContactOrg": "",
   "secondaryProPrimaryPhone": "",
   "secondaryProSecondaryPhone": "",

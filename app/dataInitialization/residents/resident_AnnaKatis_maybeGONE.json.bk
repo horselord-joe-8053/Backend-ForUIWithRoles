@@ -1,14 +1,14 @@
 {
-  "firstName": "Noel",
-  "lastName": "Styler",
-  "sex": "Male",
+  "firstName": "Anna",
+  "lastName": "Katis",
+  "sex": "Female",
 
-  "room": "8a",
-  "dob": "1948-01-12",
-  "admissionDate": "2009-01-22",
-  "pocketMoneyAmount": 12.34,
+  "room": "14",
+  "dob": "27/07/1970",
+  "admissionDate": "2021-11-28",
+  "pocketMoneyAmount": 0,
 
-  "pensionCardNumber": "304515581T",
+  "pensionCardNumber": "320463214B",
 
   "payMethod": "CommBank",
   "payToBankAccount": "063-301 10206191",
@@ -18,10 +18,8 @@
 
   "payFrequency": "Fortnightly",
   "paymentAmount": 975,
-  "lastKnownPayDate": "2022-07-21",
-  "paidDateList": ["2022-07-21"],
-  "lastDateOfIncrease": "2021-12-09",
-  "prevPaymentAmount": 975,
+  "lastKnownPayDate": "2022-05-26",
+  "paidDateList": ["2022-06-09", "2022-06-23"],
 
   "medicareNumber": "3150718898-?",
   "diabeticStatus": "Type II",
@@ -40,14 +38,12 @@
   "nextOfKinEmail": "pdr@netspace.net.au",
 
   "primaryProContactName": "Kirstie O'Brien",
-  "primaryProContactRole": "Case Manager",
   "primaryProContactOrg": "Alfred Health Home Care Packages",
   "primaryProPrimaryPhone": "90766864",
   "primaryProSecondaryPhone": "",
   "primaryProContactEmail": "k.obrien@cgmc.org.au",
 
   "secondaryProContactName": "",
-  "secondaryProContactRole": "",
   "secondaryProContactOrg": "",
   "secondaryProPrimaryPhone": "",
   "secondaryProSecondaryPhone": "",

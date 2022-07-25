@@ -36,13 +36,15 @@
   "nextOfKinSecondaryPhone": "",
   "nextOfKinEmail": "",
 
-  "primaryProContactName": "Maria (Case Manager)",
+  "primaryProContactName": "Maria",
+  "primaryProContactRole": "Case Manager",
   "primaryProContactOrg": "Sacred Heart Mission",
   "primaryProPrimaryPhone": "0439500158",
   "primaryProSecondaryPhone": "",
   "primaryProContactEmail": "",
 
-  "secondaryProContactName": "Leah Ramos (Former Case Manager)",
+  "secondaryProContactName": "Leah Ramos (may be not update-to-date)",
+  "secondaryProContactRole": "Case Manager",
   "secondaryProContactOrg": "Aged Persons Mental Health Service",
   "secondaryProPrimaryPhone": "90766833",
   "secondaryProSecondaryPhone": "",

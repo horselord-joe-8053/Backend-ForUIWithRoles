@@ -101,6 +101,21 @@ test('DateUtils.getPrevScheduledDateList, MONTHLY, 2022-01-31 to 2022-02-28, edg
   );
 });
 
+test('DateUtils Random, FORTNIGHTLY, David Wheeler, Last Known Pay Date: 2021-11-19', () => {
+  // getScheduledDateListWithIntervalInWeeks(knownPrevDate, weeksPerInterval, anchorDate)
+  let lastKnownPayDateStr = '2021-11-19';
+  let anchorDateStr = '2022-07-20';
+  let frequency = 'FORTNIGHTLY';
+
+  let scheduledDates = DateUtils.getDerivedScheduledDates(
+    frequency,
+    lastKnownPayDateStr,
+    anchorDateStr
+  );
+
+  Logger.logAsJsonStr('test', '----scheduledDates', scheduledDates);
+});
+
 function getDateObjList(expectedDateStrList) {
   // let result = [];
 

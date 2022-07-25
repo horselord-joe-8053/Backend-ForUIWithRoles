@@ -1,0 +1,57 @@
+{
+  "firstName": "Robert",
+  "lastName": "Bardas",
+  "sex": "Male",
+  "room": "13",
+  "dob": "1954-01-26",
+  "admissionDate": "2007-01-16",
+  "pocketMoneyAmount": 0,
+
+  "pensionCardNumber": "?",
+
+  "payMethod": "CommBank",
+  "payToBankAccount": "063-301 10206191",
+  "notesForPayment": "search keyword 'bardas'",
+  "payer": "Relative or Guardian",
+  "notesForPayer": "who paid for Robert?",
+
+  "payFrequency": "Monthly",
+  "paymentAmount": 2133,
+  "lastKnownPayDate": "2022-07-01",
+  "paidDateList": ["2022-07-01"],
+  "lastDateOfIncrease": "2021-11-01",
+  "prevPaymentAmount": 2133,
+
+  "medicareNumber": "3151911547-?",
+  "diabeticStatus": "None",
+  "medicalSummary": "Bipolar, Schizophrenia",
+  "gpName": "Dr. Doris Daglas",
+  "gpPrimaryPhone": "95094488",
+  "gpSecondaryPhone": "",
+  "gpEmail": "",
+  "gpClinicName": "Wynlorel General Practice",
+  "gpAddress": "1368 High Street, Malvern VIC 3144",
+
+  "nextOfKinName": "Janet Krapes",
+  "nextOfKinRelationship": "Sister",
+  "nextOfKinPrimaryPhone": "95719348",
+  "nextOfKinSecondaryPhone": "0419801074",
+  "nextOfKinEmail": "",
+
+  "primaryProContactName": "Athena Donohue",
+  "primaryProContactRole": "Case Manager",
+  "primaryProContactOrg": "Star Health",
+  "primaryProPrimaryPhone": "0458788024",
+  "primaryProSecondaryPhone": "0408568715 (Lizhbleth - Carer)",
+  "primaryProContactEmail": "adonohue@starhealth.org.au",
+
+  "secondaryProContactName": "Kim Khoum",
+  "secondaryProContactRole": "",
+  "secondaryProContactOrg": "NDIS",
+  "secondaryProPrimaryPhone": "1800800100",
+  "secondaryProSecondaryPhone": "",
+  "secondaryProContactEmail": "NAT@NDIS.gov.au",
+
+  "residentCarePlanFileLink": "https://drive.google.com/file/d/1S-TyMQBhoatRhYDR4ENeZk3OCd7jb8v0/view?usp=sharing",
+  "residentFileFolderLink": "https://drive.google.com/drive/folders/1GRq_Aw2-AMHwJQ5f9ebxKpM2p4baaega?usp=sharing"
+}

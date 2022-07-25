@@ -28,13 +28,13 @@ const Resident = mongoose.model(
 
     payMethod: {
       type: String,
-      enum: ['CommBank', 'Check', 'Cash'],
+      enum: ['CommBank', 'Cheque', 'Cash'],
       // default: 'CommBank',
     },
     payToBankAccount: {
       type: String,
-      enum: ['None', '063301 10206191', '063301 10129659'],
-      // default: '063301 10206191',
+      enum: ['None', '063-301 10206191', '063-301 10129659', '063-301 10258653'],
+      // default: '063-301 10206191',
     },
     notesForPayment: String,
     payer: {
@@ -55,6 +55,8 @@ const Resident = mongoose.model(
     paymentAmount: Number,
     lastKnownPayDate: Date,
     paidDateList: [Date],
+    lastDateOfIncrease: Date,
+    prevPaymentAmount: Number,
 
     // medical info
     medicareNumber: String, //jjw: TODO: ideally boolean but frontend is using 'yes', 'no', the conversion has to happen somewhere in expense of generality
@@ -84,6 +86,7 @@ const Resident = mongoose.model(
     primaryProContactName: String,
     // jjw: TODO: ENUM need primaryProContactRole and secondaryProContactRole in a enum
     primaryProContactOrg: String,
+    primaryProContactRole: String,
     primaryProPrimaryPhone: String,
     primaryProSecondaryPhone: String,
     primaryProContactEmail: String,
@@ -91,6 +94,7 @@ const Resident = mongoose.model(
     secondaryProContactName: String,
     // jjw: TODO: ENUM need primaryProContactRole and secondaryProContactRole in a enum
     secondaryProContactOrg: String,
+    secondaryProContactRole: String,
     secondaryProPrimaryPhone: String,
     secondaryProSecondaryPhone: String,
     secondaryProContactEmail: String,
