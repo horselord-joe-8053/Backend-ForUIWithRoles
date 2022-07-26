@@ -11,7 +11,7 @@
 
   "payMethod": "Cheque",
   "payToBankAccount": "063-301 10258653",
-  "notesForPayment": "Payment date shown here may be different from the date the check is deposited; In bank account, search keyword 'cheque'",
+  "notesForPayment": "Search for 'cheque'; Payment date shown here may be different from the date the check is deposited;",
   "payer": "Self",
   "notesForPayer": "",
 

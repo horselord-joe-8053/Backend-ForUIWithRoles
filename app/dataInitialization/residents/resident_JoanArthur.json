@@ -11,9 +11,9 @@
 
   "payMethod": "CommBank",
   "payToBankAccount": "063-301 10206191",
-  "notesForPayment": "search keyword 'ctrlink', then find by the amount",
+  "notesForPayment": "Search for 'ctrlink', then search for the amount",
   "payer": "Centrelink",
-  "notesForPayer": "CRN: 303722972K",
+  "notesForPayer": "Log into Centrelink Business Portal home page, click 'View Customer Deductions', search by CRN: 303722972K",
   "payFrequency": "Fortnightly",
   "paymentAmount": 869.01,
   "lastKnownPayDate": "2022-07-14",

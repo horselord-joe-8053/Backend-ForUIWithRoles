@@ -11,7 +11,7 @@
 
   "payMethod": "CommBank",
   "payToBankAccount": "063-301 10206191",
-  "notesForPayment": "search keyword 'bardas'",
+  "notesForPayment": "Search for 'bardas'",
   "payer": "Relative or Guardian",
   "notesForPayer": "who paid for Robert?",
 

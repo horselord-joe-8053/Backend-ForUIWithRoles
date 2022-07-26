@@ -11,9 +11,9 @@
 
   "payMethod": "CommBank",
   "payToBankAccount": "063-301 10206191",
-  "notesForPayment": "search keyword 'ctrlink', then find by the amount - Part 1 of lumpsum $2659.03",
+  "notesForPayment": "Search for 'ctrlink', then search for the amount - Part 1 of lumpsum $2659.03",
   "payer": "Centrelink",
-  "notesForPayer": "CRN: 303767216B",
+  "notesForPayer": "Log into Centrelink Business Portal home page, click 'View Customer Deductions', search by CRN: 303767216B",
   "payFrequency": "Fortnightly",
   "paymentAmount": 836.01,
   "lastKnownPayDate": "2022-07-07",

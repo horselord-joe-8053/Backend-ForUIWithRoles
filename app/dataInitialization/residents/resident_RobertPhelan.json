@@ -12,7 +12,7 @@
 
   "payMethod": "CommBank",
   "payToBankAccount": "063-301 10129659",
-  "notesForPayment": "search keyword 'phel'",
+  "notesForPayment": "Search for 'phel'",
   "payer": "State Trustee",
   "notesForPayer": "another $20 is received in the other business account (*6191) on around 22nd of each month",
   "payFrequency": "Monthly",
