@@ -104,6 +104,7 @@ require('./app/routes/resident.routes')(app);
 require('./app/routes/staff.routes')(app);
 require('./app/routes/timesheet.routes')(app);
 require('./app/routes/contact.routes')(app);
+require('./app/routes/linkedVideo.routes')(app);
 require('./app/routes/businessDoc.routes')(app);
 require('./app/routes/payment.routes')(app);
 

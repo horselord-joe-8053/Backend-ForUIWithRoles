@@ -10,6 +10,11 @@
     "itemMsgLabel": "Resident"
   },
   {
+    "_id": "uuid_1237",
+    "key": "LINKED_VIDEO",
+    "itemMsgLabel": "LinkedVideo"
+  },
+  {
     "_id": "uuid_1238",
     "key": "CONTACT",
     "itemMsgLabel": "Contact"

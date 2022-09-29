@@ -1,4 +1,6 @@
 const roleInitializer = require('./roles/role-initializer');
+const userInitializer = require('./users/user-initializer');
+
 const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
 const contactInitializer = require('./contacts/contact-initializer');
@@ -9,6 +11,7 @@ const paymentInitializer = require('./paymentArrangements/payment-initializer.js
 
 const db = require('../../app/models');
 const Role = db.role;
+const User = db.user;
 const Contact = db.contact;
 const CompanyDocument = db.businessDoc;
 const Resident = db.resident;
@@ -25,6 +28,7 @@ exports.initialize = async () => {
 
   // TODO: totaly async this function and use await for orderly initialization
   await initItems(roleInitializer, Role, 'Role');
+  await initItems(userInitializer, User, 'User');
   await initItems(residentsInitializer, Resident, 'Resident');
   await initItems(staffInitializer, Staff, 'Staff');
   await initItems(contactInitializer, Contact, 'Contact');

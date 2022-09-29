@@ -1,0 +1,8 @@
+[
+  {
+    "username": "admin123",
+    "email": "admin123@email.com",
+    "password": "admin@pwd321",
+    "role": { "query": { "name": "admin" } }
+  }
+]
