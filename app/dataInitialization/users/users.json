@@ -4,5 +4,35 @@
     "email": "admin123@email.com",
     "password": "admin@pwd321",
     "role": { "query": { "name": "admin" } }
+  },
+  {
+    "username": "owner123",
+    "email": "owner123@email.com",
+    "password": "owner@pwd321",
+    "role": { "query": { "name": "owner" } }
+  },
+  {
+    "username": "staff123",
+    "email": "staff123@email.com",
+    "password": "staff@pwd321",
+    "role": { "query": { "name": "staff" } }
+  },
+  {
+    "username": "superuser123",
+    "email": "superuser123@email.com",
+    "password": "superuser@pwd321",
+    "role": { "query": { "name": "superuser" } }
+  },
+  {
+    "username": "privateuser123",
+    "email": "privateuser123@email.com",
+    "password": "privateuser@pwd321",
+    "role": { "query": { "name": "privateuser" } }
+  },
+  {
+    "username": "publicuser123",
+    "email": "publicuser@email.com",
+    "password": "publicuser@pwd321",
+    "role": { "query": { "name": "publicuser" } }
   }
 ]

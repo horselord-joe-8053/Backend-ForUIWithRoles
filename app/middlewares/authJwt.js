@@ -103,7 +103,7 @@ const verifyAccToken = (req, res, next) => {
 
 /*---- functions to verify user role ----*/
 const verifyIsAtLeastPrivateUser = async (req, res, next) => {
-  return await verifyIsAtLeast(isAtLeastStaff, 'privateuser', req, res, next);
+  return await verifyIsAtLeast(isAtLeastPrivateUser, 'privateuser', req, res, next);
 };
 
 const verifyIsAtLeastSuperUser = async (req, res, next) => {
