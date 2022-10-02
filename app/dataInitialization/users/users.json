@@ -18,6 +18,12 @@
     "role": { "query": { "name": "staff" } }
   },
   {
+    "username": "agent123",
+    "email": "agent123@email.com",
+    "password": "agent123@pwd",
+    "role": { "query": { "name": "superuser" } }
+  },
+  {
     "username": "superuser123",
     "email": "superuser123@email.com",
     "password": "superuser@pwd321",
