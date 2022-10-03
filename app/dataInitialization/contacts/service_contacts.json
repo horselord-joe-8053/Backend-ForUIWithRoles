@@ -1,0 +1,31 @@
+[
+  {
+    "category": "Property Infrastructure Related Repairs",
+    "subCategory": "Landlord's Property Manager",
+    "name": "Demo Property Agency A",
+    "note": "Any infrastructure related repair go through the Landlord's property manager first",
+    "primaryNumber": "0400000000",
+    "operatingHours": "Mon-Fri 9am-5pm"
+  },
+  {
+    "category": "Transportation",
+    "subCategory": "Taxi",
+    "name": "Demo Taxi A",
+    "primaryNumber": "13 00 00",
+    "operatingHours": "24 Hours"
+  },
+  {
+    "category": "Transportation",
+    "subCategory": "Taxi",
+    "name": "Demo Taxi B",
+    "primaryNumber": "13 00 01",
+    "operatingHours": "24 Hours"
+  },
+  {
+    "category": "Other Repairs",
+    "subCategory": "Handyman",
+    "name": "Demo Handyman A",
+    "primaryNumber": "0400000000",
+    "operatingHours": "Mon-Fri 9am-6pm"
+  }
+]
