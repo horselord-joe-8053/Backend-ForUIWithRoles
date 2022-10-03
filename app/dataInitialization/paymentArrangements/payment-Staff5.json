@@ -1,0 +1,10 @@
+[
+  {
+    "staff": { "query": { "shorthandName": "Staff5" } },
+    "frequency": "Fortnightly",
+    "cashHourlyRate": 19,
+    "numOfHours": 12,
+    "usedFor": "cleaning",
+    "type": "cash"
+  }
+]

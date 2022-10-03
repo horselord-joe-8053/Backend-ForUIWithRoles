@@ -1,0 +1,57 @@
+{
+  "firstName": "Resident1",
+  "lastName": "Ln1",
+  "sex": "Male",
+  "room": "7",
+  "dob": "1970-01-01",
+  "admissionDate": "2010-01-01",
+  "pocketMoneyAmount": 5,
+
+  "pensionCardNumber": "000000000A",
+
+  "payMethod": "CommBank",
+  "payToBankAccount": "063-301 00000000",
+  "notesForPayment": "Search for 'Resident'",
+  "payer": "Relative or Guardian",
+  "notesForPayer": "",
+
+  "payFrequency": "Fortnightly",
+  "paymentAmount": 890,
+  "lastKnownPayDate": "2022-07-13",
+  "paidDateList": ["2022-07-13"],
+  "lastDateOfIncrease": "2021-10-19",
+  "prevPaymentAmount": 870,
+
+  "medicareNumber": "3000000000-?",
+  "diabeticStatus": "None",
+  "medicalSummary": "Schizophrenia",
+  "gpName": "Dr. Goldberg",
+  "gpPrimaryPhone": "90000000",
+  "gpSecondaryPhone": "",
+  "gpEmail": "",
+  "gpClinicName": "Clinic A",
+  "gpAddress": "A Road, Suburb A, VIC 3000",
+
+  "nextOfKinName": "Kin1 Ln1",
+  "nextOfKinRelationship": "Sister",
+  "nextOfKinPrimaryPhone": "0400000000",
+  "nextOfKinSecondaryPhone": "0400000000 (Kin2 - Brother)",
+  "nextOfKinEmail": "Kin1@outlook.com.au",
+
+  "primaryProContactName": "ProContact1_1",
+  "primaryProContactRole": "Case Manager",
+  "primaryProContactOrg": "Star Health",
+  "primaryProPrimaryPhone": "0400000000",
+  "primaryProSecondaryPhone": "90000000",
+  "primaryProContactEmail": "pro1_1@starhealth.org.au",
+
+  "secondaryProContactName": "ProContact1_2",
+  "secondaryProContactRole": "Carer",
+  "secondaryProContactOrg": "",
+  "secondaryProPrimaryPhone": "0400000000",
+  "secondaryProSecondaryPhone": "",
+  "secondaryProContactEmail": "",
+
+  "residentCarePlanFileLink": "https://drive.google.com/file/d/1aDwQ8K8ZRAuKj2VBqiRYWLpgt0IQWvn-/view?usp=sharing",
+  "residentFileFolderLink": "https://drive.google.com/drive/folders/1AiJzhki2eyT9ifeRQ23wvIKepY0jK-CL?usp=sharing"
+}

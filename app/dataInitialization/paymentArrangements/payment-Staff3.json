@@ -1,0 +1,18 @@
+[
+  {
+    "staff": { "query": { "shorthandName": "Staff3" } },
+    "frequency": "Fortnightly",
+    "cashHourlyRate": 19,
+    "numOfHours": 10,
+    "usedFor": "pca",
+    "type": "non-cash"
+  },
+  {
+    "staff": { "query": { "shorthandName": "Staff3" } },
+    "frequency": "Fortnightly",
+    "cashHourlyRate": 19,
+    "numOfHours": 8,
+    "usedFor": "night",
+    "type": "non-cash"
+  }
+]
