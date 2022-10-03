@@ -33,7 +33,7 @@ const Resident = mongoose.model(
     },
     payToBankAccount: {
       type: String,
-      enum: ['None', '063-301 10206191', '063-301 10129659', '063-301 10258653'],
+      enum: ['None', '063-301 00000000'],
       // default: '063-301 10206191',
     },
     notesForPayment: String,

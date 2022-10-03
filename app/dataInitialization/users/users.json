@@ -1,44 +1,44 @@
 [
   {
-    "username": "admin123",
-    "email": "admin123@email.com",
-    "password": "admin@pwd321",
+    "username": "admin_demo",
+    "email": "admin_demo@email.com",
+    "password": "admin@pwd",
     "role": { "query": { "name": "admin" } }
   },
   {
-    "username": "owner123",
-    "email": "owner123@email.com",
-    "password": "owner@pwd321",
+    "username": "owner_demo",
+    "email": "owner_demo@email.com",
+    "password": "owner@pwd",
     "role": { "query": { "name": "owner" } }
   },
   {
-    "username": "staff123",
-    "email": "staff123@email.com",
-    "password": "staff@pwd321",
+    "username": "staff_demo",
+    "email": "staff_demo@email.com",
+    "password": "staff@pwd",
     "role": { "query": { "name": "staff" } }
   },
   {
-    "username": "agent123",
-    "email": "agent123@email.com",
-    "password": "agent123@pwd",
+    "username": "agent_demo",
+    "email": "agent_demo@email.com",
+    "password": "agent_demo@pwd",
     "role": { "query": { "name": "superuser" } }
   },
   {
-    "username": "superuser123",
-    "email": "superuser123@email.com",
-    "password": "superuser@pwd321",
+    "username": "superuser_demo",
+    "email": "superuser_demo@email.com",
+    "password": "superuser@pwd",
     "role": { "query": { "name": "superuser" } }
   },
   {
-    "username": "privateuser123",
-    "email": "privateuser123@email.com",
-    "password": "privateuser@pwd321",
+    "username": "privateuser_demo",
+    "email": "privateuser_demo@email.com",
+    "password": "privateuser@pwd",
     "role": { "query": { "name": "privateuser" } }
   },
   {
-    "username": "publicuser123",
-    "email": "publicuser@email.com",
-    "password": "publicuser@pwd321",
+    "username": "publicuser_demo",
+    "email": "publicuser_demo@email.com",
+    "password": "publicuser@pwd",
     "role": { "query": { "name": "publicuser" } }
   }
 ]

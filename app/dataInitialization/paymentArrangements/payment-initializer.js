@@ -15,7 +15,7 @@ exports.getData = async () => {
   /*
   [
     {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Staff3" } },
       "frequency": "Fortnightly",
       "hourlyRate": 19,
       "numOfHours": 8,

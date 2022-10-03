@@ -17,11 +17,11 @@ exports.getData = async () => {
   {
     "date": "2022-04-16",
     "office": {
-      "staff": { "query": { "shorthandName": "Jenny" } },
+      "staff": { "query": { "shorthandName": "Staff1" } },
       "shiftType": { "query": { "uniqueReadableId": "office_lump_fortnight_200" } }
     },
     "pcaAm": {
-      "staff": { "query": { "shorthandName": "Grace" } },
+      "staff": { "query": { "shorthandName": "Staff3" } },
       "shiftType": { "query": { "uniqueReadableId": "pca_bank25x9" } }
     }
   }
