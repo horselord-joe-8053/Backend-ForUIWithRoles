@@ -4,6 +4,8 @@ const userInitializer = require('./users/user-initializer');
 const residentsInitializer = require('./residents/resident-initializer');
 const staffInitializer = require('./staff/staff-initializer');
 const contactInitializer = require('./contacts/contact-initializer');
+const linkedVideoInitializer = require('./linkedVideos/linkedVideo-initializer');
+
 const businessDocInitializer = require('./businessDocs/businessDoc-initializer');
 const timesheetInitializer = require('./timesheets/timesheet-initializer.js');
 const shiftTypeInitializer = require('./shiftType/shiftType-initializer.js');
@@ -21,6 +23,7 @@ const ShiftType = db.shiftType;
 const PaymentArrangement = db.paymentArrangement;
 
 const logger = require('../utils/logger');
+const LinkedVideo = require('../models/linkedVideo.model');
 
 // https://stackoverflow.com/a/42964310
 exports.initialize = async () => {
@@ -32,6 +35,7 @@ exports.initialize = async () => {
   await initItems(residentsInitializer, Resident, 'Resident');
   await initItems(staffInitializer, Staff, 'Staff');
   await initItems(contactInitializer, Contact, 'Contact');
+  await initItems(linkedVideoInitializer, LinkedVideo, 'LinkedVideo');
   await initItems(businessDocInitializer, CompanyDocument, 'Company Document');
   await initItems(shiftTypeInitializer, ShiftType, 'ShiftType');
   await initItems(timesheetInitializer, ShiftsInADay, 'ShiftsInADay');

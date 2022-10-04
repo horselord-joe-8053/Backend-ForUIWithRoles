@@ -1,0 +1,26 @@
+[
+  {
+    "category": "Website",
+    "subCategory": "About our Website",
+    "title": "Website Introduction",
+    "linkToVideo": "<iframe src=\"https://www.youtube.com/embed/CWrIvL4mBtY\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>",
+    "description": "Demo linked Video 1",
+    "note": "some note 1"
+  },
+  {
+    "category": "Google Drive",
+    "subCategory": "Online File System",
+    "title": "Our Online File System on Google Drive",
+    "linkToVideo": "<iframe src=\"https://www.youtube.com/embed/CWrIvL4mBtY\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>",
+    "description": "Demo linked Video 2",
+    "note": "some note 2"
+  },
+  {
+    "category": "Other Advertising Videos",
+    "subCategory": "Resident Outting Video",
+    "title": "Some footage of an outting for our residents",
+    "linkToVideo": "<iframe src=\"https://www.youtube.com/embed/CWrIvL4mBtY\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>",
+    "description": "Demo linked Video 3",
+    "note": "some note 3"
+  }
+]
