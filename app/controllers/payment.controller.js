@@ -22,7 +22,15 @@ exports.addPaidDates = async (req, res) => {
       logger.logAsJsonStr('payment.controller.addPaidDates in loop', 'val', val);
 
       let residentId = key;
-      let newPaidDateListForResident = val;
+      let newPaidDateStrListForResident = val;
+
+      // convert to list of Date to be in sync of
+      // currResidentPaidDateList from the DB
+      let newPaidDateListForResident = [];
+      if (newPaidDateStrListForResident && newPaidDateStrListForResident.length > 0) {
+        // NOTE: this is not entirely safe for all browsers, e.g. IE8
+        newPaidDateListForResident = newPaidDateStrListForResident.map((str) => new Date(str));
+      }
 
       // get the resident
       // use await ...findOne().exec() gives better stack traces
@@ -52,7 +60,10 @@ exports.addPaidDates = async (req, res) => {
       //   return a.getTime() - b.getTime();
       // });
 
-      updatedResidentPaidDateList.sort();
+      // updatedResidentPaidDateList.sort();
+      // NOTE: .sort() is in-place. https://stackoverflow.com/a/46414940
+      // NOTE: direct .sort() on the array of Date does not seem to work for some reason. TODO: warrant more investigation
+      updatedResidentPaidDateList.sort(simpleDateSortByISOStr).reverse();
       logger.logAsJsonStr(
         'payment.controller.addPaidDates in loop',
         'updatedResidentPaidDateList after sort',
@@ -69,13 +80,13 @@ exports.addPaidDates = async (req, res) => {
       let firstName = resident['firstName'];
       let lastName = resident['lastName'];
 
-      let newPaidDateStrList = newPaidDateListForResident.map((date) => {
+      let newPaidDateStrList = newPaidDateStrListForResident.map((date) => {
         return DateUtils.toISODateWithoutTimeString(date);
       });
 
       updateResult[residentId] = {
         name: firstName + '_' + lastName,
-        numAddedPaidDates: newPaidDateListForResident.length,
+        numAddedPaidDates: newPaidDateStrListForResident.length,
         addedPaidDates: newPaidDateStrList,
       };
     } // end of for loop
@@ -89,3 +100,10 @@ exports.addPaidDates = async (req, res) => {
   } finally {
   }
 };
+
+function simpleDateSortByISOStr(dateA, dateB) {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString#:~:text=Syntax-,Date.prototype.toISOString(),denoted%20by%20the%20suffix%20Z%20.
+  let isoStrA = dateA.toISOString();
+  let isoStrB = dateB.toISOString();
+  return isoStrA < isoStrB ? -1 : isoStrA > isoStrB ? 1 : 0;
+}
