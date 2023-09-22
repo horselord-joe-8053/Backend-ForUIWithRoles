@@ -4,15 +4,15 @@ name: Build and Deploy to kubernetes Backend
 on:
   push:
     branches:
-      - feature
+      - feature_ori_demo_noname
       # - main
 
 env:
-  PROJECT_ID: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}} # modifiable based from GKE
-  GKE_CLUSTER: balm-website-cluster-1 # modifiable based from GKE
-  GKE_ZONE: australia-southeast2
-  DEPLOYMENT_NAME: balm-backend-gke # need to be the same in kustom_resources/backend.yaml -> kind: Deployment - name
-  IMAGE: balm-backend-gke-image
+  PROJECT_ID: western-rider-399808 # modifiable based from GKE
+  GKE_CLUSTER: autopilot-cluster-1 # modifiable based from GKE
+  GKE_ZONE: australia-southeast1
+  DEPLOYMENT_NAME: demo-backend-gke # need to be the same in kustom_resources/backend.yaml -> kind: Deployment - name
+  IMAGE: demo-backend-gke-image
   # TAG: 1.0.1 # we Change to set the tag by grabbing the last commit info
 
 jobs:

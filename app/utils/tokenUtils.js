@@ -123,7 +123,11 @@ exports.buildTokens = (user, loginSessionId) => {
 exports.setTokens = (res, accessPayload, refreshPayload) => {
   res.cookie(Cookies.AccessToken, accessPayload, accessTokenCookieOptions)
   // jjw: only update the refreshToken in the cookie if it is defined
-  if (refreshPayload) res.cookie(Cookies.RefreshToken, refreshPayload, refreshTokenCookieOptions)
+  if (refreshPayload) {
+    res.cookie(Cookies.RefreshToken, refreshPayload, refreshTokenCookieOptions)
+  } else {
+    logger.logAsStr("token-utils.setTokens", "refreshPayload is undefined, hence cookie's refresh will not be set", "");
+  }
 }
 
 exports.generateRefreshedTokens = (currUserId, loginSessionId, storedTokenVersion) => {

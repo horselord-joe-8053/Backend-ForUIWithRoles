@@ -47,6 +47,7 @@ const verifyAccToken = (req, res, next) => {
       );
       return res.status(401).send({ message: accessTokenMissingMsg });
     } else {
+      logger.logAsJsonStr('authJwt.verifyAccToken', 'RefreshToken also NOT found from req.cookies', '');
       return res.status(401).send({ message: accessRefreshTokenBothMissingMsg });
     }
   }
