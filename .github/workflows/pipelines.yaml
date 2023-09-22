@@ -68,6 +68,15 @@ jobs:
           service_account_key: ${{secrets.BALMORAL_SITE_GKE_PROJECT_SECRET}}
           project_id: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}}
 
+      # according to 2022 change for kube auth https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      - name: Install gke-gcloud-auth-plugin
+        run: |-
+          gcloud components install gke-gcloud-auth-plugin
+
+      - name: Show Version of gke-gcloud-auth-plugin
+        run: |-
+          gke-gcloud-auth-plugin --version
+      
       # not modify
       - name: Configure Docker on Google Cloud
         run: |-
