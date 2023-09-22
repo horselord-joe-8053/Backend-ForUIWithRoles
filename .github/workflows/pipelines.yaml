@@ -129,7 +129,7 @@ jobs:
       # (https://stackoverflow.com/questions/8045479/whats-the-magic-of-a-dash-in-command-line-parameters)
 
       # below line 'kubectl rollout status deployment/$DEPLOYMENT_NAME'
-      # will result in "Error from server (NotFound): deployments.apps "balm-frontend-gke" not found"
+      # will result in "Error from server (NotFound): deployments.apps "demo-frontend-gke" not found"
       # if we don't keep the name of the deployment the same as $DEPLOYMENT_NAME
       - name: Customize and Deploy Image to GKE cluster
         run: |-
