@@ -8,7 +8,7 @@ on:
       # - main
 
 env:
-  PROJECT_ID: western-rider-399808 # modifiable based from GKE
+  PROJECT_ID: ${{secrets.BALMORAL_SITE_GKE_PROJECTID_SECRET}} # modifiable based from GKE
   GKE_CLUSTER: autopilot-cluster-1 # modifiable based from GKE
   GKE_ZONE: australia-southeast1
   DEPLOYMENT_NAME: demo-backend-gke # need to be the same in kustom_resources/backend.yaml -> kind: Deployment - name
