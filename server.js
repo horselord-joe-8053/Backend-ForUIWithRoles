@@ -13,14 +13,15 @@ const logger = require('./app/utils/logger');
 // // for deployment
 // let corsOptions = {
 //   // credentials: true,
-//   // origin: 'http://localhost:8081',
+//   // origin: 'http://localhost:',
 //   // origin: '*',
 // };
 
 // for local testing
 let corsOptions = {
   credentials: true,
-  origin: 'http://localhost:8081',
+  // origin: 'http://localhost:8081',
+  origin: 'http://localhost:3000', // if we are doing local testing with static server
   // origin: '*',
 };
 
